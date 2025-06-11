@@ -10,6 +10,5 @@ public class PageController {
 	@GetMapping(value = "/")
 	public String home() {
 		return "main";
-	}
-	
+	}	
 }
