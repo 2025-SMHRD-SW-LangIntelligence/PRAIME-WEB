@@ -8,7 +8,7 @@ public class MainController {
 	
 	// 메인페이지 이동
 	@GetMapping(value = "/")
-	public String home() {
+	public String mainPage() {
 		return "main";
 	}	
 	
