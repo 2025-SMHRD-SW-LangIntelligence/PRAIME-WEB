@@ -13,7 +13,7 @@ public class PageController {
 	}
 	
 	// 회원가입 페이지 이동
-	@GetMapping(value = "/")
+	@GetMapping(value = "/join")
 	public String joinPage() {
 		return "join";
 	}	
