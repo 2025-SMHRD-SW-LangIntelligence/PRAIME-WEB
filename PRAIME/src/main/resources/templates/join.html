@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="join.css">
+    <link rel="stylesheet" href="font.css">
+    <script src="join.js"></script>
+    <title>회원가입페이지</title>
+</head>
+<body>
+    <div class="container">
+        <div class="join-box">
+            <h1 class="join-title">회원가입</h1>
+            <form class="join-form" accept="" method="">
+                <div class="form-group">
+                    <label for="id">아이디</label>
+                    <div class="id-input-group">
+                        <input type="text" name="id" id="id" placeholder="아이디를 입력해주세요">
+                        <button type="button" class="duplicate-check-btn">중복확인</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pw">비밀번호</label>
+                    <input type="password" name="pw" id="pw" placeholder="비밀번호를 입력해주세요">
+                </div>
+                <div class="form-group">
+                    <label for="pw-confirm">비밀번호 확인</label>
+                    <input type="password" name="pw-confirm" id="pw-confirm" placeholder="비밀번호를 다시 입력해주세요">
+                </div>
+                <div class="form-group">
+                    <label for="name">이름</label>
+                    <input type="text" name="name" placeholder="이름을 입력해주세요">
+                </div>
+                <div class="form-group tel-group">
+                    <label for="tel">전화번호</label>
+                    <div class="tel-input-group">
+                        <select name="tel-carrier">
+                            <option value="">통신사 선택</option>
+                            <option value="KT">KT</option>
+                            <option value="SKT">SKT</option>
+                            <option value="LG U+">LG U+</option>
+                            <option value="KT 알뜰폰">KT 알뜰폰</option>
+                            <option value="SKT 알뜰폰">SKT 알뜰폰</option>
+                            <option value="LG U+ 알뜰폰">LG U+ 알뜰폰</option>
+                        </select>
+                        <input type="text" name="tel-1" placeholder="010" maxlength="3" size="3">
+                        <span>-</span>
+                        <input type="text" name="tel-2" placeholder="1234" maxlength="4" size="4">
+                        <span>-</span>
+                        <input type="text" name="tel-3" placeholder="5678" maxlength="4" size="4">
+                    </div>
+                </div>
+                <div class="form-group email-group">
+                    <label for="email">이메일</label>
+                    <div class="email-input-group">
+                        <input type="text" name="email-id" placeholder="이메일을 입력해주세요">
+                        <span>@</span>
+                        <select name="email-domain">
+                            <option value="">선택하세요</option>
+                            <option value="gmail.com">gmail.com</option>
+                            <option value="naver.com">naver.com</option>
+                            <option value="daum.net">daum.net</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group birth-group">
+                    <label for="birth">생년월일</label>
+                    <div class="birth-input-group">
+                        <input type="text" name="birth-year" placeholder="년도" maxlength="4" size="4">
+                        <select name="birth-month">
+                            <option value="" selected disabled>월</option>
+                            <option value="1">1월</option>
+                            <option value="2">2월</option>
+                            <option value="3">3월</option>
+                            <option value="4">4월</option>
+                            <option value="5">5월</option>
+                            <option value="6">6월</option>
+                            <option value="7">7월</option>
+                            <option value="8">8월</option>
+                            <option value="9">9월</option>
+                            <option value="10">10월</option>
+                            <option value="11">11월</option>
+                            <option value="12">12월</option>
+                        </select>
+                        <select name="birth-day">
+                            <option value="" selected disabled>일</option>
+                            <option value="1">1일</option>
+                            <option value="2">2일</option>
+                            <option value="31">31일</option>
+                        </select>
+                    </div>
+                </div>                
+            </form>
+            <div class="button-group">
+                <button class="join-btn">회원가입</button>
+                <button class="reback-btn" onclick="goToMain()">취소</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
