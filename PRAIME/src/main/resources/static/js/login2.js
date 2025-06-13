@@ -1,21 +1,8 @@
+// login.js
 $(document).ready(function() {
-    // 비밀번호 보기/숨기기 기능
-    $('.password-toggle-icon').click(function() {
-        const passwordInput = $(this).siblings('input');
-        const icon = $(this).find('i');
-        
-        if (passwordInput.attr('type') === 'password') {
-            passwordInput.attr('type', 'text');
-            icon.removeClass('fa-eye').addClass('fa-eye-slash');
-        } else {
-            passwordInput.attr('type', 'password');
-            icon.removeClass('fa-eye-slash').addClass('fa-eye');
-        }
-    });
-
     // 로그인 버튼 클릭 이벤트
     $("#loginBtn").click(function(e) {
-        e.preventDefault();
+        e.preventDefault(); // 폼 기본 제출 방지
         
         // 기존 오류 메시지 제거
         $(".error-msg").remove();
@@ -58,20 +45,15 @@ $(document).ready(function() {
                     pw: pw
                 },
                 success: function(response) {
-                    // 성공 시 리다이렉트
-                    if (response.startsWith("http") || response.startsWith("/")) {
-                        window.location.href = response;
-                    }
+                    // 서버에서 리다이렉트 URL 반환 시 이동
+                    window.location.href = response;
                 },
                 error: function(xhr) {
+                    // 서버에서 에러 메시지 반환 시 처리
                     if (xhr.status === 400) {
-                        const errorMsg = xhr.responseJSON.message || "아이디와 비밀번호를 확인해주세요";
-                        
-                        // alert 표시
-                        alert(errorMsg);
-                        
-                        // 필드에 에러 메시지도 함께 표시 (선택사항)
                         const errorField = xhr.responseJSON.field;
+                        const errorMsg = xhr.responseJSON.message;
+                        
                         if (errorField === 'id') {
                             $("#id").closest('.form-group').append(
                                 `<p class="error-msg" style="color:red;margin-top:5px;">${errorMsg}</p>`

@@ -137,6 +137,33 @@ header {
     transform: translateY(-2px);
 }
 
+/* Start --------------------- 비밀번호 요소 ---------------------*/
+
+/* 비밀번호 입력 컨테이너 스타일 */
+.password-input-container {
+    position: relative;
+    width: 100%;
+}
+
+/* 비밀번호 토글 아이콘 스타일 */
+.password-toggle-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+    font-size: 18px;
+}
+
+.password-toggle-icon:hover {
+    color: #0f4f35;
+}
+
+/* Font Awesome 아이콘 사용을 위한 스타일 */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+/*  --------------------- 비밀번호 요소 --------------------- END*/
 
 /*---------------- 버튼 ----------------*/
 .button-group {
@@ -192,6 +219,16 @@ header {
 
 /*---------------- 버튼 ---------------- End*/
 
+/* login.css에 추가할 스타일 */
+.error-message {
+    color: #ff0000;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.form-group input:invalid {
+    border-color: #ff0000;
+}
 
 /* ----------------반응형 조정---------------- */
 @media (max-width: 480px) {
