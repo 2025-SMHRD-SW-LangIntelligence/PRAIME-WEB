@@ -121,8 +121,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!pw) {
             showError('pw', '비밀번호를 입력해주세요.');
             isValid = false;
-        } else if (!/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,20}$/.test(pw)) {
-            showError('pw', '비밀번호는 8~20자의 영문, 숫자, 특수문자 조합이어야 합니다.');
+        } else if (!/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$/.test(pw)) {
+            showError('pw', '비밀번호는 8~20자의 영문, 숫자 조합이어야 합니다.');
             isValid = false;
         }
 
