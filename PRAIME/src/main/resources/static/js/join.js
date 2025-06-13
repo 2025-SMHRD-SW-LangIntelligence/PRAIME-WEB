@@ -1,5 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
 	
+	// --- 본인인증, 주소찾기, 취소 함수 (미구현: API연동필요) ---
+	window.identityVerification = function() {
+	    alert("본인인증 기능은 현재 개발 중입니다.");
+	};
+
+	window.addressFind = function() {
+	    alert("주소찾기 기능은 현재 개발 중입니다.");
+	};
+
+	window.goToRoleChoice = function() {
+	    window.location.href = '/roleChoicePage';
+	};	
+	
 
 	// 비밀번호 보기/숨기기 기능
 	$('.password-toggle-icon').click(function() {
