@@ -1,4 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
+	
+
+	// 비밀번호 보기/숨기기 기능
+	$('.password-toggle-icon').click(function() {
+	    const passwordInput = $(this).siblings('input');
+	    const icon = $(this).find('i');
+	    
+	    if (passwordInput.attr('type') === 'password') {
+	        passwordInput.attr('type', 'text');
+	        icon.removeClass('fa-eye').addClass('fa-eye-slash');
+	    } else {
+	        passwordInput.attr('type', 'password');
+	        icon.removeClass('fa-eye-slash').addClass('fa-eye');
+	    }
+	});	
+	
+	
     // 중복 확인 상태를 저장할 변수
     let isIdChecked = false;
     let checkedId = '';
@@ -223,3 +240,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+

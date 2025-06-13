@@ -129,6 +129,35 @@
     border-radius: 5px;
 }
 
+/* Start --------------------- 비밀번호 요소 ---------------------*/
+
+/* 비밀번호 입력 컨테이너 스타일 */
+.password-input-container {
+    position: relative;
+    width: 100%;
+}
+
+/* 비밀번호 토글 아이콘 스타일 */
+.password-toggle-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+    font-size: 18px;
+}
+
+.password-toggle-icon:hover {
+    color: #0f4f35;
+}
+
+/* Font Awesome 아이콘 사용을 위한 스타일 */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+/*  --------------------- 비밀번호 요소 --------------------- END*/
+
+
 /* Start --------------------- 아이디 요소 ---------------------*/
 .id-input-group{
     display: flex; /*자식 요소들을 가로로 나란히 배치*/

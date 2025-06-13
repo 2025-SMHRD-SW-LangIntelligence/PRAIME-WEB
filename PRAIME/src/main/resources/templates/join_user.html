@@ -6,6 +6,8 @@
     <link th:href="@{/css/font.css}" rel="stylesheet">
     <link th:href="@{/css/common.css}" rel="stylesheet">
     <link th:href="@{/css/join.css}" rel="stylesheet">
+	<!-- Font Awesome CDN 추가 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
    	<!-- jQuery CDN  -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Axios CDN  -->
@@ -43,14 +45,24 @@
                                     <button class="duplicate-check-btn" onclick="checkIdDuplicate()">중복확인</button>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="pw">비밀번호</label>
-                                <input type="password" name="pw" id="pw" placeholder="비밀번호를 입력해주세요">
-                            </div>
-                            <div class="form-group">
-                                <label for="pw">비밀번호 확인</label>
-                                <input type="password" name="pw-confirm" placeholder="비밀번호를 다시 입력해주세요">
-                            </div>
+							<div class="form-group">
+								<label for="pw">비밀번호</label>
+								<div class="password-input-container">
+									<input type="password" name="pw" id="pw"
+										placeholder="비밀번호를 입력해주세요"> <span
+										class="password-toggle-icon"> <i class="fas fa-eye"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="pw">비밀번호</label>
+								<div class="password-input-container">
+									<input type="password" name="pw-confirm" id="pw-confirm"
+										placeholder="비밀번호를 입력해주세요"> <span
+										class="password-toggle-icon"> <i class="fas fa-eye"></i>
+									</span>
+								</div>
+							</div>
                             <div class="form-group">
                                 <label for="pw">이름</label>
                                 <input type="text" name="name" id="name" placeholder="이메일을 입력해주세요">
