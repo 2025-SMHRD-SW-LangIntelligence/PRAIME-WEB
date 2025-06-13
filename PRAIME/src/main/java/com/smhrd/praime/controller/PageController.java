@@ -9,13 +9,33 @@ public class PageController {
 	// 메인페이지 이동
 	@GetMapping(value = "/")
 	public String mainPage() {
-		return "main";
+		return "login";
 	}
 	
+	// 로그인 페이지 이동
+	@GetMapping(value = "/loginPage")
+	public String loginPage() {
+		return "login";
+	}	
+	
+	// 유저 메인페이지 이동
+	@GetMapping(value = "/userMainPage")
+	public String userMainPage() {
+		return "user_main";
+	}
+
+
+	
+	// 회원가입 유형선택 페이지 이동
+	@GetMapping(value = "/roleChoicePage")
+	public String roleChoicePage() {
+		return "role_choice";
+	}	
+	
 	// 회원가입 페이지 이동
-	@GetMapping(value = "/joinPage")
+	@GetMapping(value = "/joinUserPage")
 	public String joinPage() {
-		return "join";
+		return "join_user";
 	}	
 	
 }

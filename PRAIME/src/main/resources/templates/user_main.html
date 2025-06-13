@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>농담</title>
+    <link th:href="@{/css/font.css}" rel="stylesheet">
+    <link th:href="@{/css/common.css}" rel="stylesheet">
+    <link th:href="@{/css/user_main.css}" rel="stylesheet">
+   	<!-- jQuery CDN  -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Axios CDN  -->
+   	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- JS 파일 -->
+    <script th:src="@{/js/login.js}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <header>
+                <div class="header-group">
+                    <div class="header-title-group">
+                        <h1 class="header-title">농담</h1>
+                        <p class="header-subtitle">농업을담다</p>
+                    </div>
+                </div>
+            </header>
+            <main>
+                <section class="banner-section">
+                    <img th:src="@{/img/banner.jpg}" alt="Seasonal Fruits" class="banner-image">
+                    <div class="banner-text">
+                        <p class="banner-title">농부가 직접 생산한 농산물을</p>
+                        <p class="banner-subtitle">더보기 ></p>
+                    </div>
+                </section>
+
+                <nav class="category-nav">
+                    <ul class="category-list">
+                        <li class="category-item active"><a href="#">전체</a></li>
+                        <li class="category-item"><a href="#">과채류</a></li>
+                        <li class="category-item"><a href="#">곡류</a></li>
+                        <li class="category-item"><a href="#">농장직송</a></li>
+                        <li class="category-item"><a href="#">제작상품</a></li>
+                    </ul>
+                </nav>
+
+                <div class="filter-bar">
+                    <div class="filter-left">
+                        <span class="filter-option active">100% GAP/친환경 인증 농산물</span>
+                        <span class="filter-option">농업인증 농산물</span>
+                        <span class="filter-option">농장직송</span>
+                    </div>
+                    <div class="filter-right">
+                        <span class="filter-icon"><i class="fas fa-filter"></i> 필터</span>
+                        <span class="filter-icon"><i class="fas fa-sort"></i> 정렬</span>
+                    </div>
+                </div>
+
+                <section class="product-list-section">
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <img th:src="@{/img/product1.jpg}" alt="Organic Apples" class="product-image">
+                            <div class="product-tags">
+                                <span class="tag">100% GAP</span>
+                                <span class="tag">친환경</span>
+                            </div>
+                            <h3 class="product-name">무농약 햇 부사</h3>
+                            <p class="product-price">35,000원</p>
+                            <div class="product-meta">
+                                <span class="rating">
+                                    <i class="fas fa-star"></i> 4.9 (123)
+                                </span>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <img th:src="@{/img/product2.png}" alt="Organic Pears" class="product-image placeholder-image">
+                            <h3 class="product-name">무농약 동산 유기농 배</h3>
+                            <p class="product-price">28,000원</p>
+                            <div class="product-meta">
+                                <span class="rating">
+                                    <i class="fas fa-star"></i> 4.7 (84)
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                </section>
+            </main>
+
+            <nav class="bottom-nav">
+                <ul class="bottom-nav-list">
+                    <li class="bottom-nav-item active">
+                        <i class="fas fa-home"></i>
+                        <span>마켓</span>
+                    </li>
+                    <li class="bottom-nav-item">
+                        <i class="fas fa-box-open"></i>
+                        <span>내 주문</span>
+                    </li>
+                    <li class="bottom-nav-item">
+                        <i class="fas fa-user"></i>
+                        <span>내 정보</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</body>
+</html>

@@ -14,7 +14,7 @@ public class UserService {
     // 회원가입 처리
     public UserEntity registerUser(UserEntity user) {
         // 아이디 중복 확인
-        if (userRepository.existsById(user.getId())) {
+        if (userRepository.existsById(user.getUid())) {
             throw new RuntimeException("이미 사용중인 아이디입니다.");
         }
         
@@ -25,7 +25,7 @@ public class UserService {
     }
 
     // 아이디 중복 확인
-    public boolean isIdDuplicate(String id) {
-        return userRepository.existsById(id);
+    public boolean isIdDuplicate(String uid) {
+        return userRepository.existsById(uid);
     }
 }

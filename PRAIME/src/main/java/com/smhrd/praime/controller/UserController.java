@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.smhrd.praime.entiry.Role;
 import com.smhrd.praime.entiry.UserEntity;
 import com.smhrd.praime.service.UserService;
 import java.time.LocalDate;
@@ -21,15 +23,15 @@ public class UserController {
     // 아이디 중복 확인 (AJAX 요청 처리)
     @PostMapping("/checkId")
     @ResponseBody
-    public String checkIdDuplicate(@RequestParam("id") String id) {
-        boolean isDuplicate = userService.isIdDuplicate(id);
+    public String checkIdDuplicate(@RequestParam("id") String uid) {
+        boolean isDuplicate = userService.isIdDuplicate(uid);
         return isDuplicate ? "duplicate" : "available";
     }
 
     // 회원가입 처리
-    @PostMapping("/join")
+    @PostMapping("/joinUser.do")
     public String registerUser(
-            @RequestParam("id") String id,
+            @RequestParam("id") String uid,
             @RequestParam("pw") String pw,
             @RequestParam("name") String name,
             @RequestParam("tel-0") String telecom,
@@ -38,16 +40,15 @@ public class UserController {
             @RequestParam("tel-3") String tel3,
             @RequestParam("email-id") String emailId,
             @RequestParam("email-domain") String emailDomain,
-            @RequestParam("birth-year") String birthYear,
-            @RequestParam("birth-month") String birthMonth,
-            @RequestParam("birth-day") String birthDay,
+            @RequestParam("address") String address,
+            @RequestParam("address-detail") String addressDetail,
             Model model) {
 
         try {
             // UserEntity 객체 생성 및 값 설정
             UserEntity user = new UserEntity();
-            user.setId(id);
-            user.setPw(pw); // 실제 프로젝트에서는 암호화 필요
+            user.setUid(uid);
+            user.setPw(pw); 
             user.setName(name);
             user.setTelecom(telecom);
             user.setTel1(tel1);
@@ -55,14 +56,9 @@ public class UserController {
             user.setTel3(tel3);
             user.setEmailId(emailId);
             user.setEmailDomain(emailDomain);
-
-            // 생년월일 LocalDate로 변환
-            LocalDate birthDate = LocalDate.of(
-                Integer.parseInt(birthYear),
-                Integer.parseInt(birthMonth),
-                Integer.parseInt(birthDay)
-            );
-            user.setBirthDate(birthDate);
+            user.setAddress(address);
+            user.setAddressDetail(addressDetail);
+            user.setRole(Role.USER);
 
             // 회원가입 처리
             userService.registerUser(user);

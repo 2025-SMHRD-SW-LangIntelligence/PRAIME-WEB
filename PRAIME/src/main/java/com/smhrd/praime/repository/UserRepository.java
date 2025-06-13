@@ -5,8 +5,8 @@ import org.springframework.stereotype.Repository;
 import com.smhrd.praime.entiry.UserEntity;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, String> {
 	
     // 아이디 중복 확인을 위한 메서드
-    boolean existsById(String id);
+    boolean existsById(String uid);
 }

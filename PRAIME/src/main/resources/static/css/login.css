@@ -1,0 +1,215 @@
+.login-box {
+    border-radius: 10px;
+    padding: 0px 40px 0px 40px;
+  }
+
+
+  
+/* 헤더 스타일 */
+header {
+    position: relative;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eae6dd;
+    background-color: #0f4f35;
+    text-align: center;
+    margin-bottom: 0;
+    font-size: 40px;
+  }
+  
+  .header-group {
+    display: flex;
+    align-items: center;
+    position: relative;
+    min-height: 40px;
+    gap: 10px;
+  }
+  
+  .prevPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    font-size: 1.5rem;
+    color: #eae6dd;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+  }
+  
+  .prevPage:hover {
+    color: #f0f0f0;
+}
+
+.header-title-group {
+    flex: 1;
+}
+
+.header-title {
+    font-size: 2.0rem;
+    color: #f0f0f0;
+    font-weight: bold;
+    margin-bottom: 3px;
+  }
+  
+.header-subtitle {
+    font-size: 0.85rem;
+    color: #f0f0f0;
+    line-height: 1.4;
+}
+
+.login-title{
+    text-align: center;
+}
+
+.login-title-wrap{
+    font-size: 20px;
+    margin: 30px 0 30px 0;
+}
+.login-title-text{
+    text-align: center;
+    color: #eaeeee;
+}
+.login-subtitle{
+    font-size: 0.8rem;
+}
+
+/* Start --------------------- 폼 요소 ---------------------*/
+
+
+.login-form{
+    margin-bottom: 20px;
+}
+
+
+
+.login-subtitle{
+    text-align: center;
+}
+
+
+.form-group{
+    margin-bottom: 20px;
+}
+
+.form-group label{
+    display: block;
+    margin-bottom: 8px;
+    margin-left: 7px;
+    font-size: 15px;
+    font-weight: bolder;
+}
+
+
+.form-group input{
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #e2e6ee;
+    border-radius: 5px;
+}
+/* Start --------------------- 아이디 요소 ---------------------*/
+.id-input-group{
+    display: flex; /*자식 요소들을 가로로 나란히 배치*/
+    gap: 10px; /*자식 요소들 사이에 10px의 간격으로 배치*/
+    align-items: center; /* 자식 요소들을 세로 중앙에 정렬 */
+}
+
+.id-input-group input{
+    flex: 1; /*사용 가능한 공간을 최대로*/
+}
+
+.duplicate-check-btn{
+    flex: 0 0 auto; /* 버튼크기 고정*/
+    background-color: #0f4f35;
+    color: white;
+    padding: 15px;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+}
+.duplicate-check-btn:hover{
+    background-color: #0a3524;
+    transform: translateY(-2px);
+}
+
+
+/*---------------- 버튼 ----------------*/
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 350px; /* 하단 정렬*/
+    padding-top: 20px;
+    position: sticky; 
+    margin-bottom: 30px;
+}
+
+
+.back-btn, .login-btn{
+    flex: 1;
+    padding: 17px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    
+}
+
+
+.back-btn{
+    background-color: #f6f5f5;
+    color: #1e5549;
+    box-shadow: 0 5px 15px 0 rgb(0, 0, 0, 0.1 );
+}
+.back-btn:hover{
+    background-color: #d8d4cc;
+    transform: translateY(-2px);
+}
+
+.login-btn{
+    background-color: #0f4f35;
+    color: white;
+    box-shadow: 0 5px 15px 0 rgb(0, 0, 0, 0.1 );
+}
+
+.login-btn:hover{
+    background-color: #0a3524;
+    transform: translateY(-2px);
+}
+
+.join-link-group{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/*---------------- 버튼 ---------------- End*/
+
+
+/* ----------------반응형 조정---------------- */
+@media (max-width: 480px) {
+    header {
+        padding: 12px 0;
+    }
+    
+    .header-title {
+        font-size: 1.1rem;
+    }
+    
+    .header-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .prevPage {
+        width: 28px;
+        height: 28px;
+      font-size: 1.3rem;
+    }
+}

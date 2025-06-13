@@ -1,0 +1,71 @@
+:root {
+    /* 색상 변수 */
+    --primary-color: #1e5549;
+    --primary-hover: #164338;
+    --secondary-color: #f5f1e8;
+    --button-text: #ffffff;
+    --border-color: #e0e0e0;
+    --input-bg: #ffffff;
+    --placeholder-color: #999999;
+    --error-color: #e74c3c;
+    --text-color: #333333;
+    --label-color: #555555;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --card-selected-bg: #f0f7f5;
+    --subtitle-color: #5a7d76;
+    --cancel-btn-bg: #f6f5f5;
+    --cancel-btn-hover: #d8d4cc;
+    --disabled-btn-bg: #a0b0ad;
+  }
+  
+  /* 기본 스타일 */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #121212;
+  }
+  
+  body {
+    background-color: #fefefe;
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* 레이아웃 */
+  .container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 550px;
+    width: 100%;
+    margin: 0 auto;
+    background-color: #f5f1e8;
+    position: relative;
+  }
+  
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* 타이포그래피 */
+  h1, h2, h3 {
+    color: var(--primary-color);
+  }
+  
+  /* 반응형 */
+  @media (max-width: 600px) {
+    .container {
+      max-width: 100%;
+      padding: 15px;
+    }
+    
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.2rem; }
+  }
