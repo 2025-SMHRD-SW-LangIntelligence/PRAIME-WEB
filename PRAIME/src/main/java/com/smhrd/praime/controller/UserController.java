@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.smhrd.praime.entiry.Role;
 import com.smhrd.praime.entiry.UserEntity;
 import com.smhrd.praime.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
+
 import java.time.LocalDate;
 
 @Controller
@@ -20,13 +23,40 @@ public class UserController {
     private UserService userService;
 
 
-    // 아이디 중복 확인 (AJAX 요청 처리)
-    @PostMapping("/checkId")
-    @ResponseBody
-    public String checkIdDuplicate(@RequestParam("id") String uid) {
-        boolean isDuplicate = userService.isIdDuplicate(uid);
-        return isDuplicate ? "duplicate" : "available";
+    // 로그인 기능
+    @PostMapping(value = "/login.do")
+    public String login(@RequestParam("id") String uid, @RequestParam String pw, HttpSession session) {
+        UserEntity user = userService.login(uid, pw);
+        System.out.println(user);
+        System.out.println("로그인기능들어옴!!!!!!!!!!!");
+
+        if (user != null) {  // Login 성공
+            session.setAttribute("user", user);
+            System.out.println("로그인성공!!!!!!!!!!!");
+
+            if (Role.FARMER.equals(user.getRole())) {   //Role 농부
+            	System.out.println("농부!!!!!!!!!!!");
+                return "redirect:/farmer_main";
+                
+            } else if (Role.USER.equals(user.getRole())) {  //Role 소비자
+            	System.out.println("소비자!!!!!!!!!!!");
+                return "user_main";
+                
+            } else if (Role.ADMIN.equals(user.getRole())) {  //Role 관리자
+            	System.out.println("관리자!!!!!!!!!!!");
+                return "admin_main";
+                
+            }
+            
+            else {
+                return "redirect:/"; 
+            }
+
+        } else {
+            return "redirect:/login"; // Login 실패
+        }
     }
+
 
     // 회원가입 처리
     @PostMapping("/joinUser.do")

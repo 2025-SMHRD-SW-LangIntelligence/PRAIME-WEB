@@ -28,4 +28,10 @@ public class UserService {
     public boolean isIdDuplicate(String uid) {
         return userRepository.existsById(uid);
     }
+    
+	// 로그인 기능
+	public UserEntity login(String uid,String pw) {
+		UserEntity user = userRepository.findByUidAndPw(uid,pw);
+		return user;
+	}
 }
