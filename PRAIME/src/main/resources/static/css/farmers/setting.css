@@ -1,0 +1,131 @@
+   .profile-box{
+        max-width: 600px;
+        margin: 20px;
+        padding: 16px;
+        border: 1px solid #fafafa;
+        border-radius: 8px;
+        background-color: #fafafa;
+        box-shadow: 0 7px 4px rgba(0,0,0,0.1);
+    }
+
+   /* 프로필 컨텐츠 그룹 (아바타 + 정보) */
+.profile-contents {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* 아바타 (이니셜 원형) */
+.profile-contents .avatar {
+  width: 60px;
+  height: 60px;
+  border: #fafafa;
+  box-shadow: 0 7px 7px rgba(0,0,0,0.5);
+  border-radius: 50%;
+  background-color: #1dd1a1;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 이름·이메일·농장명 텍스트 그룹 */
+.profile-contents h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+.profile-contents p {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.3;
+}
+
+/* 액션 버튼 컨테이너 */
+.profile-actions {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 공통 버튼 스타일 */
+.profile-actions a {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 500;
+  box-shadow: 0 7px 8px rgba(0,0,0,0.5);
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+/* 버튼 아이콘 */
+.profile-actions .icon {
+  margin-right: 12px;
+  font-size: 1.2rem;
+}
+
+/* 화살표 */
+.profile-actions .arrow {
+  margin-left: auto;
+  font-size: 1.5rem;
+}
+
+/* 내 정보 수정 버튼 (파란 계열) */
+.user-edit {
+  background-color: #e7f0ff;
+  color: #1a3d8f;
+
+}
+.user-edit:hover {
+  background-color: #d0d8f8;
+  transform: translateY(-1px);
+}
+
+/* 농장 정보 수정 버튼 (초록 계열) */
+.farm-edit {
+  background-color: #e8faf0;
+  color: #116530;
+}
+.farm-edit:hover {
+  background-color: #cef4d9;
+  transform: translateY(-1px);
+}
+
+/* 로그아웃 버튼 */
+.logout-box {
+    margin: 20px;
+    margin-top: 50px;
+    max-width: 600px;
+    border: 1px solid #fafafa;
+    padding: 16px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 7px 4px rgba(0,0,0,0.1);
+}
+
+.logout-btn {
+    margin: auto;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 200;
+   height: 50px;
+   background-color: #ff3b30;
+   color: white;
+   border-radius: 8px;
+   text-decoration: none;
+   font-size: 1.1rem;
+   box-shadow: 0 5px 8px rgba(0, 0, 0,00.3);
+    
+}
+.logout-btn:hover {
+    background-color: #ff0000;
+    transform: translateY(-1px);
+}

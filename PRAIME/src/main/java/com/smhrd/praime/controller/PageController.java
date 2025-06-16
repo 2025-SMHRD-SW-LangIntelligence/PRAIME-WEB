@@ -86,6 +86,12 @@ public class PageController {
 		return "farmers/my_info_edit";
 	}
 	
+	// 농장 정보 수정 페이지 이동
+	@GetMapping(value = "/farmInfoEditPage")
+	public String farmInfoEditPage() {
+		return "farmers/farm_info_edit";
+	}
+	
 
 	
 	// ---------- 관리자 ---------- //
