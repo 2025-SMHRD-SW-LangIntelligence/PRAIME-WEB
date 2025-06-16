@@ -14,10 +14,48 @@
    	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- 파일   -->
     <script th:src="@{/js/admin/category_register.js}"></script>
-    <title>내 정보 페이지</title>
+    <title>관리자 작물 등록 페이지</title>
 </head>
 <body>
     <div class="container">
+    	<div class="wrapper">
+			<header>
+				<div class="header-group">
+					<a href="/adminMainPage" class="prevPage"> < </a>
+						<div class="header-title-group">
+							<h1 class="header-title">관리자 페이지</h1>
+							<p class="header-subtitle">관리자 작물 등록</p>
+						</div>
+				</div>
+			</header>
+			<main>
+                <div class = "admin-box">
+                    <div class = "admin-group">
+                    <!-- 해당 기능 테스트시 본인의 C드라이브에 crops라는 폴더를 생성하고 실행해주세요! -->
+                        <p class = "admin-title">작물 등록 페이지</p>
+
+                        <form action = "/adminCategoryRegisterPage" enctype="multipart/form-data" method = "POST">
+                            <div class = "form-group">
+                                <label for = "crops-name">작물명</label>
+                                <div class = "crop-name-input-container">
+                                	<input class = "form-control" type="text" id = "crops-name" name = "crops-name" placeholder = "등록할 작물을 입력하세요." required>
+                                </div>
+                            </div>
+                            <div class = "form-group">
+                                <label for = "crops-img">작물 이미지 등록</label>
+                                <div class = "crop-img-input-container">
+                                	<input class = "form-control" type = "file" accept="image/*" id = "crops-img" name = "crops-img" required>
+                                </div>
+                            </div>
+                            <div class = "button-group">
+                                <button type = "reset" class = "back-btn">재등록</button>
+                                <button type = "submit" class = "join-btn">작물추가</button>
+                            </div>
+                        </form>
+                    </div>    
+                </div>
+            </main>
+        </div>
 
     </div>
 </body>
