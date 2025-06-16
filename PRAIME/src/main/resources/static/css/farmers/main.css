@@ -1,0 +1,100 @@
+header {
+    background-color: var(--primary-color);
+    text-align: center;
+    padding: 15px 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid #eae6dd;
+}
+
+
+
+.top-nav{
+	background-color: var(--primary-color);
+	text-align: right;
+}
+.top-nav span{
+	color : white;
+}
+
+  
+
+
+/* Placeholder image styling */
+.product-image.placeholder-image {
+    background-color: #e9ecef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6c757d;
+    font-size: 2rem;
+}
+
+.product-image.placeholder-image::before {
+    content: '\f03e'; 
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+/* 반응형 */
+@media (max-width: 480px) {
+    .banner-section {
+        height: 150px;
+    }
+
+    .banner-title {
+        font-size: 1rem;
+    }
+
+    .banner-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .category-list {
+        padding: 0 10px;
+    }
+
+    .filter-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 10px;
+    }
+
+    .filter-left {
+        flex-wrap: wrap;
+    }
+
+    .filter-right {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        padding: 0 10px;
+    }
+
+    .product-image {
+        height: 130px;
+    }
+
+    .product-name {
+        font-size: 0.9rem;
+    }
+
+    .product-price {
+        font-size: 1rem;
+    }
+
+    .product-meta {
+        font-size: 0.75rem;
+    }
+
+    .bottom-nav-item i {
+        font-size: 1.2rem;
+    }
+
+    .bottom-nav-item span {
+        font-size: 0.7rem;
+    }
+}

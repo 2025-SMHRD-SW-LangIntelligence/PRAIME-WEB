@@ -1,8 +1,5 @@
-/* Inherit styles from common.css and login.css as needed */
-
-/* Header adjustments for consumer page if different from login */
 header {
-    background-color: var(--primary-color); /* Using a variable from common.css */
+    background-color: var(--primary-color);
     text-align: center;
     padding: 15px 0;
     margin-bottom: 0;
@@ -12,7 +9,7 @@ header {
 .header-group {
     display: flex;
     align-items: center;
-    justify-content: center; /* Center the header content */
+    justify-content: center; 
     min-height: 40px;
     gap: 10px;
 }
@@ -34,20 +31,19 @@ header {
     line-height: 1.4;
 }
 
-/* Main Content Styling */
 main {
-    flex: 1; /* Allows main content to grow and push footer down */
-    padding-bottom: 70px; /* Space for the fixed bottom navigation */
+    flex: 1; 
+    padding-bottom: 70px; 
 }
 
 /* Banner Section */
 .banner-section {
     position: relative;
     width: 100%;
-    height: 180px; /* Adjust height as needed */
+    height: 180px; 
     overflow: hidden;
     margin-bottom: 20px;
-    background-color: #f0f0f0; /* Placeholder background */
+    background-color: #f0f0f0;
 }
 
 .banner-image {
@@ -81,10 +77,10 @@ main {
     
 }
 
-/* Category Navigation */
+
 .category-nav {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    -webkit-overflow-scrolling: touch; 
     white-space: nowrap;
     padding: 10px 0;
     background-color: #fefefe;
@@ -95,7 +91,7 @@ main {
 .category-list {
     list-style: none;
     display: flex;
-    padding: 0 15px; /* Padding for the ends of the scrollable list */
+    padding: 0 15px; 
 }
 
 .category-item {
@@ -173,7 +169,7 @@ main {
 /* Product List Section */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Responsive grid */
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
     gap: 15px;
     padding: 0 15px;
 }
@@ -184,7 +180,7 @@ main {
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out;
-    padding-bottom: 10px; /* Space for content below image */
+    padding-bottom: 10px; 
 }
 
 .product-card:hover {
@@ -193,7 +189,7 @@ main {
 
 .product-image {
     width: 100%;
-    height: 150px; /* Fixed height for product images */
+    height: 150px; 
     object-fit: cover;
     display: block;
     border-bottom: 1px solid #eee;
@@ -240,7 +236,7 @@ main {
 }
 
 .product-meta .rating i {
-    color: #f7d24d; /* Star color */
+    color: #f7d24d; 
     margin-right: 3px;
 }
 
@@ -296,7 +292,7 @@ main {
 }
 
 .product-image.placeholder-image::before {
-    content: '\f03e'; /* Font Awesome image icon */
+    content: '\f03e'; 
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
 }

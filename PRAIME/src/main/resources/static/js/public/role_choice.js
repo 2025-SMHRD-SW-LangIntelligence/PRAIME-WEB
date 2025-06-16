@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // 선택된 역할에 따라 다른 페이지로 이동
         if (selectedRole === 'farmer') {
             window.location.href = 'joinFarmerPage';
-        } else if (selectedRole === 'user') {
-            window.location.href = 'joinUserPage';
+        } else if (selectedRole === 'consumer') {
+            window.location.href = 'joinConsumerPage';
         }
     });
 

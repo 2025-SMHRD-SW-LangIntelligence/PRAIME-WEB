@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>농담</title>
+    <link th:href="@{/css/font.css}" rel="stylesheet">
+    <link th:href="@{/css/common.css}" rel="stylesheet">
+    <link th:href="@{/css/farmers/main.css}" rel="stylesheet">
+   	<!-- jQuery CDN  -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Axios CDN  -->
+   	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- JS 파일 -->
+    <script th:src="@{/js/farmers/main.js}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+           <span class="">2025년 6월 16일</span>
+        </nav>
+        <header>
+            <div class="header-group">
+            	<div>
+            	</div>
+                <div class="header-title-group">
+            	 	<span th:text="${session.user?.uid}"></span>님
+                    <p class="header-subtitle">오늘도 좋은하루 되세요</p>
+                </div>
+            </div>
+        </header>        
+        <main>
+			<section class="banner-section">
+				<div class="banner-text">
+                    날씨
+                </div>
+			</section>
+        </main>
+        <!-- Footer -->
+    	<div th:replace="/global/footer::footer "></div>       
+    </div>
+</body>
+</html>

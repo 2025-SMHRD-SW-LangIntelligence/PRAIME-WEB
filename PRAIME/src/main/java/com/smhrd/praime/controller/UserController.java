@@ -12,6 +12,7 @@ import com.smhrd.praime.entiry.Role;
 import com.smhrd.praime.entiry.UserEntity;
 import com.smhrd.praime.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,14 +21,10 @@ import java.util.Optional;
 @Controller
 public class UserController {
 
-    private final PageController pageController;
 
     @Autowired
     private UserService userService;
 
-    UserController(PageController pageController) {
-        this.pageController = pageController;
-    }
 
     // 로그인 기능
     @PostMapping(value = "/login.do")
@@ -61,9 +58,9 @@ public class UserController {
         if (Role.FARMER.equals(role)) {
         	System.out.println("농부");
             return "/farmerMainPage";
-        } else if (Role.USER.equals(role)) {
+        } else if (Role.CONSUMER.equals(role)) {
         	System.out.println("소비자");
-            return "/userMainPage";
+            return "/consumerMainPage";
         } else if (Role.ADMIN.equals(role)) {
         	System.out.println("관리자");
             return "/adminMainPage";
@@ -73,8 +70,8 @@ public class UserController {
     
 
     // 회원가입 처리
-    @PostMapping("/joinUser.do")
-    public String registerUser(
+    @PostMapping({"/joinConsumer.do", "/joinFarmer.do"})
+    public String joinUser(
             @RequestParam("id") String uid,
             @RequestParam("pw") String pw,
             @RequestParam("name") String name,
@@ -86,28 +83,35 @@ public class UserController {
             @RequestParam("email-domain") String emailDomain,
             @RequestParam("address") String address,
             @RequestParam("address-detail") String addressDetail,
-            Model model) {
+            Model model,
+            HttpServletRequest request) {
+
+        // URI로 역할 판별
+        String requestURI = request.getRequestURI();
+        boolean isConsumer = requestURI.endsWith("joinConsumer.do");
+
+        Role role = requestURI.endsWith("joinConsumer.do") ? Role.CONSUMER : Role.FARMER;
+
+        UserEntity user = new UserEntity();
+        user.setUid(uid);
+        user.setPw(pw);
+        user.setName(name);
+        user.setTelecom(telecom);
+        user.setTel1(tel1);
+        user.setTel2(tel2);
+        user.setTel3(tel3);
+        user.setEmailId(emailId);
+        user.setEmailDomain(emailDomain);
+        user.setAddress(address);
+        user.setAddressDetail(addressDetail);
+        user.setRole(role);
 
         try {
-            UserEntity user = new UserEntity();
-            user.setUid(uid);
-            user.setPw(pw); 
-            user.setName(name);
-            user.setTelecom(telecom);
-            user.setTel1(tel1);
-            user.setTel2(tel2);
-            user.setTel3(tel3);
-            user.setEmailId(emailId);
-            user.setEmailDomain(emailDomain);
-            user.setAddress(address);
-            user.setAddressDetail(addressDetail);
-            user.setRole(Role.USER);
-
             userService.registerUser(user);
-            return "redirect:/";
+            return "redirect:/";  //로그인페이지 이동
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
-            return "joinUserPage";
+            return isConsumer ? "joinConsumerPage" : "joinFarmerPage";  // 동적 페이지 반환
         }
     }
 

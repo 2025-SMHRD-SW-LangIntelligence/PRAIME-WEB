@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
 
             // axios를 사용해 서버에 POST 요청
-            axios.post('/joinUser.do', null, {
+            axios.post('/joinFarmer.do', null, {
                 params: formData
             })
             .then(function(response) {
