@@ -2,6 +2,7 @@ package com.smhrd.praime.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class PageController {
@@ -69,7 +70,7 @@ public class PageController {
 	}		
 	
 	// 농부 회원가입 페이지 이동2
-	@GetMapping(value = "/joinFarmerPage2")
+	@PostMapping(value = "/joinFarmerPage2")
 	public String joinFarmerPage2() {
 		return "farmers/join2";
 	}		

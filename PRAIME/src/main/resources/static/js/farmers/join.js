@@ -205,13 +205,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 주소 검사
         const address = document.getElementById('address').value;
-        const addressDetail = document.getElementById('addressDetail').value;
+        const addressDetail = document.getElementById('address-detail').value;
         if (!address) {
             showError('address', '주소를 입력해주세요.');
             isValid = false;
         }
         if (!addressDetail) {
-            showError('addressDetail', '상세주소를 입력해주세요.');
+            showError('address-detail', '상세주소를 입력해주세요.');
             isValid = false;
         }
 
@@ -221,8 +221,46 @@ document.addEventListener('DOMContentLoaded', function() {
     // 회원가입 버튼 클릭 이벤트 처리
     document.getElementById('joinBtn').addEventListener('click', function(e) {
         e.preventDefault();
-        
-        // 유효성 검사 수행
+  
+		// 유효성 검사 수행
+		if (validateForm()) {
+		    // 폼 데이터 수집
+		    const formData = {
+		        id: document.getElementById('id').value,
+		        pw: document.getElementById('pw').value,
+		        name: document.getElementById('name').value,
+		        'tel-0': document.getElementById('tel-0').value,
+		        'tel-1': document.getElementById('tel-1').value,
+		        'tel-2': document.getElementById('tel-2').value,
+		        'tel-3': document.getElementById('tel-3').value,
+		        email: document.getElementById('email').value,
+		        'email-domain': document.getElementById('email-domain').value,
+		        address: document.getElementById('address').value,
+		        'address-detail': document.getElementById('address-detail').value
+		    };
+
+		    // 1. Axios 대신 form을 생성하여 step2로 전송
+		    const form = document.createElement('form');
+		    form.method = 'POST';
+		    form.action = '/joinFarmerPage2';
+		    
+		    // 데이터를 hidden input으로 추가
+		    for (const key in formData) {
+		        if (formData.hasOwnProperty(key)) {
+		            const input = document.createElement('input');
+		            input.type = 'hidden';
+		            input.name = key;
+		            input.value = formData[key];
+		            form.appendChild(input);
+		        }
+		    }
+		    
+		    document.body.appendChild(form);
+		    form.submit();		
+		
+		
+		      
+/*        // 유효성 검사 수행
         if (validateForm()) {
             // 폼 데이터 수집
             const formData = {
@@ -249,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(function(error) {
                 console.error('회원가입 실패:', error);
                 showError('general', '회원가입에 실패했습니다. 다시 시도해주세요.');
-            });
+            });*/
         }
     });
 });
