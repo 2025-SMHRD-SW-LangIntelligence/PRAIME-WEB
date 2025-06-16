@@ -68,6 +68,12 @@ public class PageController {
 		return "farmers/join";
 	}		
 	
+	// 농부 회원가입 페이지 이동2
+	@GetMapping(value = "/joinFarmerPage2")
+	public String joinFarmerPage2() {
+		return "farmers/join2";
+	}		
+	
 	// 내정보 보기 페이지 이동
 	@GetMapping(value = "/myInfoPage")
 	public String myInfoPage() {
