@@ -3,22 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 정보 페이지</title>
     <link th:href="@{/css/font.css}" rel="stylesheet">
     <link th:href="@{/css/common.css}" rel="stylesheet">
     <link th:href="@{/css/farmers/my_info.css}" rel="stylesheet">
-	<!-- Font Awesome CDN 추가 -->
+	<link th:href="@{/css/farmers/setting.css}" rel="stylesheet">
+
+    <!-- Font Awesome CDN 추가 -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
    	<!-- jQuery CDN  -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Axios CDN  -->
    	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- 파일   -->
-    <script th:src="@{/js/farmers/my_info.js}"></script>
-    <title>내 정보 페이지</title>
+    <script th:src="@{/js/farmers/my_info.js}"></script> 
 </head>
 <body>
     <div class="container">
+		<div class="wrapper">
+			<header>
+				<div class="header-group">
+					<div class="header-title-group">
+						<h1 class="header-title">설정</h1>
+					</div>
+				</div>
+		    </header>
+            <main>
+                <div class="profile-box"> 
+                    <h2>프로필 정보</h2>
+                        <div class="profile-contents">
+                            <!-- 프로필 사진 -->
+                            <div class="avatar">
+                                이
+                            </div>
+                            <div>
+                                <h3>이름</h3>
+                                <p>example@example.com</p>
+                                <p>농장명</p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-actions">
+                            <a href="#" class="user-edit">
+                                <span class="icon">👤</span>
+                                <span>내 정보 수정</span>
+                                <span class="arrow">⭢</span>
+                            </a>
 
+                            <a href="#" class="farm-edit">
+                                <span class="icon">🏡</span>
+                                <span>농장 정보 수정</span>
+                                <span class="arrow">⭢</span>
+                            </a>
+
+                        </div>
+                </div>
+                <div class="logout-box">
+                    <a th:href="@{/loginPage}" class="logout-btn">
+                        로그아웃
+                    </a>
+                </div>
+
+                
+            </main>
     </div>
 </body>
 </html>
