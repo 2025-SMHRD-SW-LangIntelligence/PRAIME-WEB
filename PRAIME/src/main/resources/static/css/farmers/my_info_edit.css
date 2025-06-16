@@ -1,0 +1,375 @@
+/* 공통 변수 추가 (common.css 변수와 통합) */
+:root {
+    --header-bg: #0f4f35;
+    --header-text: #f0f0f0;
+    --header-hover: #f0f0f0;
+    --btn-primary: #0f4f35;
+    --btn-primary-hover: #0a3524;
+    --btn-secondary: #f6f5f5;
+    --btn-secondary-hover: #d8d4cc;
+    --btn-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --input-border: #e2e6ee;
+    --title-circle-bg: #0f4f35;
+    --title-circle-text: #eaeeee;
+  }
+  
+  /* 기본 박스 스타일 */
+  .join-box {
+    border-radius: 10px;
+    padding: 20px;
+  }
+  
+  
+  /* 헤더 영역 */
+  header {
+    position: relative;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--header-bg);
+    margin-bottom: 0;
+  }
+  
+  .header-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    min-height: 40px;
+  }
+  
+  .prevPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    font-size: 1.5rem;
+    color: var(--header-text);
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 10px;
+    border-radius: 50%;
+    transition: color 0.3s;
+  }
+  
+  .prevPage:hover {
+    color: var(--header-hover);
+  }
+  
+  .header-title-group {
+    flex: 1;
+    padding-right: 40px;
+  }
+  
+  .header-title,
+  .header-subtitle {
+    color: var(--header-text);
+  }
+  
+  .header-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 3px;
+  }
+  
+  .header-subtitle {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  /* 제목 영역 */
+  .join-title {
+    text-align: center;
+  }
+  
+.join-title-text{
+    color: var(--title-circle-text);
+}
+
+
+/* Start --------------------- 폼 요소 ---------------------*/
+
+
+.join-form{
+    margin-bottom: 20px;
+}
+
+
+
+.join-subtitle{
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+
+.form-group{
+    margin-bottom: 20px;
+}
+
+.form-group label{
+    display: block;
+    margin-bottom: 8px;
+    margin-left: 7px;
+    font-size: 15px;
+    font-weight: bolder;
+}
+
+
+.form-group input{
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #e2e6ee;
+    border-radius: 5px;
+}
+
+/* Start --------------------- 비밀번호 요소 ---------------------*/
+
+/* 비밀번호 입력 컨테이너 스타일 */
+.password-input-container {
+    position: relative;
+    width: 100%;
+}
+
+/* 비밀번호 토글 아이콘 스타일 */
+.password-toggle-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+    font-size: 18px;
+}
+
+.password-toggle-icon:hover {
+    color: #0f4f35;
+}
+
+/* Font Awesome 아이콘 사용을 위한 스타일 */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+/*  --------------------- 비밀번호 요소 --------------------- END*/
+
+
+/* Start --------------------- 아이디 요소 ---------------------*/
+.id-input-group{
+    display: flex; /*자식 요소들을 가로로 나란히 배치*/
+    gap: 10px; /*자식 요소들 사이에 10px의 간격으로 배치*/
+    align-items: center; /* 자식 요소들을 세로 중앙에 정렬 */
+}
+
+.id-input-group input{
+    flex: 1; /*사용 가능한 공간을 최대로*/
+}
+
+.duplicate-check-btn{
+    flex: 0 0 auto; /* 버튼크기 고정*/
+    background-color: #0f4f35;
+    color: white;
+    padding: 15px;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.duplicate-check-btn:hover{
+    background-color: #0a3524;
+    transform: translateY(-2px);
+}
+
+/*Start ---------------- 이메일 ----------------*/
+
+.email-group {
+    margin-bottom: 20px;
+}
+
+.email-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.email-input-group input {
+    flex: 1;
+    padding: 15px 10px;
+    border-radius: 5px;
+    border: 1px solid #e2e6ee;
+}
+
+.email-input-group select {
+    flex: 1;
+    padding: 13px 10px;
+    border-radius: 5px;
+    border: 1px solid #e2e6ee;
+    font-size: 16px;
+}
+
+.email-input-group span {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+/*---------------- 이메일 ---------------- End*/
+
+
+
+
+/* Start ---------------- 전화번호 ---------------- */
+
+.tel-group {
+    margin-bottom: 20px;
+}
+
+.tel-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tel-input-group select {
+    flex: 0.5;
+    padding: 13px 10px;
+    border-radius: 5px;
+    border: 1px solid #e2e6ee;
+    font-size: 16px;
+}
+
+.tel-input-group input {
+    flex: 0.5;
+    padding: 13px 10px;
+    border-radius: 5px;
+    border: 1px solid #e2e6ee;
+    font-size: 16px;
+    min-width: 0;
+}
+
+.tel-input-group span {
+    font-size: 17px;
+    font-weight: bold;
+    flex: 0;
+}
+
+/*---------------- 전화번호 ---------------- End*/
+
+/*---------------- 주소 ----------------*/
+
+.address-input-group{
+    display: flex; 
+    gap: 10px; 
+    align-items: center; 
+    margin-bottom: 15px;
+}
+
+.id-input-group input{
+    flex: 1;
+}
+
+.duplicate-check-btn{
+    flex: 0 0 auto; /* 버튼크기 고정*/
+    background-color: #0f4f35;
+    color: white;
+    padding: 15px;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+}
+/*---------------- 주소 ---------------- End*/
+
+
+
+/*---------------- 버튼 ----------------*/
+.button-group{
+    display: flex;
+    gap: 20px;
+}
+
+.back-btn, .join-btn{
+    flex: 1;
+    padding: 17px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    
+}
+
+
+.back-btn{
+    background-color: #f6f5f5;
+    color: #1e5549;
+    box-shadow: 0 5px 15px 0 rgb(0, 0, 0, 0.1 );
+}
+.back-btn:hover{
+    background-color: #d8d4cc;
+    transform: translateY(-2px);
+}
+
+.join-btn{
+    background-color: #0f4f35;
+    color: white;
+    box-shadow: 0 5px 15px 0 rgb(0, 0, 0, 0.1 );
+}
+
+.join-btn:hover{
+    background-color: #0a3524;
+    transform: translateY(-2px);
+}
+
+
+/*---------------- 버튼 ---------------- End*/
+
+
+/* ---------------- 에러 메시지 스타일----------------  */
+.error-message {
+    color: #ff0000;
+    font-size: 12px;
+    margin-top: 5px;
+    padding-left: 5px;
+}
+
+
+
+
+/* ---------------- 에러 메시지 스타일---------------- END  */
+
+
+/* ----------------반응형 조정---------------- */
+@media (max-width: 480px) {
+    header {
+      padding: 12px 0;
+    }
+    
+    .header-title {
+      font-size: 1.1rem;
+    }
+    
+    .header-subtitle {
+      font-size: 0.8rem;
+    }
+    
+    .prevPage {
+      width: 28px;
+      height: 28px;
+      font-size: 1.3rem;
+    }
+  
+    .tel-input-group {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .tel-input-group select,
+    .tel-input-group input {
+      width: 100%;
+    }
+  
+    .button-group {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }

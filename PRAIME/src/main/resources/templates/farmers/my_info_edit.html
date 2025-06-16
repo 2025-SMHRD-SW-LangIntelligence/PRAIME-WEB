@@ -13,12 +13,113 @@
     <!-- Axios CDN  -->
    	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- 파일   -->
-    <script th:src="@{/js/farmers/my_info_edit.js}"></script>
+    <!-- <script th:src="@{/js/farmers/my_info_edit.js}"></script> -->
     <title>내 정보 수정 페이지</title>
 </head>
 <body>
     <div class="container">
-
+        <div class="wrapper">
+            <header>
+                <div class="header-group">
+                    <a href="/roleChoicePage" class="prevPage">  </a>
+                    <div class="header-title-group">
+                        <h1 class="header-title">기본 정보 변경</h1>
+                        <p class="header-subtitle">농민 기본정보를 변경해주세요</p>
+                    </div>
+    			</div>
+            </header>
+            <main>
+                <div class="join-box">
+                    <div class="join-group">
+                        <h2 class="join-title">
+                            <span class="join-title-wrap">
+                               
+                            </span>기본정보
+                        </h2>
+                        <!-- <form class="join-form" action=""> -->
+                        <form class="join-form" id="joinFormStep1" action="/farmers/join_step2" method="post">
+                            
+                            <div class="form-group">
+                                <label for="id">아이디</label>
+                                <div class="id-input-group">
+                                    <input type="text" name="id" id="id" placeholder="아이디를 입력해주세요" th:value="${session.user.uid}">
+                                    <button class="duplicate-check-btn" >중복확인</button>
+                                </div>
+                            </div>
+							<div class="form-group">
+								<label for="pw">비밀번호</label>
+								<div class="password-input-container">
+									<input type="password" name="pw" id="pw"
+										placeholder="비밀번호를 입력해주세요" th:value="${session.user.pw}"> <span
+										class="password-toggle-icon"> <i class="fas fa-eye"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="pw">비밀번호</label>
+								<div class="password-input-container">
+									<input type="password" name="pw-confirm" id="pw-confirm"
+										placeholder="비밀번호를 입력해주세요"> <span
+										class="password-toggle-icon"> <i class="fas fa-eye"></i>
+									</span>
+								</div>
+							</div>
+                            <div class="form-group">
+                                <label for="pw">이름</label>
+                                <input type="text" name="name" id="name" placeholder="이름을 입력해주세요" th:value="${session.user.name}">
+                            </div>
+                            <div class="form-group tel-group">
+                                <label for="tel">휴대폰</label>
+                                <div class="tel-input-group">
+                                    <select name="tel-0" id="tel-0">
+                                        <option value="">통신사선택</option>
+                                        <option value="KT">KT</option>
+                                        <option value="SKT">SKT</option>
+                                        <option value="LG U+">LG U+</option>
+                                        <option value="KT 알뜰폰">KT 알뜰폰</option>
+                                        <option value="SKT 알뜰폰">SKT 알뜰폰</option>
+                                        <option value="LG U+ 알뜰폰">LG U+ 알뜰폰</option>
+                                    </select>                                    
+                                    <input type="text" name="tel-1" id="tel-1" placeholder="010" maxlength="3" size="3" th:value="${session.user.tel1}">
+                                    <span>-</span>
+                                    <input type="text" name="tel-2" id="tel-2" placeholder="1234" maxlength="4" size="4" th:value="${session.user.tel2}">
+                                    <span>-</span>
+                                    <input type="text" name="tel-3" id="tel-3" placeholder="5678" maxlength="4" size="4" th:value="${session.user.tel3}">
+                                    <button class="duplicate-check-btn" onclick="identityVerification()">본인인증</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">이메일</label>
+                                <div class="email-input-group">
+                                    <input type="email" name="email" id="email" placeholder="이메일을 입력해주세요" th:value="${session.user.emailId}" >
+                                    <span>@</span>
+                                    <select name="email-domain" id="email-domain">
+                                        <option value="">선택</option>
+                                        <option value="gmail.com">gmail.com</option>
+                                        <option value="naver.com">naver.com</option>
+                                        <option value="daum.com">daum.com</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">주소</label>
+                                <div class="address-input-group">
+                                    <input type="text" name="address" id="address"  placeholder="우편번호" th:value="${session.user.address}">
+                                    <button class="duplicate-check-btn" onclick="addressFind()">주소찾기</button>
+                                </div>
+                                <div class="address-input-group">
+                                    <input type="text" name="address-detail" id="address-detail" placeholder="상세주소를 입력해주세요" th:value="${session.user.addressDetail}">
+                                </div>
+                            </div>                        
+                        </form>
+                    </div>
+                    <div class="button-group">
+                        <button class="back-btn" onclick="history.back()">취소</button>
+                        <button class="join-btn" id="joinBtn">변경</button>
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
 </body>
 </html>
