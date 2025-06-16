@@ -44,16 +44,16 @@ public class PageController {
 	}	
 
 	
-	// 내정보 보기 페이지 이동
+	// 소비자 내정보 보기 페이지 이동
 	@GetMapping(value = "/myInfoConsumerPage")
 	public String myInfoConsumerPage() {
 		return "farmers/my_info";
 	}
 	
-	// 내정보 수정 페이지 이동
-	@GetMapping(value = "/myInfoFarmerPage")
-	public String myInfoFarmerPage() {
-		return "farmers/my_info_update";
+	// 소비자 내정보 수정 페이지 이동
+	@GetMapping(value = "/myInfoConsumerEditPage")
+	public String myInfoConsumerEditPage() {
+		return "consumer/my_info_edit";
 	}
 
 	// ---------- 농부 ---------- //
@@ -75,15 +75,15 @@ public class PageController {
 		return "farmers/join2";
 	}		
 	
-	// 내정보 보기 페이지 이동
-	@GetMapping(value = "/myInfoPage")
-	public String myInfoPage() {
+	// 농부 내정보 보기 페이지 이동
+	@GetMapping(value = "/myInfoFarmerPage")
+	public String myInfoFarmerPage() {
 		return "farmers/my_info";
 	}
 	
-	// 내정보 수정 페이지 이동
-	@GetMapping(value = "/myInfoEditPage")
-	public String myInfoUpdatePage() {
+	// 농부 내정보 수정 페이지 이동
+	@GetMapping(value = "/myInfoFarmerEditPage")
+	public String myInfoFarmerEditPage() {
 		return "farmers/my_info_edit";
 	}
 	

@@ -37,14 +37,14 @@
                                 이
                             </div>
                             <div>
-                                <h3>이름</h3>
-                                <p>example@example.com</p>
-                                <p>농장명</p>
+                                <h3 th:text="${session.user?.uid}">이름</h3>
+                                <p th:text="${session.user?.address}"></p>
+                                <p th:text="${session.user?.farmName}"></p>
                             </div>
                         </div>
                         
                         <div class="profile-actions">
-                            <a href="#" class="user-edit">
+                            <a href="/myInfoFarmerEditPage" class="user-edit">
                                 <span class="icon">👤</span>
                                 <span>내 정보 수정</span>
                                 <span class="arrow">⭢</span>
@@ -63,9 +63,8 @@
                         로그아웃
                     </a>
                 </div>
-
-                
             </main>
+    	</div> 
     </div>
 </body>
 </html>

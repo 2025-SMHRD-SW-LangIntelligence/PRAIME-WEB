@@ -81,7 +81,7 @@ public class UserController {
 //        // 로직 처리 후 응답
 //        return Map.of("success", true);
 //    }
-//    
+    
     
     @PostMapping({"/joinConsumer.do", "/joinFarmer.do"})
     @ResponseBody // 비동기 요청 처리 시 @ResponseBody 필요 (redirect 시에는 불필요할 수 있으나, Axios 요청이므로 유지)
