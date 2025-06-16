@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/font.css}" rel="stylesheet">
+    <link th:href="@{/css/common.css}" rel="stylesheet">
+    <link th:href="@{/css/farmers/join2.css}" rel="stylesheet">
+	<!-- Font Awesome CDN 추가 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+   	<!-- jQuery CDN  -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Axios CDN  -->
+   	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- 파일   -->
+    <script th:src="@{/js/farmers/join2.js}"></script>
+    <title>농민회원 가입 페이지</title>
+</head>
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <header>
+                <div class="header-group">
+                    <a href="role_choice.html" class="prevPage"><</a>
+                    <div class="header-title-group">
+                        <h1 class="header-title">회원가입</h1>
+                        <p class="header-subtitle">농민 기본정보를 입력해주세요</p>
+                    </div>
+                </div>
+            </header>
+            <main>
+                <div class="join-box">
+                    <div class="join-group">
+                        <h2 class="join-title">
+                            <span class="join-title-wrap">
+                                <span class="join-title-text">2</span>
+                            </span>농장정보
+                        </h2>
+                        <p class="join-subtitle">기본정보 2</p>
+                        <form class="join-form" action="">
+                            <div class="form-group">
+                                <label for="pw">농장명</label>
+                                <input type="text" name="farm-name" placeholder="농장명을 입력해주세요">
+                            </div>
+                            <div class="form-group">
+                                <label for="farm-area">농장면적</label>
+                                <div class="farm-area-input-group">
+                                    <input type="text" name="farm-area" id="farm-area" placeholder="농장면적을 입력해주세요">
+                                    <select name="area-unit">
+                                        <option value="">면적선택</option>
+                                        <option value="ha">ha</option>
+                                        <option value="sqft">m2</option>
+                                    </select> 
+                                </div>
+                            </div>                            
+                            <div class="form-group">
+                                <label for="address">농장주소</label>
+                                <div class="address-input-group">
+                                    <input type="text" name="farm-address" id="farm-address" placeholder="우편번호">
+                                    <button class="duplicate-check-btn" onclick="duplicateCheck()">주소찾기</button>
+                                </div>
+                                <div class="address-input-group">
+                                    <input type="text" name="address-detail" placeholder="상세주소를 입력해주세요">
+                                </div>        
+                            </div>                        
+                            <div class="form-group">
+                                <div class="crop-category-group">
+                                    <label for="crop">농작물 등록 </label>
+                                    <div class="crop-grid">
+                                        <!-- 농작물 항목들 - 실제 프로젝트에서는 DB에서 가져오거나 동적으로 생성 -->
+                                        <div class="crop-item" data-crop-id="1">
+                                            <div class="crop-icon">
+                                                <span>🍎</span>
+                                            </div>
+                                            <span class="crop-name">사과</span>
+                                            <input type="checkbox" name="selectedCrops" value="apple" class="crop-checkbox" hidden>
+                                        </div>
+                                        <div class="crop-item" data-crop-id="2">
+                                            <div class="crop-icon">
+                                                <i class="fas fa-apple-alt"></i>
+                                            </div>
+                                            <span class="crop-name">배</span>
+                                            <input type="checkbox" name="selectedCrops" value="pear" class="crop-checkbox" hidden>
+                                        </div>
+                                        <div class="crop-item" data-crop-id="3">
+                                            <div class="crop-icon">
+                                                <i class="fas fa-lemon"></i>
+                                            </div>
+                                            <span class="crop-name">레몬</span>
+                                            <input type="checkbox" name="selectedCrops" value="lemon" class="crop-checkbox" hidden>
+                                        </div>
+                                        <div class="crop-item" data-crop-id="4">
+                                            <div class="crop-icon">
+                                                <i class="fas fa-leaf"></i>
+                                            </div>
+                                            <span class="crop-name">상추</span>
+                                            <input type="checkbox" name="selectedCrops" value="leaf" class="crop-checkbox" hidden>
+                                        </div>
+                                        <div class="crop-item" data-crop-id="5">
+                                            <div class="crop-icon">
+                                                <i class="fas fa-seedling"></i>
+                                            </div>
+                                            <span class="crop-name">벼</span>
+                                            <input type="checkbox" name="selectedCrops" value="seedling" class="crop-checkbox" hidden>
+                                        </div>
+                                        <div class="crop-item" data-crop-id="6">
+                                            <div class="crop-icon">
+                                                <i class="fas fa-wheat-alt"></i>
+                                            </div>
+                                            <span class="crop-name">밀</span>
+                                            <input type="checkbox" name="selectedCrops" value="wheat" class="crop-checkbox" hidden>
+                                        </div>
+                                    </div>
+                                    <div class="selected-crops-display" id="selectedCropsDisplay"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="button-group">
+                        <button class="back-btn" onclick="goToRoleChoice()">취소</button>
+                        <button class="join-btn" id="joinBtn">회원가입</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
