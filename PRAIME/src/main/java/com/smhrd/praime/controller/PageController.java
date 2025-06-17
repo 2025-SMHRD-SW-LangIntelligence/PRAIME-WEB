@@ -135,4 +135,12 @@ public class PageController {
 		return "farmlog/edit";
 	}
 	
+	// ---------- 병해충진단 ---------- //
+	// 병해충진단 페이지 이동
+	@GetMapping(value = "/diagnosisPage")
+	public String diagnosisPage() {
+		return "diagnosis/view";
+	}
+	
+	
 }

@@ -1,4 +1,30 @@
-   .profile-box{
+header {
+    background-color: var(--primary-color);
+    text-align: center;
+    padding: 15px 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    border-bottom: 1px solid #eae6dd;
+}
+
+.header-group{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px 0 20px;
+}
+
+.header-title-group{
+   margin-top: 0; 
+   text-align: left;
+}
+
+.header-title{
+    margin-top: 0; 
+	color: white;
+}
+
+
+.profile-box{
         max-width: 600px;
         margin: 20px;
         padding: 16px;
