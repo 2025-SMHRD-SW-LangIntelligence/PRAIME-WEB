@@ -12,6 +12,7 @@
     <!-- Axios CDN  -->
    	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- JS 파일 -->
+    <script th:src="@{/js/common.js}"></script>
     <script th:src="@{/js/farmers/main.js}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -77,11 +78,11 @@
                     <section class="core-func-section">
                         <div class="core-title">핵심 기능</div>
                         <div class="core-card-group">
-                            <div class="core-card">
+                            <div class="core-card" onclick="goToFarmlogPage()">
                                 <img th:src="@{/img/log.png}" alt="작업 일지" class="core-icon">
-                                <span class="core-label">작업일지</span>
+                                <span class="core-label">영농일지</span>
                             </div>
-                            <div class="core-card">
+                            <div class="core-card" onclick="goToDiagnosisPage()">
                                 <img th:src="@{/img/bug.png}" alt="병해충 진단" class="core-icon">
                                 <span class="core-label">병해충 진단</span>
                             </div>
@@ -92,7 +93,7 @@
                     <section class="recent-journal-section">
                         <div class="section-header">
                             <h2 class="section-title">최근 일지</h2>
-                            <a href="#" class="view-all">전체보기 &gt;</a>
+                            <a href="/farmlogBoardPage" class="view-all">전체보기 &gt;</a>
                         </div>
                     
                         <div class="journal-list">
@@ -134,7 +135,7 @@
                         </div>
                     
                         <div class="journal-add-button">
-                            <button class="add-journal-btn">+ 새 영농일지 작성하기</button>
+                            <button class="add-journal-btn" onclick="goToFarmlogWritePage()">+ 새 영농일지 작성하기</button>
                         </div>
                     </section>
                 </div>

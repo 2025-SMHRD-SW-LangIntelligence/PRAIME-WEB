@@ -1,6 +1,12 @@
+/*농부*/
 function goToMyInfoFarmerPage(){
 	window.location.href = "/myInfoFarmerPage";
+} 
+
+function goToFarmerMainPage(){
+	window.location.href = "/farmerMainPage";
 }
+
 
 function goToFarmlogPage(){
 	window.location.href = "/farmlogPage";
@@ -10,10 +16,3 @@ function goToFarmlogPage(){
 function goToDiagnosisPage(){
 	window.location.href = "/diagnosisPage";
 }
-
-
-
-function goToFarmlogWritePage(){
-	window.location.href = "/farmlogWritePage";
-}
-
