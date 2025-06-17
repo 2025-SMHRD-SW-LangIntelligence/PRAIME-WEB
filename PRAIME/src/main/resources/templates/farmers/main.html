@@ -77,7 +77,7 @@
                     <section class="core-func-section">
                         <div class="core-title">핵심 기능</div>
                         <div class="core-card-group">
-                            <div class="core-card">
+                            <div class="core-card" onclick = "location.href = '/farmlogWritePage'">
                                 <img th:src="@{/img/log.png}" alt="작업 일지" class="core-icon">
                                 <span class="core-label">작업일지</span>
                             </div>
@@ -92,7 +92,7 @@
                     <section class="recent-journal-section">
                         <div class="section-header">
                             <h2 class="section-title">최근 일지</h2>
-                            <a href="#" class="view-all">전체보기 &gt;</a>
+                            <a href="/farmlogBoardPage" class="view-all">전체보기 &gt;</a>
                         </div>
                     
                         <div class="journal-list">
@@ -134,7 +134,7 @@
                         </div>
                     
                         <div class="journal-add-button">
-                            <button class="add-journal-btn">+ 새 영농일지 작성하기</button>
+                            <button class="add-journal-btn" onclick = "location.href = '/farmlogWritePage'">+ 새 영농일지 작성하기</button>
                         </div>
                     </section>
                 </div>

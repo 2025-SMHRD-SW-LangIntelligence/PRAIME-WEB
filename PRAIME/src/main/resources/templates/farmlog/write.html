@@ -18,7 +18,35 @@
 </head>
 <body>
     <div class="container">
-
+		<div class = "wrapper">
+		<header>
+            <div class="header-group">
+            	<a href="#" class="prevPage" onclick = "history.back()"> < </a>
+                <div class="header-title-group">
+                	<span>영농 일지 작성</span>
+                </div>
+            </div>
+        </header>
+        	<main>
+        		<form action = "" class = "journal-form">
+        			<div class = "crops-select">
+        				<span>사과<input type = "radio"></span>
+        				<span>배<input type = "radio"></span>
+        			</div>
+        			<div class = "journal-title">
+        				<p>제목</p>
+        				<input type = "text" name = "title" id = "title" placeholder = "제목을 입력하세요">
+        			</div>
+        			<div class = "journal-content">
+        				<p>내용</p>
+        				<textarea rows = "20" cols = "60" name = "content" id = "content" placeholder = "내용을 입력하세요"></textarea>
+        			</div>
+        			<div class = "journal-image">
+        				<input type = "file" accept="image/*" name = "image" id = "image">
+        			</div>
+        		</form>
+        	</main>
+    	</div>
     </div>
 </body>
 </html>
