@@ -88,9 +88,9 @@ public class PageController {
 	}
 	
 	// 농장 정보 수정 페이지 이동
-	@GetMapping(value = "/farmInfoEditPage")
-	public String farmInfoEditPage() {
-		return "farmers/farm_info_edit";
+	@GetMapping(value = "/myFarmEditPage")
+	public String myFarmEditPage() {
+		return "farmers/my_farm_edit";
 	}
 	
 
