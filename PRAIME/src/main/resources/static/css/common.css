@@ -1,23 +1,24 @@
 :root {
-    /* 색상 변수 */
-    --primary-color: #1e5549;
-    --primary-hover: #164338;
-    --secondary-color: #f5f1e8;
-    --button-text: #ffffff;
-    --border-color: #e0e0e0;
-    --input-bg: #ffffff;
-    --placeholder-color: #999999;
-    --error-color: #e74c3c;
-    --text-color: #333333;
-    --label-color: #555555;
-    --card-bg: rgba(255, 255, 255, 0.7);
-    --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    --card-selected-bg: #f0f7f5;
-    --subtitle-color: #5a7d76;
-    --cancel-btn-bg: #f6f5f5;
-    --cancel-btn-hover: #d8d4cc;
-    --disabled-btn-bg: #a0b0ad;
-  }
+  /* 색상 변수 */
+  --primary-color: #0f4f35;
+  --primary-hover: #164338;
+  --secondary-color: #f5f1e8;
+  --background-color: #ffffff;
+  --button-text: #ffffff;
+  --border-color: #e0e0e0;
+  --input-bg: #ffffff;
+  --placeholder-color: #999999;
+  --error-color: #e74c3c;
+  --text-color: #333333;
+  --label-color: #555555;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  --card-selected-bg: #f0f7f5;
+  --subtitle-color: #5a7d76;
+  --cancel-btn-bg: #f6f5f5;
+  --cancel-btn-hover: #d8d4cc;
+  --disabled-btn-bg: #a0b0ad;
+}
   
   /* 기본 스타일 */
   * {
