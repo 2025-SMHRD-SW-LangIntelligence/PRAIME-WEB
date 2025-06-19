@@ -16,15 +16,25 @@
 <!-- 파일   -->
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/diagnosis/upload.js}"></script>
-<title>내 정보 페이지</title>
+<title>병해충 AI 진단</title>
 </head>
+
 <body>
 	<div class="container">
 
+
 		<!-- 헤더 -->
-		<header class="diagnosis-header">
-			<h1 id="header-title">병해충 AI 진단</h1>
+
+		<header>
+			<div class="diagnosis-header">
+				<a href="#" class="prevPage" onclick="history.back()"> < </a>
+				<div class="header-title-group">
+					<span class="header-title">병해충 AI 진단</span>
+				</div>
+			</div>
 		</header>
+
+
 
 		<!-- 진단하기, 진단 이력 (상단 버튼)-->
 		<div class="diagnosis-actions top-actions">
@@ -36,43 +46,48 @@
 			</button>
 		</div>
 
+		<!-- 2) 이 안의 내용만 갈아 끼울 겁니다 -->
+		<div id="page-container">
+			<section class="diagnosis-upload">
 
-		<!-- 업로드 섹션 -->
-		<section class="diagnosis-upload">
-			<div class="upload-box">
-				<i class="fas fa-image upload-icon"></i>
-				<h2>작물 사진 업로드</h2>
-				<p>병해충이 의심되는 부분을 촬영하거나 이미지를 업로드하세요</p>
-				<div class="upload-buttons">
-					<button type="button" class="btn btn-outline" id="upload-file">
-						<i class="fas fa-4upload"></i> 파일 업로드
-					</button>
-				</div>
-			</div>
+				<!-- 업로드 섹션 -->
+				<section class="diagnosis-upload">
+					<div class="upload-box">
+						<i class="fas fa-image upload-icon"></i>
+						<h2>작물 사진 업로드</h2>
+						<p>병해충이 의심되는 부분을 촬영하거나 이미지를 업로드하세요</p>
+						<div class="upload-buttons">
+							<button type="button" class="btn btn-outline" id="upload-file">
+								<i class="fas fa-4upload"></i> 파일 업로드
+							</button>
+						</div>
+					</div>
 
-			<!-- 진단 결과 표시 -->
-			<div class="diagnosis-result hidden" id="diagnosisResult">
-				<h3>진단 결과</h3>
-				<p>
-					레이블: <span id="result-label">--</span>
-				</p>
-				<p>
-					신뢰도: <span id="result-confidence">--%</span>
-				</p>
-			</div>
+					<!-- 진단 결과 표시 -->
+					<div class="diagnosis-result hidden" id="diagnosisResult">
+						<h3>진단 결과</h3>
+						<p>
+							레이블: <span id="result-label">--</span>
+						</p>
+						<p>
+							신뢰도: <span id="result-confidence">--%</span>
+						</p>
+					</div>
 
-			<!-- 리셋 / 결과보기 (하단 버튼) -->
+					<!-- 리셋 / 결과보기 (하단 버튼) -->
 
-			<div class="diagnosis-actions bottom-actions">
-				<button type="button" class="btn btn-outline" id="reset-diagnosis">리셋</button>
-				<button type="button" class="btn btn-primary" id="view-result">결과
-					보기</button>
-			</div>
+					<div class="diagnosis-actions bottom-actions">
+						<button type="button" class="btn btn-outline" id="reset-diagnosis">리셋</button>
+						<button type="button" class="btn btn-primary" id="view-result">결과
+							보기</button>
+					</div>
 
 
-
-			<!-- Footer -->
-			<div th:replace="/global/footer::footer "></div>
+				</section>
+				<!-- Footer -->
+				<div th:replace="/global/footer::footer "></div>
+			</section>
+		</div>
 	</div>
 </body>
 </html>
