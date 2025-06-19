@@ -6,14 +6,10 @@
 <link th:href="@{/css/font.css}" rel="stylesheet">
 <link th:href="@{/css/common.css}" rel="stylesheet">
 <link th:href="@{/css/diagnosis/upload.css}" rel="stylesheet">
-<!-- Font Awesome CDN 추가 -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<!-- jQuery CDN  -->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<!-- Axios CDN  -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- 파일   -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/diagnosis/upload.js}"></script>
 <title>병해충 AI 진단</title>
@@ -21,7 +17,6 @@
 
 <body>
 	<div class="container">
-		<!-- 헤더 -->
 		<header>
 			<div class="diagnosis-header">
 				<a href="#" class="prevPage" onclick="history.back()"> < </a>
@@ -33,7 +28,6 @@
 
 
 
-		<!-- 진단하기, 진단 이력 (상단 버튼)-->
 		<div class="diagnosis-actions top-actions">
 			<button type="button" class="btn btn-primary" id="start-diagnosis">
 				<i class="fas fa-stethoscope"></i> 진단하기
@@ -43,11 +37,9 @@
 			</button>
 		</div>
 
-		<!-- 2) 이 안의 내용만 갈아 끼울 겁니다 -->
 		<div id="page-container">
 			<section class="diagnosis-upload">
 
-				<!-- 업로드 섹션 -->
 				<section class="diagnosis-upload">
 					<div class="upload-box">
 						<i class="fas fa-image upload-icon"></i>
@@ -55,12 +47,11 @@
 						<p>병해충이 의심되는 부분을 촬영하거나 이미지를 업로드하세요</p>
 						<div class="upload-buttons">
 							<button type="button" class="btn btn-outline" id="upload-file">
-								<i class="fas fa-4upload"></i> 파일 업로드
+								<i class="fas fa-upload"></i> 파일 업로드
 							</button>
 						</div>
 					</div>
 
-					<!-- 진단 결과 표시 -->
 					<div class="diagnosis-result hidden" id="diagnosisResult">
 						<h3>진단 결과</h3>
 						<p>
@@ -70,16 +61,13 @@
 							신뢰도: <span id="result-confidence">--%</span>
 						</p>
 					</div>
-
-
-
 				</section>
-            <!-- 버튼 그룹 -->
-                    <div class="button-group">
-                        <button class="reset-btn" onclick="reset()">리셋</button>
-                        <button class="diagnosis-result-btn" id="diagnosisResultBtn">결과</button>
-                    </div>			
-				<!-- Footer -->
+
+                <div class="button-group">
+                    <button class="reset-btn">리셋</button>
+                    <button class="diagnosis-result-btn" id="diagnosisResultSaveBtn">결과저장</button>
+                </div>
+                <!-- Footer  -->
 				<div th:replace="/global/footer::footer "></div>
 			</section>
 		</div>

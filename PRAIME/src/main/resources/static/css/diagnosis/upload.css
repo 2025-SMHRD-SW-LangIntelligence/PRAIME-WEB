@@ -113,15 +113,6 @@
   padding: 0; /* 이미지 미리보기가 전체 박스를 차지하도록 패딩 제거 */
 }
 
-/* 업로드된 이미지 위에 텍스트를 덮어씌울 경우 대비 (현재는 숨김 처리) */
-.upload-box.uploaded .upload-icon,
-.upload-box.uploaded h2,
-.upload-box.uploaded p,
-.upload-box.uploaded .upload-buttons {
-    /* display: none; */ /* JS에서 직접 숨기므로 여기서는 주석 처리 */
-}
-
-
 .upload-icon {
   font-size: 3rem;
   color: var(--primary-color);
@@ -149,22 +140,8 @@
   flex-direction: column;
   gap: 10px;
   /* `upload-box` 클릭으로 대체되므로 이 버튼 자체는 숨김 처리 */
-  display: none;
+  display: none; /* JS에 의해 숨겨집니다. */
 }
-
-/* 파일 업로드 버튼의 아이콘 (숨김) */
-/* js에서 display:none을 처리하므로 이 CSS는 더 이상 필요 없습니다.
-#upload-file .fa-4upload {
-  display: none;
-}
-#upload-file::before {
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  content: "\f093";
-  margin-right: 8px;
-}
-*/
-
 
 /* 진단 결과 */
 .diagnosis-result {
@@ -243,6 +220,3 @@
     cursor: not-allowed;
     opacity: 0.6;
 }
-
-/* Footer - 기존과 동일 */
-/* 필요 시 common.css 또는 글로벌 CSS에서 설정 */
