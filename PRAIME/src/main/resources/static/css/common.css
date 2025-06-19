@@ -60,6 +60,10 @@
     color: var(--primary-color);
   }
 
+botton{
+	cursor: pointer;
+}
+
 /*링크*/
 a{
 	text-decoration: none;
