@@ -13,12 +13,15 @@
     <!-- Axios CDN  -->
    	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- 파일   -->
+    <script th:src="@{/js/common.js}"></script>
     <script th:src="@{/js/farmlog/view.js}"></script>
     <title>내 정보 페이지</title>
 </head>
 <body>
     <div class="container">
-
+    
+        <!-- Footer -->
+        <div th:replace="/global/footer::footer "></div> 		
     </div>
 </body>
 </html>
