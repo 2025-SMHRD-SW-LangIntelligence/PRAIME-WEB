@@ -141,6 +141,11 @@ public class PageController {
 	public String diagnosisPage() {
 		return "diagnosis/view";
 	}
+	// 병해충진단 업로드 페이지 이동
+	@GetMapping(value = "/diagnosisUploadPage")
+	public String diagnosisUploadPage() {
+		return "diagnosis/upload";
+	}
 	
 	
 }

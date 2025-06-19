@@ -7,8 +7,8 @@ function goToFarmlogPage(){
 }
 
 
-function goToDiagnosisPage(){
-	window.location.href = "/diagnosisPage";
+function goToDiagnosisUploadPage(){
+	window.location.href = "/diagnosisUploadPage";
 }
 
 
