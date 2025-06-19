@@ -8,8 +8,8 @@ function goToFarmerMainPage(){
 }
 
 
-function goToFarmlogPage(){
-	window.location.href = "/farmlogPage";
+function goToFarmlogBoardPage(){
+	window.location.href = "/farmlogBoardPage";
 }
 
 
