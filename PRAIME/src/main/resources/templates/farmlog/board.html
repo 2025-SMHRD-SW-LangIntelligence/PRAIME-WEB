@@ -25,8 +25,8 @@
             		<a href="#" class="prevPage" onclick = "history.back()"> < </a>
             	</div>
                 <div class="header-title-group">
-                	<span>영농일지</span>
-                	<span><button class = "new-diary-btn" onclick = "location.href = '/farmlogWritePage'">새 일지 작성</button></span>
+                	<span class = "header-title">영농일지</span>
+                	<button class = "new-diary-btn" onclick = "location.href = '/farmlogWritePage'">새 일지 작성</button>
                 </div>
             </div>
         </header>
@@ -34,7 +34,7 @@
 	        <section class = "search-section">
 		        <div class = "search-board">
 			        <form action = "#" class = "search-form">
-			        	<input type = "text" name = "keyword" id = "keyword" placeholder = "일지 검색">
+			        	<input type = "text" class = "search-input" name = "keyword" id = "keyword" placeholder = "일지 검색">
 			        	
 			        		<select class = "search-select" name = "searchOption" id = "searchOption">
 			        			<option value = "title">제목</option>
@@ -57,6 +57,8 @@
 	        	</div>
 	        </section>
         </main>
+        <!-- Footer -->
+        <div th:replace="/global/footer::footer "></div> 
 		</div>
     </div>
 </body>

@@ -1,0 +1,47 @@
+package com.smhrd.praime.entiry;
+
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@Table(name = "dailyLog")
+@AllArgsConstructor
+@NoArgsConstructor
+public class DailyLogEntity {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long dlid;
+	
+	@Column(nullable = false)
+	private Long pid;
+	@Column(nullable = false)
+	private String weather;
+	@Column(nullable = false)
+	private String dltitle;
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String dcontent;
+	@Column(nullable = false, updatable = false)
+	private LocalDate ddate;
+	
+	private String writeDay;
+	
+	@PrePersist
+	protected void writeDay() {
+		
+		this.ddate = LocalDate.now();
+		
+	}
+	
+}

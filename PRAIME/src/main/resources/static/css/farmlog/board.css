@@ -1,0 +1,147 @@
+/* ---------- 헤더 ---------- */
+
+header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 헤더 하단 음영 추가 */
+}
+
+.header-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.prevPage {
+  font-size: 1.5rem;
+  color: white;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+.header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.header-title {
+	color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.new-diary-btn {
+  background-color: #0A6E0A;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.new-diary-btn:hover {
+  background-color: #164338;
+}
+
+/* ---------- 메인 ---------- */
+
+main {
+  padding-top: 1.2rem;
+  background-color: #f9f9f9;  /* 배경 구분용 */
+}
+
+/* ---------- 검색 섹션 ---------- */
+
+.search-form {
+  display: flex;
+  align-items: center;       /* 수직 가운데 정렬 */
+  gap: 0.5rem;               /* 요소 간 간격 */
+  flex-wrap: nowrap;        /* 줄바꿈 방지 */
+}
+
+.search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.search-select {
+  width: 140px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.btn.btn-primary {
+  padding: 0.5rem 0.9rem;
+  background-color: #f6f5f5;
+  color: black;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* 살짝 음영 */
+  transition: background-color 0.2s ease;
+}
+
+.btn.btn-primary:hover {
+  background-color: #d8d4cc;
+}
+
+/* ---------- 게시판 리스트 ---------- */
+
+.board-section {
+  padding: 1rem;
+}
+
+.board-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* 카드 스타일 */
+.board-list .board-card {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.board-list .board-card:hover {
+  transform: translateY(-2px);
+}
+
+.board-card-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.board-card-content {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+
+.board-card-date {
+  font-size: 0.8rem;
+  color: #888;
+}
