@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link th:href="@{/css/font.css}" rel="stylesheet">
 <link th:href="@{/css/common.css}" rel="stylesheet">
-<link th:href="@{/css/diagnosis/board.css}" rel="stylesheet">
+<link th:href="@{/css/diagnosis/upload.css}" rel="stylesheet">
 <!-- Font Awesome CDN 추가 -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -15,18 +15,37 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- 파일   -->
 <script th:src="@{/js/common.js}"></script>
-<script th:src="@{/js/diagnosis/board.js}"></script>
-<title>병해충 진단 내역</title>
+<script th:src="@{/js/diagnosis/upload.js}"></script>
+<title>병해충 AI 진단</title>
 </head>
 
 <body>
 	<div class="container">
-		<section class="diagnosis-board">
-			<h2>진단 이력</h2>
+		<!-- 헤더 -->
+		<header>
+			<div class="diagnosis-header">
+				<a href="#" class="prevPage" onclick="history.back()"> < </a>
+				<div class="header-title-group">
+					<span class="header-title">병해충 AI 진단</span>
+				</div>
+			</div>
+		</header>
 
 
-			<!-- Footer -->
-			<div th:replace="/global/footer::footer "></div>
-		</section>
+
+		<!-- 진단하기, 진단 이력 (상단 버튼)-->
+		<div class="diagnosis-actions top-actions">
+			<button type="button" class="btn btn-primary" id="start-diagnosis">
+				<i class="fas fa-stethoscope"></i> 진단하기
+			</button>
+			<button type="button" class="btn btn-outline" id="view-history">
+				<i class="fas fa-history"></i> 진단 이력
+			</button>
+		</div>
+
+
+				<!-- Footer -->
+				<div th:replace="/global/footer::footer "></div>
+		</div>
 </body>
 </html>
