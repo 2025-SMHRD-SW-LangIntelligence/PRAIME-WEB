@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.smhrd.praime.config.FileUploadConfig;
+import com.smhrd.praime.config.FileUploadConfig2;
 import com.smhrd.praime.entiry.CropsEntity;
 import com.smhrd.praime.entiry.DailyImageEntity;
 import com.smhrd.praime.entiry.DailyLogEntity;
@@ -32,7 +32,7 @@ public class DailyLogController {
 	DailyLogService dailyLogService;
 	
 	@Autowired
-	FileUploadConfig fileUploadConfig;
+	FileUploadConfig2 fileUploadConfig;
 	
     DailyLogController(DailyImageService dailyImageService) {
         this.dailyImageService = dailyImageService;

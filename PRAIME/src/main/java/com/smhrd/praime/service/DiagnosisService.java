@@ -1,0 +1,179 @@
+package com.smhrd.praime.service;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Base64;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.smhrd.praime.DiagnosisResultDto;
+import com.smhrd.praime.entiry.DiagnosisEntity;
+import com.smhrd.praime.repository.DiagnosisRepository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+@Transactional
+public class DiagnosisService {
+
+    private final DiagnosisRepository diagnosisRepository;
+    
+    @Value("${app.upload.diagnosis-images:uploads/diagnosis}")
+    private String uploadPath;
+
+    /**
+     * 진단 결과 저장
+     */
+    public Long saveDiagnosisResult(DiagnosisResultDto dto) {
+        try {
+            // 입력값 검증
+            validateDiagnosisResult(dto);
+            
+            // Base64 이미지를 파일로 저장
+            String imagePath = saveBase64Image(dto.getResultImageBase64());
+            
+            // 엔티티 생성 및 저장
+            DiagnosisEntity entity = DiagnosisEntity.builder()
+                    .label(dto.getLabel())
+                    .confidence(dto.getConfidence())
+                    .resultImageBase64(dto.getResultImageBase64())
+                    .imagePath(imagePath)
+                    .build();
+            
+            DiagnosisEntity saved = diagnosisRepository.save(entity);
+            
+            log.info("진단 결과 저장 완료 - ID: {}, 라벨: {}, 신뢰도: {}%", 
+                    saved.getId(), saved.getLabel(), saved.getConfidence());
+            
+            return saved.getId();
+            
+        } catch (IllegalArgumentException e) {
+            log.error("잘못된 입력값으로 인한 저장 실패: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("진단 결과 저장 중 오류 발생", e);
+            throw new RuntimeException("진단 결과 저장에 실패했습니다.", e);
+        }
+    }
+
+    /**
+     * 진단 이력 조회 (페이징)
+     */
+    @Transactional(readOnly = true)
+    public Page<DiagnosisEntity> getDiagnosisHistory(int page, int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            return diagnosisRepository.findAllByOrderByCreatedAtDesc(pageable);
+        } catch (Exception e) {
+            log.error("진단 이력 조회 중 오류 발생", e);
+            throw new RuntimeException("진단 이력 조회에 실패했습니다.", e);
+        }
+    }
+
+    /**
+     * 특정 라벨로 진단 결과 조회
+     */
+    @Transactional(readOnly = true)
+    public List<DiagnosisEntity> getDiagnosisByLabel(String label) {
+        try {
+            return diagnosisRepository.findByLabelContainingIgnoreCase(label);
+        } catch (Exception e) {
+            log.error("라벨별 진단 결과 조회 중 오류 발생", e);
+            throw new RuntimeException("라벨별 진단 결과 조회에 실패했습니다.", e);
+        }
+    }
+
+    /**
+     * 최소 신뢰도 이상의 진단 결과 조회
+     */
+    @Transactional(readOnly = true)
+    public List<DiagnosisEntity> getDiagnosisByMinConfidence(Double minConfidence) {
+        try {
+            return diagnosisRepository.findByConfidenceGreaterThanEqualOrderByConfidenceDesc(minConfidence);
+        } catch (Exception e) {
+            log.error("신뢰도별 진단 결과 조회 중 오류 발생", e);
+            throw new RuntimeException("신뢰도별 진단 결과 조회에 실패했습니다.", e);
+        }
+    }
+
+    /**
+     * 특정 기간 내 진단 결과 조회
+     */
+    @Transactional(readOnly = true)
+    public List<DiagnosisEntity> getDiagnosisByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        try {
+            return diagnosisRepository.findByCreatedAtBetween(startDate, endDate);
+        } catch (Exception e) {
+            log.error("기간별 진단 결과 조회 중 오류 발생", e);
+            throw new RuntimeException("기간별 진단 결과 조회에 실패했습니다.", e);
+        }
+    }
+
+    /**
+     * 진단 결과 입력값 검증
+     */
+    private void validateDiagnosisResult(DiagnosisResultDto dto) {
+        if (dto.getLabel() == null || dto.getLabel().trim().isEmpty()) {
+            throw new IllegalArgumentException("진단 라벨은 필수입니다.");
+        }
+        
+        if (dto.getConfidence() == null || dto.getConfidence() < 0 || dto.getConfidence() > 100) {
+            throw new IllegalArgumentException("신뢰도는 0-100 사이의 값이어야 합니다.");
+        }
+        
+        if (dto.getResultImageBase64() == null || dto.getResultImageBase64().trim().isEmpty()) {
+            throw new IllegalArgumentException("결과 이미지는 필수입니다.");
+        }
+        
+        // Base64 형식 검증
+        try {
+            Base64.getDecoder().decode(dto.getResultImageBase64());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("올바르지 않은 Base64 이미지 형식입니다.");
+        }
+    }
+
+    /**
+     * Base64 인코딩된 이미지를 파일로 저장
+     */
+    private String saveBase64Image(String base64Image) throws IOException {
+        // 업로드 디렉토리 생성
+        Path uploadDir = Paths.get(uploadPath);
+        if (!Files.exists(uploadDir)) {
+            Files.createDirectories(uploadDir);
+            log.info("업로드 디렉토리 생성: {}", uploadDir.toString());
+        }
+        
+        // Base64 디코딩
+        byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+        
+        // 파일명 생성 (UUID + 타임스탬프)
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        String fileName = String.format("diagnosis_%s_%s.jpg", timestamp, UUID.randomUUID().toString().substring(0, 8));
+        
+        // 파일 저장
+        Path filePath = uploadDir.resolve(fileName);
+        try (FileOutputStream fos = new FileOutputStream(filePath.toFile())) {
+            fos.write(imageBytes);
+        }
+        
+        log.info("이미지 파일 저장 완료: {}", filePath.toString());
+        
+        return filePath.toString();
+    }
+}

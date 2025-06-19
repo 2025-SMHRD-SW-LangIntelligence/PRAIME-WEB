@@ -1,0 +1,216 @@
+package com.smhrd.praime.controller;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.smhrd.praime.DiagnosisResultDto;
+import com.smhrd.praime.entiry.DiagnosisEntity;
+import com.smhrd.praime.service.DiagnosisService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@RestController
+@RequestMapping("/api/diagnosis")
+@RequiredArgsConstructor
+@Slf4j
+@CrossOrigin(origins = "*") // 개발용 - 운영시에는 특정 도메인으로 제한
+public class DiagnosisController {
+
+    private final DiagnosisService diagnosisService;
+
+    /**
+     * 진단 결과 저장 API
+     * 프론트엔드에서 Flask 서버로부터 받은 진단 결과를 데이터베이스에 저장
+     */
+    @PostMapping("/save")
+    public ResponseEntity<Map<String, Object>> saveDiagnosisResult(
+            @Valid @RequestBody DiagnosisResultDto diagnosisResultDto) {
+        
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            log.info("진단 결과 저장 요청 - 라벨: {}, 신뢰도: {}%", 
+                    diagnosisResultDto.getLabel(), diagnosisResultDto.getConfidence());
+            
+            // 진단 결과 저장 서비스 호출
+            Long savedId = diagnosisService.saveDiagnosisResult(diagnosisResultDto);
+            
+            response.put("success", true);
+            response.put("message", "진단 결과가 성공적으로 저장되었습니다.");
+            response.put("diagnosisId", savedId);
+            
+            log.info("진단 결과 저장 성공 - ID: {}", savedId);
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (IllegalArgumentException e) {
+            log.error("진단 결과 저장 실패 - 잘못된 요청: {}", e.getMessage());
+            response.put("success", false);
+            response.put("message", "잘못된 요청입니다: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+            
+        } catch (Exception e) {
+            log.error("진단 결과 저장 중 오류 발생", e);
+            response.put("success", false);
+            response.put("message", "진단 결과 저장 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    /**
+     * 진단 이력 조회 API (페이징)
+     */
+    @GetMapping("/history")
+    public ResponseEntity<Map<String, Object>> getDiagnosisHistory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            log.info("진단 이력 조회 요청 - 페이지: {}, 크기: {}", page, size);
+            
+            // 진단 이력 조회 서비스 호출
+            var historyPage = diagnosisService.getDiagnosisHistory(page, size);
+            
+            response.put("success", true);
+            response.put("data", historyPage.getContent());
+            response.put("totalElements", historyPage.getTotalElements());
+            response.put("totalPages", historyPage.getTotalPages());
+            response.put("currentPage", page);
+            response.put("pageSize", size);
+            
+            log.info("진단 이력 조회 성공 - 총 {}개 결과", historyPage.getTotalElements());
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            log.error("진단 이력 조회 중 오류 발생", e);
+            response.put("success", false);
+            response.put("message", "진단 이력 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    /**
+     * 라벨별 진단 결과 조회 API
+     */
+    @GetMapping("/search/label")
+    public ResponseEntity<Map<String, Object>> getDiagnosisByLabel(
+            @RequestParam String label) {
+        
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            log.info("라벨별 진단 결과 조회 요청 - 라벨: {}", label);
+            
+            List<DiagnosisEntity> results = diagnosisService.getDiagnosisByLabel(label);
+            
+            response.put("success", true);
+            response.put("data", results);
+            response.put("count", results.size());
+            
+            log.info("라벨별 진단 결과 조회 성공 - {}개 결과", results.size());
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            log.error("라벨별 진단 결과 조회 중 오류 발생", e);
+            response.put("success", false);
+            response.put("message", "라벨별 진단 결과 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    /**
+     * 신뢰도별 진단 결과 조회 API
+     */
+    @GetMapping("/search/confidence")
+    public ResponseEntity<Map<String, Object>> getDiagnosisByConfidence(
+            @RequestParam Double minConfidence) {
+        
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            log.info("신뢰도별 진단 결과 조회 요청 - 최소 신뢰도: {}%", minConfidence);
+            
+            List<DiagnosisEntity> results = diagnosisService.getDiagnosisByMinConfidence(minConfidence);
+            
+            response.put("success", true);
+            response.put("data", results);
+            response.put("count", results.size());
+            response.put("minConfidence", minConfidence);
+            
+            log.info("신뢰도별 진단 결과 조회 성공 - {}개 결과", results.size());
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            log.error("신뢰도별 진단 결과 조회 중 오류 발생", e);
+            response.put("success", false);
+            response.put("message", "신뢰도별 진단 결과 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    /**
+     * 기간별 진단 결과 조회 API
+     */
+    @GetMapping("/search/date-range")
+    public ResponseEntity<Map<String, Object>> getDiagnosisByDateRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            log.info("기간별 진단 결과 조회 요청 - 시작: {}, 종료: {}", startDate, endDate);
+            
+            List<DiagnosisEntity> results = diagnosisService.getDiagnosisByDateRange(startDate, endDate);
+            
+            response.put("success", true);
+            response.put("data", results);
+            response.put("count", results.size());
+            response.put("startDate", startDate);
+            response.put("endDate", endDate);
+            
+            log.info("기간별 진단 결과 조회 성공 - {}개 결과", results.size());
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            log.error("기간별 진단 결과 조회 중 오류 발생", e);
+            response.put("success", false);
+            response.put("message", "기간별 진단 결과 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    /**
+     * API 상태 확인
+     */
+    @GetMapping("/health")
+    public ResponseEntity<Map<String, Object>> healthCheck() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "UP");
+        response.put("message", "진단 API가 정상적으로 실행 중입니다.");
+        response.put("timestamp", LocalDateTime.now());
+        
+        return ResponseEntity.ok(response);
+    }
+}

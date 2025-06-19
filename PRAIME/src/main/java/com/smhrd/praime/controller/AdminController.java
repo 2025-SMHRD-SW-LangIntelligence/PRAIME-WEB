@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.smhrd.praime.config.FileUploadConfig;
+import com.smhrd.praime.config.FileUploadConfig2;
 import com.smhrd.praime.entiry.CropsEntity;
 import com.smhrd.praime.service.AdminService;
 
@@ -23,7 +23,7 @@ public class AdminController {
 	AdminService adminService;
 	
     @Autowired
-	FileUploadConfig fileUploadConfig;
+	FileUploadConfig2 fileUploadConfig;
 
     // 작물 등록 기능
     // 해당 기능 테스트시 본인의 C드라이브에 crops라는 폴더를 생성하고 테스트해주세요!
