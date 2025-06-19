@@ -11,6 +11,10 @@ function goToDiagnosisUploadPage(){
 	window.location.href = "/diagnosisUploadPage";
 }
 
+function goToDiagnosisPage(){
+	window.location.href = "/diagnosisPage";
+}
+
 
 
 function goToFarmlogWritePage(){

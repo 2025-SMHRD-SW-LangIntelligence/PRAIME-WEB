@@ -72,7 +72,9 @@
                             <div class="weather-update-time">1시간 전 업데이트</div>
                           </div>
                         </div>
-                      </section>                     
+                      </section>         
+                      
+                      <hr class="divider"/>            
             
                     <!-- 핵심 기능 섹션 -->
                     <section class="core-func-section">
@@ -92,6 +94,8 @@
                             </div>
                         </div>
                     </section>
+            
+            		<hr class="divider"/>
             
                     <!-- 최근 일지 (샘플) -->
                     <section class="recent-journal-section">
@@ -140,6 +144,58 @@
                     
                         <div class="journal-add-button">
                             <button class="add-journal-btn" onclick="goToFarmlogWritePage()">+ 새 영농일지 작성하기</button>
+                        </div>
+                    </section>
+                    
+                    <hr class="divider"/>
+                    
+                    <!-- 진단이력 (샘플) -->
+                    <section class="recent-diagnosis-section">
+                        <div class="section-header">
+                            <h2 class="section-title">최근 진단 이력</h2>
+                            <a href="/farmlogBoardPage" class="view-all">전체보기 &gt;</a>
+                        </div>
+                    
+                        <div class="journal-list">
+                            <div class="journal-item" onclick="goToDiagnosisPage()">
+                                <div class="journal-date">오늘</div>
+                                <div class="journal-content">
+                                    <div class="journal-title">사과흰가루병</div>
+                                    <div class="journal-desc">흰가루병은.......</div>
+                                </div>
+                            </div>
+                            <div class="journal-item">
+                                <div class="journal-date">25.06.18</div>
+                                <div class="journal-content">
+                                    <div class="journal-title">배검은줄무늬병</div>
+                                    <div class="journal-desc">줄무늬병은.....</div>
+                                </div>
+                            </div>
+                            <div class="journal-item">
+                                <div class="journal-date">오늘</div>
+                                <div class="journal-content">
+                                    <div class="journal-title">사과나무 물주기 및 유인작업</div>
+                                    <div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
+                                </div>
+                            </div>
+                            <div class="journal-item">
+                                <div class="journal-date">어제</div>
+                                <div class="journal-content">
+                                    <div class="journal-title">사과나무 전정 작업</div>
+                                    <div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
+                                </div>
+                            </div>
+                            <div class="journal-item">
+                                <div class="journal-date">06.15</div>
+                                <div class="journal-content">
+                                    <div class="journal-title">사과나무 전정 작업</div>
+                                    <div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="journal-add-button">
+                            <button class="add-journal-btn" onclick="goToDiagnosisUploadPage()">+ 병해충 진단 하기</button>
                         </div>
                     </section>
                 </div>
