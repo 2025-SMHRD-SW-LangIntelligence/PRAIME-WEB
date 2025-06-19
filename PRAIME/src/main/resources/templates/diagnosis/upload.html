@@ -1,26 +1,78 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link th:href="@{/css/font.css}" rel="stylesheet">
-    <link th:href="@{/css/common.css}" rel="stylesheet">
-    <link th:href="@{/css/diagnosis/upload.css}" rel="stylesheet">
-	<!-- Font Awesome CDN 추가 -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-   	<!-- jQuery CDN  -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- Axios CDN  -->
-   	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- 파일   -->
-    <script th:src="@{/js/common.js}"></script>
-    <script th:src="@{/js/diagnosis/upload.js}"></script>
-    <title>내 정보 페이지</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link th:href="@{/css/font.css}" rel="stylesheet">
+<link th:href="@{/css/common.css}" rel="stylesheet">
+<link th:href="@{/css/diagnosis/upload.css}" rel="stylesheet">
+<!-- Font Awesome CDN 추가 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- jQuery CDN  -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Axios CDN  -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 파일   -->
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/diagnosis/upload.js}"></script>
+<title>내 정보 페이지</title>
 </head>
 <body>
-    <div class="container">
-        <!-- Footer -->
-        <div th:replace="/global/footer::footer "></div> 
-    </div>
+	<div class="container">
+
+		<!-- 헤더 -->
+		<header class="diagnosis-header">
+			<h1 id="header-title">병해충 AI 진단</h1>
+		</header>
+
+		<!-- 진단하기, 진단 이력 (상단 버튼)-->
+		<div class="diagnosis-actions top-actions">
+			<button type="button" class="btn btn-primary" id="start-diagnosis">
+				<i class="fas fa-stethoscope"></i> 진단하기
+			</button>
+			<button type="button" class="btn btn-outline" id="view-history">
+				<i class="fas fa-history"></i> 진단 이력
+			</button>
+		</div>
+
+
+		<!-- 업로드 섹션 -->
+		<section class="diagnosis-upload">
+			<div class="upload-box">
+				<i class="fas fa-image upload-icon"></i>
+				<h2>작물 사진 업로드</h2>
+				<p>병해충이 의심되는 부분을 촬영하거나 이미지를 업로드하세요</p>
+				<div class="upload-buttons">
+					<button type="button" class="btn btn-outline" id="upload-file">
+						<i class="fas fa-4upload"></i> 파일 업로드
+					</button>
+				</div>
+			</div>
+
+			<!-- 진단 결과 표시 -->
+			<div class="diagnosis-result hidden" id="diagnosisResult">
+				<h3>진단 결과</h3>
+				<p>
+					레이블: <span id="result-label">--</span>
+				</p>
+				<p>
+					신뢰도: <span id="result-confidence">--%</span>
+				</p>
+			</div>
+
+			<!-- 리셋 / 결과보기 (하단 버튼) -->
+
+			<div class="diagnosis-actions bottom-actions">
+				<button type="button" class="btn btn-outline" id="reset-diagnosis">리셋</button>
+				<button type="button" class="btn btn-primary" id="view-result">결과
+					보기</button>
+			</div>
+
+
+
+			<!-- Footer -->
+			<div th:replace="/global/footer::footer "></div>
+	</div>
 </body>
 </html>
