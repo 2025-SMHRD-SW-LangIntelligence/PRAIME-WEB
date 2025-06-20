@@ -248,7 +248,27 @@ font-size: 16px;
   background-color: #0a3524;
   transform: translateY(-2px);
 }
+
+
+/*주소찾기*/
+.find-address-btn{
+    flex: 0 0 auto; /* 버튼크기 고정*/
+    background-color: #0f4f35;
+    color: white;
+    padding: 15px;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.find-address-btn:hover{
+    background-color: #0a3524;
+    transform: translateY(-2px);
+}
+
 /*---------------- 주소 ---------------- End*/
+
 
 
 

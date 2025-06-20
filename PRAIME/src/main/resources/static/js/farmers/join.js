@@ -1,17 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
-	
+		
 	// --- 본인인증, 주소찾기, 취소 함수 (미구현: API연동필요) ---
-	window.identityVerification = function() {
+	// 본인인증 버튼 클릭 이벤트
+	document.querySelector('.identity-btn')?.addEventListener('click', function (e) {
+	    e.preventDefault();
 	    alert("본인인증 기능은 현재 개발 중입니다.");
-	};
+	});
 
-	window.addressFind = function() {
-	    alert("주소찾기 기능은 현재 개발 중입니다.");
-	};
 
-	window.goToRoleChoice = function() {
+
+	// 취소 버튼 클릭 이벤트
+	document.querySelector('.back-btn')?.addEventListener('click', function (e) {
+	    e.preventDefault();
 	    window.location.href = '/roleChoicePage';
-	};	
+	});
 	
 
 	// 비밀번호 보기/숨기기 기능
@@ -258,36 +260,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		    document.body.appendChild(form);
 		    form.submit();		
 		
-		
-		      
-/*        // 유효성 검사 수행
-        if (validateForm()) {
-            // 폼 데이터 수집
-            const formData = {
-                id: document.getElementById('id').value,
-                pw: document.getElementById('pw').value,
-                name: document.getElementById('name').value,
-                'tel-0': document.getElementById('tel-0').value,
-                'tel-1': document.getElementById('tel-1').value,
-                'tel-2': document.getElementById('tel-2').value,
-                'tel-3': document.getElementById('tel-3').value,
-                'email-id': document.getElementById('email').value.split('@')[0],
-                'email-domain': document.getElementById('email-domain').value,
-                address: document.getElementById('address').value,
-                'address-detail': document.getElementById('addressDetail').value
-            };
-
-            // axios를 사용해 서버에 POST 요청
-            axios.post('/joinFarmer.do', null, {
-                params: formData
-            })
-            .then(function(response) {
-                window.location.href = '/';
-            })
-            .catch(function(error) {
-                console.error('회원가입 실패:', error);
-                showError('general', '회원가입에 실패했습니다. 다시 시도해주세요.');
-            });*/
         }
     });
 });
