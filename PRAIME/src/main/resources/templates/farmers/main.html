@@ -1,208 +1,149 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>농담</title>
-    <link th:href="@{/css/font.css}" rel="stylesheet">
-    <link th:href="@{/css/common.css}" rel="stylesheet">
-    <link th:href="@{/css/farmers/main.css}" rel="stylesheet">
-   	<!-- jQuery CDN  -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- Axios CDN  -->
-   	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- JS 파일 -->
-    <script th:src="@{/js/common.js}"></script>
-    <script th:src="@{/js/farmers/main.js}"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>농담</title>
+<link th:href="@{/css/font.css}" rel="stylesheet">
+<link th:href="@{/css/common.css}" rel="stylesheet">
+<link th:href="@{/css/farmers/main.css}" rel="stylesheet">
+<!-- jQuery CDN  -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Axios CDN  -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- JS 파일 -->
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/farmers/main.js}"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <div class="wrapper">
-            <header>
-                <div class="header-group">
-                    <div class="header-title-group">
-                	 	<h1 th:text="${session.user.name}" class="header-title">SuperNova 님</h1>
-                        <p class="header-subtitle">오늘도 좋은하루 되세요</p>
-                    </div>
-                    <div class="today-group">
-                        <span th:text="${todayDate}" class="today"></span>
-                    </div>
-                </div>
-            </header>
-            <main>
-                <div class="main-wrap">
-                    <!-- 날씨 섹션 -->
-                    <section class="weather-section">
-                        <div class="weather-box">
-<!--                         
-                            <div class="weather-details">
-                                <span>습도: 60%</span>
-                                <span>강수: 0mm</span>
-                                <span>풍속: 1m/s</span>
-                            </div>
-                          <hr class="divider"/>
-   -->                                                  
-                          <div class="weather-top">
-                            <div class="weather-left">
-                              <h1 class="weather-title">오늘의 날씨</h1>
-                              <div class="weather-info">
-                                <div class="weather-icon">
-                                    <img src="https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Status-weather-clear-icon.png" width="64" height="64">
-                                </div>
-                                <div class="weather-detail">
-                                  <div class="temperature">22℃</div>
-                                  <div class="humidity">습도 65%</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="weather-right">
-                              <div class="weather-tasks-title">주요 작업</div>
-                              <div class="weather-tasks">
-                                <span>🧺 물주기</span>
-                                <span>🌡 환기작업</span>
-                              </div>
-                            </div>
-                          </div>
-                      
-                          <hr class="divider"/>
-                      
-                          <div class="weather-bottom">
-                            <div class="weather-location">광주시 충장동 기준</div>
-                            <div class="weather-update-time">1시간 전 업데이트</div>
-                          </div>
-                        </div>
-                      </section>         
-                      
-                      <hr class="divider"/>            
-            
-                    <!-- 핵심 기능 섹션 -->
-                    <section class="core-func-section">
-                        <div class="core-title">핵심 기능</div>
-                        <div class="core-card-group">
+	<div class="container">
+		<div class="wrapper">
+			<header>
+				<div class="header-group">
+					<div class="header-title-group">
+						<h1 th:text="${session.user.name}" class="header-title">SuperNova
+							님</h1>
+						<p class="header-subtitle">오늘도 좋은하루 되세요</p>
+					</div>
+					<div class="today-group">
+						<span class="today">2025년 6월 17일</span>
+					</div>
+				</div>
+			</header>
+			<main>
+				<div class="main-wrap">
+					<!-- 날씨 섹션 -->
+					<!-- weather-section 내부 -->
+					<section class="weather-section">
+						<div class="weather-box">
+							<div class="weather-top">
+								<div class="weather-left">
+									<h1 class="weather-title">오늘의 날씨</h1>
+									<div class="weather-info">
+										<div class="weather-icon">
+											<input type="hidden" id="weatherIconPrefix"
+												value="@{/img/weather/}"> <img id="weatherIcon"
+												src="" alt="날씨 아이콘">
+										</div>
+										<div class="weather-detail">
+											<div class="temperature" id="temperature"></div>
+											<div class="humidity" id="humidity"></div>
+											<div class="rainfall" id="rainfall"></div>
+											<div class="wind" id="wind"></div>
+										</div>
+									</div>
+								</div>
+								<div class="weather-right">
+									<div class="weather-tasks-title">예상 특보</div>
+									<div class="weather-tasks" id="weatherWarning"></div>
+								</div>
+							</div>
 
-  
+							<hr class="divider" />
 
-                            <div class="core-card" onclick="goToFarmlogWritePage()">
+							<div class="weather-bottom">
+								<div class="weather-location">광주시 충장동 기준</div>
+								<div class="weather-update-time" id="updateTime"></div>
+							</div>
+						</div>
+					</section>
 
-                                <img th:src="@{/img/log.png}" alt="작업 일지" class="core-icon">
-                                <span class="core-label">영농일지</span>
-                            </div>
-                            <div class="core-card" onclick="goToDiagnosisUploadPage()">
-                                <img th:src="@{/img/bug.png}" alt="병해충 진단" class="core-icon">
-                                <span class="core-label">병해충 진단</span>
-                            </div>
-                        </div>
-                    </section>
-            
-            		<hr class="divider"/>
-            
-                    <!-- 최근 일지 (샘플) -->
-                    <section class="recent-journal-section">
-                        <div class="section-header">
-                            <h2 class="section-title">최근 일지</h2>
-                            <a href="/farmlogBoardPage" class="view-all">전체보기 &gt;</a>
-                        </div>
-                    
-                        <div class="journal-list">
-                            <div class="journal-item">
-                                <div class="journal-date">오늘</div>
-                                <div class="journal-content">
-                                    <div class="journal-title">사과나무 물주기 및 유인작업</div>
-                                    <div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
-                                </div>
-                            </div>
-                            <div class="journal-item">
-                                <div class="journal-date">오늘</div>
-                                <div class="journal-content">
-                                    <div class="journal-title">사과나무 물주기 및 유인작업</div>
-                                    <div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
-                                </div>
-                            </div>
-                            <div class="journal-item">
-                                <div class="journal-date">오늘</div>
-                                <div class="journal-content">
-                                    <div class="journal-title">사과나무 물주기 및 유인작업</div>
-                                    <div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
-                                </div>
-                            </div>
-                            <div class="journal-item">
-                                <div class="journal-date">어제</div>
-                                <div class="journal-content">
-                                    <div class="journal-title">사과나무 전정 작업</div>
-                                    <div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
-                                </div>
-                            </div>
-                            <div class="journal-item">
-                                <div class="journal-date">06.15</div>
-                                <div class="journal-content">
-                                    <div class="journal-title">사과나무 전정 작업</div>
-                                    <div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
-                                </div>
-                            </div>
-                        </div>
-                    
-                        <div class="journal-add-button">
-                            <button class="add-journal-btn" onclick="goToFarmlogWritePage()">+ 새 영농일지 작성하기</button>
-                        </div>
-                    </section>
-                    
-                    <hr class="divider"/>
-                    
-                    <!-- 진단이력 (샘플) -->
-                    <section class="recent-diagnosis-section">
-                        <div class="section-header">
-                            <h2 class="section-title">최근 진단 이력</h2>
-                            <a href="/diagnosisBoardPage" class="view-all">전체보기 &gt;</a>
-                        </div>
-                    
-                        <div class="journal-list">
-                            <div class="journal-item">
-                                <div class="journal-date">오늘</div>
-                                <div class="journal-content">
-                                    <div class="journal-title">사과흰가루병</div>
-                                    <div class="journal-desc">흰가루병은.......</div>
-                                </div>
-                            </div>
-                            <div class="journal-item">
-                                <div class="journal-date">25.06.18</div>
-                                <div class="journal-content">
-                                    <div class="journal-title">배검은줄무늬병</div>
-                                    <div class="journal-desc">줄무늬병은.....</div>
-                                </div>
-                            </div>
-                            <div class="journal-item">
-                                <div class="journal-date">오늘</div>
-                                <div class="journal-content">
-                                    <div class="journal-title">사과나무 물주기 및 유인작업</div>
-                                    <div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
-                                </div>
-                            </div>
-                            <div class="journal-item">
-                                <div class="journal-date">어제</div>
-                                <div class="journal-content">
-                                    <div class="journal-title">사과나무 전정 작업</div>
-                                    <div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
-                                </div>
-                            </div>
-                            <div class="journal-item">
-                                <div class="journal-date">06.15</div>
-                                <div class="journal-content">
-                                    <div class="journal-title">사과나무 전정 작업</div>
-                                    <div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
-                                </div>
-                            </div>
-                        </div>
-                    
-                        <div class="journal-add-button">
-                            <button class="add-journal-btn" onclick="goToDiagnosisUploadPage()">+ 병해충 진단 하기</button>
-                        </div>
-                    </section>
-                </div>
-            </main>
-        <!-- Footer -->
-        <div th:replace="/global/footer::footer "></div> 
-        </div>
-    </div>
+					<!-- 핵심 기능 섹션 -->
+					<section class="core-func-section">
+						<div class="core-title">핵심 기능</div>
+						<div class="core-card-group">
+
+
+
+							<div class="core-card" onclick="goToFarmlogPage()">
+
+								<img th:src="@{/img/log.png}" alt="작업 일지" class="core-icon">
+								<span class="core-label">영농일지</span>
+							</div>
+							<div class="core-card" onclick="goToDiagnosisPage()">
+								<img th:src="@{/img/bug.png}" alt="병해충 진단" class="core-icon">
+								<span class="core-label">병해충 진단</span>
+							</div>
+						</div>
+					</section>
+
+					<!-- 최근 일지 (샘플) -->
+					<section class="recent-journal-section">
+						<div class="section-header">
+							<h2 class="section-title">최근 일지</h2>
+							<a href="/farmlogBoardPage" class="view-all">전체보기 &gt;</a>
+						</div>
+
+						<div class="journal-list">
+							<div class="journal-item">
+								<div class="journal-date">오늘</div>
+								<div class="journal-content">
+									<div class="journal-title">사과나무 물주기 및 유인작업</div>
+									<div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
+								</div>
+							</div>
+							<div class="journal-item">
+								<div class="journal-date">오늘</div>
+								<div class="journal-content">
+									<div class="journal-title">사과나무 물주기 및 유인작업</div>
+									<div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
+								</div>
+							</div>
+							<div class="journal-item">
+								<div class="journal-date">오늘</div>
+								<div class="journal-content">
+									<div class="journal-title">사과나무 물주기 및 유인작업</div>
+									<div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
+								</div>
+							</div>
+							<div class="journal-item">
+								<div class="journal-date">어제</div>
+								<div class="journal-content">
+									<div class="journal-title">사과나무 전정 작업</div>
+									<div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
+								</div>
+							</div>
+							<div class="journal-item">
+								<div class="journal-date">06.15</div>
+								<div class="journal-content">
+									<div class="journal-title">사과나무 전정 작업</div>
+									<div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="journal-add-button">
+							<button class="add-journal-btn" onclick="goToFarmlogWritePage()">+
+								새 영농일지 작성하기</button>
+						</div>
+					</section>
+				</div>
+			</main>
+			<!-- Footer -->
+			<div th:replace="/global/footer::footer "></div>
+		</div>
+	</div>
 </body>
 </html>
