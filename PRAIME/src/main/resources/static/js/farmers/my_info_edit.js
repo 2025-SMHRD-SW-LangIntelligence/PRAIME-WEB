@@ -5,10 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	window.identityVerification = function() {
 	    alert("본인인증 기능은 현재 개발 중입니다.");
 	};
-
-	window.addressFind = function() {
-	    alert("주소찾기 기능은 현재 개발 중입니다.");
-	};
+;
 
 	window.goToRoleChoice = function() {
 	    window.location.href = '/roleChoicePage';

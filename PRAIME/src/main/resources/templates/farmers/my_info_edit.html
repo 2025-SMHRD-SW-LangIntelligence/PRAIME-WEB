@@ -14,6 +14,9 @@
    	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- 파일   -->
     <script th:src="@{/js/farmers/my_info_edit.js}"></script>
+	<!-- 카카오 주소 API -->
+	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:src="@{/js/farmers/kakao_address_api.js}"></script>    
     <title>내 정보 수정 페이지</title>
 </head>
 <body>
@@ -95,16 +98,20 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="address">주소</label>
-                                <div class="address-input-group">
-                                    <input type="text" name="address" id="address"  placeholder="우편번호" th:value="${session.user.address}">
-                                    <button class="duplicate-check-btn" onclick="addressFind()">주소찾기</button>
-                                </div>
-                                <div class="address-input-group">
-                                    <input type="text" name="address-detail" id="address-detail" placeholder="상세주소를 입력해주세요" th:value="${session.user.addressDetail}">
-                                </div>
-                            </div>                        
+						<!-- 주소찾기  -->
+						<div class="form-group">
+						    <label for="address-postcode">주소</label>
+						    <div class="address-input-group">
+						        <input type="text" id="address-postcode" name="postcode" placeholder="우편번호" readonly>
+						        <button type="button" class="find-address-btn">주소찾기</button>
+						    </div>
+						    <div class="address-input-group">
+						        <input type="text" id="address" name="address" placeholder="도로명 주소" readonly>
+						    </div>
+						    <div class="address-input-group">
+						        <input type="text" id="address-detail" name="address-detail" placeholder="상세주소를 입력해주세요">
+						    </div>
+						</div>                      
                         </form>
                     </div>
                     <div class="button-group">
