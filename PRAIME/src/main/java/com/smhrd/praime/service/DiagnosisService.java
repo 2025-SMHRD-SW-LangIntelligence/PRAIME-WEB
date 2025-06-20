@@ -44,7 +44,7 @@ public class DiagnosisService {
         validateDiagnosisResult(dto);
 
         String imagePath = saveBase64Image(dto.getResultImageBase64());
-
+        System.out.println("imagePath : "+imagePath);
         DiagnosisEntity entity = DiagnosisEntity.builder()
             .label(dto.getLabel())
             .confidence(dto.getConfidence())

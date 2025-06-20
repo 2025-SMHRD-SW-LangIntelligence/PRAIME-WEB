@@ -192,17 +192,6 @@ font-size: 16px;
 
 /*---------------- 주소 ----------------*/
 
-.address-input-group{
-  display: flex; 
-  gap: 10px; 
-  align-items: center; 
-  margin-bottom: 15px;
-}
-
-.id-input-group input{
-  flex: 1;
-}
-
 .duplicate-check-btn{
   flex: 0 0 auto; /* 버튼크기 고정*/
   background-color: white;
@@ -215,25 +204,23 @@ font-size: 16px;
   font-size: 15px;
 }
 
-.address-find-btn {
-  background-color: #0f4f35;
-  color: white;
-  box-shadow: 0 5px 15px 0 rgb(0, 0, 0, 0.1 );
-  padding: 8px;
-  font-size: 15px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s, transform 0.2s;
-  min-width: 48px;
-  width: auto;
+/*---------------- 주소 ----------------*/
+.find-address-btn{
+    flex: 0 0 auto; /* 버튼크기 고정*/
+    background-color: #0f4f35;
+    color: white;
+    padding: 15px;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.find-address-btn:hover{
+    background-color: #0a3524;
+    transform: translateY(-2px);
 }
 
-.address-find-btn:hover {
-  background-color: #0a3524;
-  transform: translateY(-2px);
-}
 /*---------------- 주소 ---------------- End*/
 
 
