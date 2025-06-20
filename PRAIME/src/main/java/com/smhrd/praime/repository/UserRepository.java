@@ -2,6 +2,7 @@ package com.smhrd.praime.repository;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import com.smhrd.praime.entiry.UserEntity;
@@ -20,5 +21,5 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
 	// 아이디로 회원정보 조회하는기능
 	Optional<UserEntity> findByUid(String uid);
 	
-	
+
 }
