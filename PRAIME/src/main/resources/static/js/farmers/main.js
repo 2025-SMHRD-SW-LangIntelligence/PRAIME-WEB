@@ -21,3 +21,5 @@ function goToFarmlogWritePage(){
 	window.location.href = "/farmlogWritePage";
 }
 
+
+

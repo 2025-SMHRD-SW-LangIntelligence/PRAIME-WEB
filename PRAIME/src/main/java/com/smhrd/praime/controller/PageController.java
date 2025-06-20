@@ -1,11 +1,26 @@
 package com.smhrd.praime.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.smhrd.praime.entiry.UserEntity;
+import com.smhrd.praime.exception.GlobalExceptionHandler;
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class PageController {
+
+    private final GlobalExceptionHandler globalExceptionHandler;
+
+
+    PageController(GlobalExceptionHandler globalExceptionHandler) {
+        this.globalExceptionHandler = globalExceptionHandler;
+    }
 	
 
 	// ---------- 공용 ---------- //
@@ -125,10 +140,37 @@ public class PageController {
 
 	// 영농일지 작성 페이지 이동
 	@GetMapping(value = "/farmlogWritePage")
-	public String farmlogWritePage() {
+	public String farmlogWritePage(HttpSession session, Model model) {
 		return "farmlog/write";
 	}
-
+	
+//	@GetMapping("/farmlogWritePage")
+//	public String farmlogWritePage(HttpSession session, Model model) {
+//	    Object rawUser = session.getAttribute("user");
+//	    System.out.println(rawUser);
+//
+//	    if (rawUser == null) {
+//	        System.out.println("세션에 사용자 없음");
+//	        return "redirect:/";
+//	    }
+//
+//	    if (!(rawUser instanceof UserEntity)) {
+//	        System.out.println("세션 user가 UserEntity가 아님. 타입: " + rawUser.getClass());
+//	        return "redirect:/";
+//	    }
+//
+//	    UserEntity user = (UserEntity) rawUser;
+//
+//	    System.out.println("세션에서 가져온 user: " + user);
+//
+//	    List<String> userCrops = user.getCrops();
+//	    model.addAttribute("userCrops", userCrops);
+//	    model.addAttribute("user", user);
+//
+//	    return "farmlog/write";
+//	}
+	
+	
 	// 영농일지 수정 페이지 이동
 	@GetMapping(value = "/farmlogEditPage")
 	public String farmlogEditPage() {
