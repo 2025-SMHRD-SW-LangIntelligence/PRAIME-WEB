@@ -454,8 +454,9 @@ const dummyData = [
 
 // 무한 스크롤 관련 변수
 let currentPage = 0;
-const itemsPerPage = 10;
+const pageSize = 10;
 let isLoading = false;
+let isEnd = false;
 let allData = [...dummyData]; // 검색 결과를 저장할 배열
 
 // 페이지 로드 시 실행
@@ -478,7 +479,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 스크롤 핸들러
 function handleScroll() {
-    if (isLoading) return;
+    if (isLoading || isEnd) return;
     
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const windowHeight = window.innerHeight;
@@ -492,10 +493,10 @@ function handleScroll() {
 
 // 추가 아이템 로드
 function loadMoreItems() {
-    if (isLoading) return;
+    if (isLoading || isEnd) return;
     
-    const startIndex = currentPage * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    const startIndex = currentPage * pageSize;
+    const endIndex = startIndex + pageSize;
     const itemsToShow = allData.slice(startIndex, endIndex);
     
     if (itemsToShow.length === 0) {
