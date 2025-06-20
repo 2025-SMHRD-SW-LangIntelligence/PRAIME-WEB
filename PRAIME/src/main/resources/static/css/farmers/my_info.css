@@ -1,16 +1,19 @@
 header {
-    background-color: var(--primary-color);
-    text-align: center;
-    padding: 15px 0;
-    margin-bottom: 0;
-    padding-top: 0;
-    border-bottom: 1px solid #eae6dd;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .header-group{
     display: flex;
     justify-content: space-between;
-    padding: 0 20px 0 20px;
+    padding: 0 20px 0 4px;
 }
 
 .header-title-group{
@@ -19,10 +22,17 @@ header {
 }
 
 .header-title{
-    margin-top: 0; 
-	color: white;
+  font-size: 1.8rem;
+  color: var(--secondary-color);
+  margin: 0;
 }
 
+.prevPage {
+  font-size: 1.5rem;
+  color: white;
+  text-decoration: none;
+  margin-right: 1rem;
+}
 
 .profile-box{
         max-width: 600px;
