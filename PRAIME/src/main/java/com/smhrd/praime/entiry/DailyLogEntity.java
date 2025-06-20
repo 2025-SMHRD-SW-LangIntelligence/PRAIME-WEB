@@ -2,6 +2,7 @@ package com.smhrd.praime.entiry;
 
 import java.time.LocalDate;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,22 +26,22 @@ public class DailyLogEntity {
 	private Long dlid;
 	
 	@Column(nullable = false)
-	private Long pid;
+	private String dlcrop;
 	@Column(nullable = false)
-	private String weather;
+	private String dlweather;
 	@Column(nullable = false)
 	private String dltitle;
 	@Column(nullable = false, columnDefinition = "TEXT")
-	private String dcontent;
+	private String dlcontent;
 	@Column(nullable = false, updatable = false)
-	private LocalDate ddate;
+	private LocalDate dldate;
 	
 	private String writeDay;
 	
 	@PrePersist
 	protected void writeDay() {
 		
-		this.ddate = LocalDate.now();
+		this.dldate = LocalDate.now();
 		
 	}
 	

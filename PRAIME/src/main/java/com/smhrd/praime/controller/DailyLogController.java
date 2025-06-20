@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ import com.smhrd.praime.service.DailyLogService;
 
 
 @Controller
+@RequestMapping("/farmlog")
 public class DailyLogController {
 
     private final DailyImageService dailyImageService;
@@ -45,31 +47,30 @@ public class DailyLogController {
 		Optional<DailyLogEntity> view = dailyLogService.viewPage(dlid);
 		model.addAttribute("view", view.get());
 
-		return "farmlog/view";
+		return "view";
 
 	}
 
 	// 새 일지 작성
-	@PostMapping("/farmlog/write")
-	public String logWrite(@RequestParam String dtitle,
-		    @RequestParam String dcontent,
-		    @RequestParam String pid,
-		    @RequestParam String weather,
-		    @RequestParam(required = false) MultipartFile[] dimages,
-		    @RequestParam String dpath) {
+	@PostMapping("/write")
+	public String logWrite(@RequestParam String dltitle,
+		    @RequestParam String dlcontent,
+		    @RequestParam String dlcrop,
+		    @RequestParam String dlweather,
+		    @RequestParam(required = false) MultipartFile[] dlimages) {
 			
 		
 		DailyLogEntity log = new DailyLogEntity();
 		CropsEntity crop = new CropsEntity();
 		
-		for (int i = 0 ; i < dimages.length ; i++) {
+		for (int i = 0 ; i < dlimages.length ; i++) {
 			
 			String imgPath = "";
 			String uploadDir = fileUploadConfig.getUploadDir(); // 이미지를 저장할 경로 - C:/crops/
 			System.out.println(uploadDir);
 			// 1. 파일의 이름 설정
 					
-			String fileName = UUID.randomUUID() + "_" + dimages[i].getOriginalFilename(); // uuid : 고유 식별자 (중복을 막을려고)
+			String fileName = UUID.randomUUID() + "_" + dlimages[i].getOriginalFilename(); // uuid : 고유 식별자 (중복을 막을려고)
 				
 			// 2. 파일이 저장될 이름과 경로 설정
 					
@@ -80,9 +81,9 @@ public class DailyLogController {
 					
 			try {
 						
-				dimages[i].transferTo(new File(filePath));
+				dlimages[i].transferTo(new File(filePath));
 				System.out.println("업로드 경로: " + filePath);
-				System.out.println("파일 존재 여부: " + !dimages[i].isEmpty());
+				System.out.println("파일 존재 여부: " + !dlimages[i].isEmpty());
 					
 					
 			} catch (IllegalStateException e) {
@@ -104,20 +105,20 @@ public class DailyLogController {
 				
 			DailyImageEntity dimage = new DailyImageEntity();
 				
-			log.setPid(crop.getPid());
+			log.setDlid(crop.getPid());
 			dimage.setDpath(imgPath);
 			dailyImageService.ImageSetSave(dimage);
 				
 		}
 				
 				
-		log.setPid(crop.getPid());
-		log.setDltitle(dtitle);
-		log.setDcontent(dcontent);
+		log.setDlid(crop.getPid());
+		log.setDltitle(dltitle);
+		log.setDlcontent(dlcontent);
 		System.out.println("파일 저장 완료. DB 저장 시작");
 		dailyLogService.writeLog(log);
 			
-		return "farmlog/board";
+		return "board";
 
 	}
 
