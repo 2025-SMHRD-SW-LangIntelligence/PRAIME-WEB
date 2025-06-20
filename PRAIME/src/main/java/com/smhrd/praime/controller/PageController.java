@@ -1,29 +1,23 @@
 package com.smhrd.praime.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.ui.Model;
-import java.util.Map;
 
 import com.smhrd.praime.entiry.UserEntity;
-import com.smhrd.praime.exception.GlobalExceptionHandler;
+import com.smhrd.praime.service.CommonService;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PageController {
 
-    private final GlobalExceptionHandler globalExceptionHandler;
-
-
-    PageController(GlobalExceptionHandler globalExceptionHandler) {
-        this.globalExceptionHandler = globalExceptionHandler;
-    }
-	
+	@Autowired
+    CommonService commonService;
 
 	// ---------- 공용 ---------- //
 	// 메인페이지 이동
@@ -74,11 +68,23 @@ public class PageController {
 	}
 
 	// ---------- 농부 ---------- //
-	// 농부 메인페이지 이동
-	@GetMapping(value = "/farmerMainPage")
-	public String farmerMainPage() {
-		return "farmers/main";
-	}
+    @GetMapping("/farmerMainPage")
+    public String farmerMainPage(HttpSession session, Model model) {
+
+        // 세션에서 유저 정보 가져오기 (예외처리 포함)
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login"; // 또는 "/"
+        }
+
+        // 오늘 날짜를 모델에 추가
+        commonService.addCurrentDateToModel(model);
+
+        // 사용자 이름도 타이틀에 필요하다면 추가
+        model.addAttribute("user", user);
+
+        return "farmers/main";
+    }
 	
 	// 농부 회원가입 페이지 이동
 	@GetMapping(value = "/joinFarmerPage")
@@ -150,6 +156,7 @@ public class PageController {
 	// 영농일지 작성 페이지 이동
 	@GetMapping(value = "/farmlogWritePage")
 	public String farmlogWritePage(HttpSession session, Model model) {
+		
 		return "farmlog/write";
 	}
 	
