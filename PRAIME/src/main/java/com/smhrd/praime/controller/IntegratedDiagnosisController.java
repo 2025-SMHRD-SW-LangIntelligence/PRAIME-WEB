@@ -1,5 +1,6 @@
 package com.smhrd.praime.controller;
 
+import com.smhrd.praime.DiagnosisDTO;
 import com.smhrd.praime.DiagnosisResultDto;
 import com.smhrd.praime.service.DiagnosisService;
 import com.smhrd.praime.service.FlaskIntegrationService;
@@ -31,47 +32,37 @@ public class IntegratedDiagnosisController {
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "conf_threshold", defaultValue = "0.5") Double confThreshold,
             @RequestParam(value = "auto_save", defaultValue = "false") Boolean autoSave) {
-        
-        Map<String, Object> response = new HashMap<>();
-        
-        try {
-            log.info("통합 진단 요청 - 파일: {}, 신뢰도: {}, 자동저장: {}", 
-                    file.getOriginalFilename(), confThreshold, autoSave);
 
-            // 1. Flask 서버에 AI 진단 요청
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            log.info("통합 진단 요청 - 파일: {}, 신뢰도: {}, 자동저장: {}", file.getOriginalFilename(), confThreshold, autoSave);
+
             Map<String, Object> flaskResponse = flaskIntegrationService.predictDisease(file, confThreshold);
-            
             response.put("flaskResult", flaskResponse);
-            
-            // 2. 자동 저장이 활성화되고 진단 결과가 있는 경우 DB에 저장
+
             if (autoSave && flaskResponse != null) {
-                try {
-                    // Flask 응답에서 필요한 정보 추출 (응답 구조에 맞게 수정 필요)
-                    Map<String, Object> predictionDetails = (Map<String, Object>) flaskResponse.get("prediction_details");
-                    Map<String, Object> outputImage = (Map<String, Object>) flaskResponse.get("output_image");
-                    
-                    if (predictionDetails != null && outputImage != null) {
-                        // DiagnosisResultDto 생성
-                        DiagnosisResultDto dto = new DiagnosisResultDto();
-                        // Flask 응답 구조에 따라 적절히 매핑
-                        // dto.setLabel(...);
-                        // dto.setConfidence(...);
-                        // dto.setResultImageBase64(...);
-                        
-                        Long savedId = diagnosisService.saveDiagnosisResult(dto);
-                        response.put("savedDiagnosisId", savedId);
-                        response.put("autoSaved", true);
-                    }
-                } catch (Exception saveException) {
-                    log.warn("자동 저장 실패, 진단 결과는 반환: {}", saveException.getMessage());
-                    response.put("autoSaved", false);
-                    response.put("saveError", saveException.getMessage());
+                Map<String, Object> predictionDetails = (Map<String, Object>) flaskResponse.get("prediction_details");
+                Map<String, Object> outputImage = (Map<String, Object>) flaskResponse.get("output_image");
+
+                if (predictionDetails != null && outputImage != null) {
+                    DiagnosisDTO dto = new DiagnosisDTO();
+                    dto.setLabel((String) predictionDetails.get("class_name"));
+                    Double confidence = (Double) predictionDetails.get("confidence");
+                    dto.setConfidence(confidence != null ? confidence * 100 : 0.0);
+
+                    String base64Img = (String) outputImage.get("base64_encoded_image");
+                    dto.setResultImageBase64(base64Img);
+
+                    Long savedId = diagnosisService.saveDiagnosis(dto);
+                    response.put("savedDiagnosisId", savedId);
+                    response.put("autoSaved", true);
                 }
             }
-            
+
             response.put("success", true);
             return ResponseEntity.ok(response);
-            
+
         } catch (Exception e) {
             log.error("통합 진단 처리 중 오류 발생", e);
             response.put("success", false);

@@ -27,7 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/diagnosis")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "*") // 개발용 - 운영시에는 특정 도메인으로 제한
+@CrossOrigin(
+	    origins = "http://localhost:3000",  // 프론트엔드 주소를 명시적으로 설정
+	    allowCredentials = "true"
+	)
 public class DiagnosisController {
 
     private final DiagnosisService diagnosisService;
@@ -39,13 +42,11 @@ public class DiagnosisController {
     @PostMapping("/save")
     public ResponseEntity<?> saveDiagnosis(@RequestBody DiagnosisDTO dto) {
         try {
-            diagnosisService.saveDiagnosis(dto);
-            return ResponseEntity.ok().body(Map.of("success", true));
+            Long savedId = diagnosisService.saveDiagnosis(dto);
+            return ResponseEntity.ok(Map.of("success", true, "savedId", savedId));
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity
-                    .status(500)
-                    .body(Map.of("success", false, "message", e.getMessage()));
+            log.error("저장 실패", e);
+            return ResponseEntity.status(500).body(Map.of("success", false, "message", e.getMessage()));
         }
     }
 

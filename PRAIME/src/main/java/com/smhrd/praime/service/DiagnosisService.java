@@ -73,22 +73,6 @@ public class DiagnosisService {
         }
     }
 
-    private String saveBase64Image(String base64Image) throws IOException {
-        Path uploadDir = Paths.get(uploadPath);
-        if (!Files.exists(uploadDir)) {
-            Files.createDirectories(uploadDir);
-            log.info("업로드 디렉토리 생성: {}", uploadDir);
-        }
-        byte[] imageBytes = Base64.getDecoder().decode(base64Image);
-        String fileName = String.format("diagnosis_%s_%s.jpg",
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")),
-                UUID.randomUUID().toString().substring(0, 8));
-        Path filePath = uploadDir.resolve(fileName);
-        Files.write(filePath, imageBytes);
-        log.info("이미지 저장 완료: {}", filePath);
-        return filePath.toString();
-    }
-    
     
     /**
      * 진단 이력 조회 (페이징)
