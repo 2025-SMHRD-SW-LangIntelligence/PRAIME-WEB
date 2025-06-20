@@ -59,6 +59,9 @@ main {
 }
 
 /* ---------- 검색 섹션 ---------- */
+.search-section{
+ padding: 0 10px 0;
+}
 
 .search-form {
   display: flex;
