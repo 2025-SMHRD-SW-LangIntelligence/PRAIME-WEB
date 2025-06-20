@@ -1,5 +1,6 @@
 package com.smhrd.praime.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +10,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.smhrd.praime.entiry.UserEntity;
+import com.smhrd.praime.repository.UserRepository;
 import com.smhrd.praime.service.CommonService;
+import com.smhrd.praime.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PageController {
 
+
 	@Autowired
     CommonService commonService;
+	UserService userService;
+    private UserRepository userRepository;
+
 
 	// ---------- 공용 ---------- //
 	// 메인페이지 이동
@@ -74,13 +81,11 @@ public class PageController {
         // 세션에서 유저 정보 가져오기 (예외처리 포함)
         UserEntity user = (UserEntity) session.getAttribute("user");
         if (user == null) {
-            return "redirect:/login"; // 또는 "/"
+            return "redirect:/login"; 
         }
-
         // 오늘 날짜를 모델에 추가
         commonService.addCurrentDateToModel(model);
-
-        // 사용자 이름도 타이틀에 필요하다면 추가
+        
         model.addAttribute("user", user);
 
         return "farmers/main";
@@ -154,39 +159,11 @@ public class PageController {
 	
 
 	// 영농일지 작성 페이지 이동
-	@GetMapping(value = "/farmlogWritePage")
-	public String farmlogWritePage(HttpSession session, Model model) {
-		
-		return "farmlog/write";
-	}
-	
-//	@GetMapping("/farmlogWritePage")
-//	public String farmlogWritePage(HttpSession session, Model model) {
-//	    Object rawUser = session.getAttribute("user");
-//	    System.out.println(rawUser);
-//
-//	    if (rawUser == null) {
-//	        System.out.println("세션에 사용자 없음");
-//	        return "redirect:/";
-//	    }
-//
-//	    if (!(rawUser instanceof UserEntity)) {
-//	        System.out.println("세션 user가 UserEntity가 아님. 타입: " + rawUser.getClass());
-//	        return "redirect:/";
-//	    }
-//
-//	    UserEntity user = (UserEntity) rawUser;
-//
-//	    System.out.println("세션에서 가져온 user: " + user);
-//
-//	    List<String> userCrops = user.getCrops();
-//	    model.addAttribute("userCrops", userCrops);
-//	    model.addAttribute("user", user);
-//
-//	    return "farmlog/write";
-//	}
-	
-	
+    @GetMapping("/farmlogWritePage")
+    public String farmlogWritePage(HttpSession session, Model model) {
+        return "farmlog/write";
+    }
+
 	// 영농일지 수정 페이지 이동
 	@GetMapping(value = "/farmlogEditPage")
 	public String farmlogEditPage() {

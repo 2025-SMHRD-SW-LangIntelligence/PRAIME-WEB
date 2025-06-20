@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.smhrd.praime.DiagnosisResultDto;
+import com.smhrd.praime.DiagnosisDTO;
 import com.smhrd.praime.entiry.DiagnosisEntity;
 import com.smhrd.praime.service.DiagnosisService;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,37 +37,15 @@ public class DiagnosisController {
      * 프론트엔드에서 Flask 서버로부터 받은 진단 결과를 데이터베이스에 저장
      */
     @PostMapping("/save")
-    public ResponseEntity<Map<String, Object>> saveDiagnosisResult(
-            @Valid @RequestBody DiagnosisResultDto diagnosisResultDto) {
-        
-        Map<String, Object> response = new HashMap<>();
-        
+    public ResponseEntity<?> saveDiagnosis(@RequestBody DiagnosisDTO dto) {
         try {
-            log.info("진단 결과 저장 요청 - 라벨: {}, 신뢰도: {}%", 
-                    diagnosisResultDto.getLabel(), diagnosisResultDto.getConfidence());
-            
-            // 진단 결과 저장 서비스 호출
-            Long savedId = diagnosisService.saveDiagnosisResult(diagnosisResultDto);
-            
-            response.put("success", true);
-            response.put("message", "진단 결과가 성공적으로 저장되었습니다.");
-            response.put("diagnosisId", savedId);
-            
-            log.info("진단 결과 저장 성공 - ID: {}", savedId);
-            
-            return ResponseEntity.ok(response);
-            
-        } catch (IllegalArgumentException e) {
-            log.error("진단 결과 저장 실패 - 잘못된 요청: {}", e.getMessage());
-            response.put("success", false);
-            response.put("message", "잘못된 요청입니다: " + e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-            
+            diagnosisService.saveDiagnosis(dto);
+            return ResponseEntity.ok().body(Map.of("success", true));
         } catch (Exception e) {
-            log.error("진단 결과 저장 중 오류 발생", e);
-            response.put("success", false);
-            response.put("message", "진단 결과 저장 중 오류가 발생했습니다.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            e.printStackTrace();
+            return ResponseEntity
+                    .status(500)
+                    .body(Map.of("success", false, "message", e.getMessage()));
         }
     }
 

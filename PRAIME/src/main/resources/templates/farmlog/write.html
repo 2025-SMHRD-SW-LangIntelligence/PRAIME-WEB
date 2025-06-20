@@ -30,6 +30,18 @@
 				</div>
 			</header>
 			<main>
+				<!-- <div th:text="${user.uid}"></div> -->
+<!--      <div class="crop-selection">
+        <h3>나의 재배 작물:</h3>
+        <ul th:if="${not #lists.isEmpty(userCrops)}">
+            <li th:each="crop : ${userCrops}">
+                <input type="checkbox" th:id="${crop}" th:name="selectedCrops" th:value="${crop}">
+                <label th:for="${crop}" th:text="${crop}"></label>
+            </li>
+        </ul>
+        <p th:if="${#lists.isEmpty(userCrops)}">등록된 작물이 없습니다. 마이페이지에서 작물을 등록해주세요.</p>
+    </div>  -->
+	
 				<form action="" class="journal-form" enctype="multipart/form-data">
 					<input type="text" id="weather" name="weather" hidden> <input
 						type="text" id="date" name="date" hidden>
