@@ -1,11 +1,13 @@
 package com.smhrd.praime.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.smhrd.praime.entiry.DailyLogEntity;
 import com.smhrd.praime.repository.DailyLogRepository;
@@ -36,9 +38,18 @@ public class DailyLogService {
 
 	// 영농일지 작성
 
-	public DailyLogEntity writeLog(DailyLogEntity entity) {
-
-		return dailyLogRepository.save(entity);
+	public DailyLogEntity writeLog(String dltitle, String dlcontent, String dlcrop, String dlweather, List<MultipartFile> dlimages) {
+		
+		DailyLogEntity lEntity = new DailyLogEntity();
+				
+		lEntity.setDlcrop(dlcrop);
+		lEntity.setDltitle(dltitle);
+		lEntity.setDlcontent(dlcontent);
+		System.out.println("파일 저장 완료. DB 저장 시작");
+		
+		
+		
+		return dailyLogRepository.save(lEntity);
 
 	}
 }
