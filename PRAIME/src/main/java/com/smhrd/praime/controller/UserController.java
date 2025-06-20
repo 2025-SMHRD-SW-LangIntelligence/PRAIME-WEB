@@ -1,5 +1,5 @@
 package com.smhrd.praime.controller;
-
+import java.util.List;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.smhrd.praime.entiry.Role;
 import com.smhrd.praime.entiry.UserEntity;
@@ -29,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 public class UserController {
+
 
 
     @Autowired
@@ -183,6 +185,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
     
+    // 기본정보 수정
     @PostMapping("/farmers/update_info")
     public String updateUserInfo(
     @RequestParam("pw") String pw,
@@ -211,9 +214,35 @@ public class UserController {
     user.setAddress(address);
     user.setAddressDetail(addressDetail);
     
-    userService.updateUser(user);
+    userService.updateBasicInfo(user);
     
     return "redirect:/myInfoFarmerPage";
     }
     
+    // 농장정보 수정
+
+    @PostMapping("/farmers/update_farm")
+    public String updateFarmInfo(HttpSession session,
+        @RequestParam("farm-name") String farmName,
+        @RequestParam("farm-area") String farmArea,
+        @RequestParam("area-unit") String areaUnit,
+        @RequestParam("farm-address") String farmAddress,
+        @RequestParam("farm-address-detail") String farmAddressDetail,
+        @RequestParam(value = "crops", required = false) List<String> crops
+    ) {
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        user.setFarmName(farmName);
+        user.setFarmArea(farmArea + " " + areaUnit);
+        user.setFarmAddress(farmAddress);
+        user.setFarmAddressDetail(farmAddressDetail);
+        user.setCrops(crops != null ? crops : Collections.emptyList());
+
+        userService.updateFarmInfo(user);  // save/update
+
+        session.setAttribute("user", user);
+        return "redirect:/myInfoFarmerPage";
+    }
+
+
+
 }
