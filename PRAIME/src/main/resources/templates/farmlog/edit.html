@@ -1,27 +1,87 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link th:href="@{/css/font.css}" rel="stylesheet">
-    <link th:href="@{/css/common.css}" rel="stylesheet">
-    <link th:href="@{/css/farmlog/edit.css}" rel="stylesheet">
-	<!-- Font Awesome CDN 추가 -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-   	<!-- jQuery CDN  -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- Axios CDN  -->
-   	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- 파일   -->
-    <script th:src="@{/js/common.js}"></script>
-    <script th:src="@{/jsfarmlog/edit.js}"></script>
-    <title>내 정보 페이지</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link th:href="@{/css/font.css}" rel="stylesheet">
+<link th:href="@{/css/common.css}" rel="stylesheet">
+<link th:href="@{/css/farmlog/edit.css}" rel="stylesheet">
+<!-- Font Awesome CDN 추가 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- jQuery CDN  -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Axios CDN  -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 파일   -->
+<script th:src="@{/js/farmlog/edit.js}"></script>
+<title>영농 일지 수정</title>
 </head>
 <body>
-    <div class="container">
-    
-        <!-- Footer -->
-        <div th:replace="/global/footer::footer "></div> 
-    </div>
+	<div class="container">
+		<div class="wrapper">
+			<header>
+				<div class="header-group">
+					<a href="#" class="prevPage" onclick="history.back()"> &lt; </a>
+					<div class="header-title-group">
+						<span class="header-title">영농 일지 수정</span>
+					</div>
+				</div>
+			</header>
+			<main>
+				<form action = "/farmlog/edit" id="edit-form" class="journal-form"
+					enctype="multipart/form-data">
+					<input type="hidden" id="dlid" name="dlid" />
+
+					<div class="journal-meta">
+						<div class="journal-date">
+							<p>날짜</p>
+							<input type="text" id="dldate" name="dldate" readonly />
+						</div>
+						<div class="journal-weather">
+							<p>날씨</p>
+							<input type="text" id="dlweather" name="dlweather" readonly />
+						</div>
+					</div>
+
+					<div class="crop-select-group">
+						<label for="crop">작물 선택</label>
+						<div id="crop-radio-container"></div>
+					</div>
+
+					<div class="journal-title">
+						<p>제목</p>
+						<input type="text" name="dltitle" id="dltitle"
+							placeholder="제목을 입력하세요" />
+					</div>
+
+					<div class="journal-content">
+						<p>내용</p>
+						<textarea rows="20" cols="60" name="dlcontent" id="dlcontent"
+							placeholder="내용을 입력하세요"></textarea>
+					</div>
+
+					<div class="journal-image">
+						<div class="image-upload-panel">
+							<label for="dlimages" class="upload-box"> <i
+								class="fas fa-camera"></i>
+								<p>사진 추가</p>
+								<input type="file" id="dlimages" name="dlimages" accept="image/*" multiple hidden />
+							</label>
+								<!-- ✅ 썸네일 & 갯수 표시 영역 -->
+								<div id="upload-preview" class="upload-preview"></div>
+						</div>
+					</div>
+
+					<div class="journal-buttons">
+						<button type="button" class="cancel-btn">취소</button>
+						<button type="submit" class="submit-btn">수정하기</button>
+					</div>
+				</form>
+			</main>
+			<!-- Footer -->
+        	<div th:replace="/global/footer::footer "></div>
+		</div>
+	</div>
 </body>
 </html>

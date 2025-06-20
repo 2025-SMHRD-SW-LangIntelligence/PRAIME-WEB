@@ -1,0 +1,265 @@
+/* 헤더 */
+header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.prevPage {
+  font-size: 1.5rem;
+  color: white;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+.header-title-group span {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.header-title {
+	color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* 메인 폼 전체 */
+
+main {
+  padding: 1.5rem;
+  background-color: var(--secondary-color);
+  flex: 1;
+  padding-bottom: 3rem;
+}
+
+/* 공통 폼 그룹 */
+.journal-form > div {
+  margin-bottom: 1.5rem;
+}
+
+/* 제목 영역 */
+.journal-title p,
+.journal-content p {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--label-color);
+}
+
+.journal-title input,
+.journal-content textarea {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}
+
+.journal-content textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+/* 이미지 업로드 */
+.journal-image input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  border: 1px dashed #aaa;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  color: #555;
+  cursor: pointer;
+}
+
+.image-upload-panel {
+  margin-top: 1.5rem;
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 2px dashed var(--border-color);
+  border-radius: 1rem;
+  background-color: #ffffff;
+  color: var(--placeholder-color);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.upload-box:hover {
+  border-color: var(--primary-color);
+  background-color: var(--card-selected-bg);
+}
+
+.upload-box i {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.upload-box p {
+  margin: 0;
+  color: var(--label-color);
+}
+
+.upload-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.upload-preview .thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+
+/* 저장/취소 버튼 영역 */
+.journal-form::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.journal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.journal-buttons button {
+  flex: 1;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.journal-buttons .cancel-btn {
+  background-color: var(--cancel-btn-bg);
+}
+
+.journal-buttons .cancel-btn:hover {
+  background-color: var(--cancel-btn-hover);
+}
+
+.journal-buttons .submit-btn {
+  background-color: var(--primary-color);
+  color: var(--button-text);
+}
+
+.journal-buttons .submit-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* 작물 선택 카드 전체 그룹 */
+.crop-select-group {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* 개별 카드 라벨 */
+.crop-card {
+  display: inline-block;
+  padding: 0.8rem 1.2rem;
+  border: 2px solid var(--border-color);
+  border-radius: 0.75rem;
+  background-color: var(--input-bg);
+  color: var(--label-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  min-width: 80px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* 선택된 상태 스타일 */
+input[type="radio"]:checked + .crop-card {
+  border-color: var(--primary-color);
+  background-color: var(--card-selected-bg);
+  color: var(--primary-color);
+  font-weight: bold;
+  box-shadow: 0 0 0 2px rgba(30, 85, 73, 0.2);
+}
+
+.journal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 3rem; /* 👈 하단 간격 추가 */
+}
+
+/* 반응형 */
+
+@media (max-width: 480px) {
+  .crop-card {
+    flex: 1 1 calc(50% - 0.5rem);
+    text-align: center;
+  }
+}
+
+.journal-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.journal-meta > div {
+  flex: 1;
+}
+
+.journal-meta input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}
+
+/* 썸네일 삭제 버튼 스타일 */
+.upload-preview button {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
