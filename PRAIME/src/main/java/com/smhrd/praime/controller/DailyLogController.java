@@ -96,7 +96,6 @@ public class DailyLogController {
 				e.printStackTrace();
 					
 			}
-				
 
 					
 			// 4. DB에 저장 될 경로 문자열 설정
