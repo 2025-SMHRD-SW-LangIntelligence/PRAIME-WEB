@@ -54,7 +54,7 @@
                             <label for="farm-address">농장주소</label>
                             <div class="address-input-group">
                                 <input type="text" name="farm-address" id="farm-address" placeholder="우편번호" required th:value="${session.user.farmAddress}">
-                                <button type="button" class="address-find-btn" onclick="/* addressFind(); */ alert('주소찾기 기능은 준비 중입니다.');">주소찾기</button>
+                                <button type="button" class="address-find-btn" onclick="/* addressFind(); */ alert('주소찾기 기능은 준비 중입니다.');">주소<br>찾기</button>
                             </div>
                             <div class="address-input-group">
                                 <input type="text" name="farm-address-detail" id="farm-address-detail" placeholder="상세주소를 입력해주세요" required th:value="${session.user.farmAddressDetail}">
