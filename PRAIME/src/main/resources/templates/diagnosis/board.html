@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link th:href="@{/css/font.css}" rel="stylesheet">
 <link th:href="@{/css/common.css}" rel="stylesheet">
-<link th:href="@{/css/diagnosis/upload.css}" rel="stylesheet">
+<link th:href="@{/css/diagnosis/board.css}" rel="stylesheet">
 <!-- Font Awesome CDN 추가 -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -43,9 +43,42 @@
 			</button>
 		</div>
 
+		<main>
+			<div class="sort-buttons" style="margin-bottom: 12px;">
+				<button onclick="sortByDate('desc')">최신순</button>
+				<button onclick="sortByDate('asc')">오래된순</button>
+			</div>
+			<table id="boardTable">
 
-				<!-- Footer -->
-				<div th:replace="/global/footer::footer "></div>
-		</div>
+				<div class="card-list">
+					<!-- 게시글 카드 1 -->
+					<div class="card-item">
+						<div class="card-date">2025년 6월 1일 14:30</div>
+						<div class="card-main">
+							<div class="card-thumb">
+								<img src="이미지경로.png" alt="썸네일" />
+							</div>
+							<div class="card-content">
+								<div class="card-title-row">
+									<span class="card-title">사과 궤양병</span> <span class="card-badge">사과</span>
+								</div>
+						
+								<div class="card-info-row">
+										신뢰도 : 92% <span class="card-bar bar-92"></span>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 카드 반복 -->
+				</div>
+		</main>
+
+
+
+
+		<!-- Footer -->
+		<div th:replace="/global/footer::footer "></div>
+	</div>
 </body>
 </html>

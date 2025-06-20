@@ -228,6 +228,26 @@ font-size: 16px;
   border-radius: 5px;
   font-size: 15px;
 }
+
+.address-find-btn {
+  background-color: #0f4f35;
+  color: white;
+  box-shadow: 0 5px 15px 0 rgb(0, 0, 0, 0.1 );
+  padding: 8px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
+  min-width: 48px;
+  width: auto;
+}
+
+.address-find-btn:hover {
+  background-color: #0a3524;
+  transform: translateY(-2px);
+}
 /*---------------- 주소 ---------------- End*/
 
 

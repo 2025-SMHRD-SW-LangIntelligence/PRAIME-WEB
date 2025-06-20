@@ -1,19 +1,15 @@
 /* ---------- 헤더 ---------- */
 
-header {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 1rem;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 헤더 하단 음영 추가 */
-}
-
 .header-group {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	background-color: var(--primary-color);
+	color: white;
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .prevPage {
@@ -32,9 +28,9 @@ header {
 }
 
 .header-title {
-	color: white;
-  font-size: 1.2rem;
-  font-weight: bold;
+	font-size: 1.8rem;
+	color: var(--secondary-color);
+	margin: 0;
 }
 
 .new-diary-btn {
@@ -55,10 +51,13 @@ header {
 
 main {
   padding-top: 1.2rem;
-  background-color: #f9f9f9;  /* 배경 구분용 */
+  background-color: var(--secondary-color);  /* 배경 구분용 */
 }
 
 /* ---------- 검색 섹션 ---------- */
+.search-section{
+ padding: 0 10px 0;
+}
 
 .search-form {
   display: flex;
