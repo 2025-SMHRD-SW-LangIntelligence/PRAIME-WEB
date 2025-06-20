@@ -24,6 +24,8 @@ import com.smhrd.praime.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+
 
 @Controller
 public class UserController {
@@ -180,6 +182,38 @@ public class UserController {
         response.put("message", message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-
-
+    
+    @PostMapping("/farmers/update_info")
+    public String updateUserInfo(
+    @RequestParam("pw") String pw,
+    @RequestParam("name") String name,
+    @RequestParam("tel-0") String telecom,
+    @RequestParam("tel-1") String tel1,
+    @RequestParam("tel-2") String tel2,
+    @RequestParam("tel-3") String tel3,
+    @RequestParam("email") String email,
+    @RequestParam("email-domain") String emailDomain,
+    @RequestParam("address") String address,
+    @RequestParam(value = "address-detail", required = false) String addressDetail,
+    
+    HttpSession session,
+    Model model) {
+    UserEntity user = (UserEntity) session.getAttribute("user");
+    	
+    user.setPw(pw);
+    user.setName(name);
+    user.setTelecom(telecom);
+    user.setTel1(tel1);
+    user.setTel2(tel2);
+    user.setTel3(tel3);
+    user.setEmailId(email);
+    user.setEmailDomain(emailDomain);
+    user.setAddress(address);
+    user.setAddressDetail(addressDetail);
+    
+    userService.updateUser(user);
+    
+    return "redirect:/myInfoFarmerPage";
+    }
+    
 }
