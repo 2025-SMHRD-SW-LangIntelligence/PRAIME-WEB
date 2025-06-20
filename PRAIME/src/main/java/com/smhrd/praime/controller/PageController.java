@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.ui.Model;
+import java.util.Map;
 
 import com.smhrd.praime.entiry.UserEntity;
 import com.smhrd.praime.exception.GlobalExceptionHandler;
@@ -133,7 +135,14 @@ public class PageController {
 	
 	// 영농일지 게시판 페이지 이동
 	@GetMapping(value = "/farmlogBoardPage")
-	public String farmlogBoardPage() {
+	public String farmlogBoardPage(Model model) {
+		// 더미데이터 추가 (선택사항)
+		// 실제로는 DailyLogService에서 데이터를 가져와야 함
+		model.addAttribute("boardList", java.util.Arrays.asList(
+			Map.of("dltitle", "사과나무 전정 작업 완료", "dlcontent", "오늘 사과나무 전정 작업을 완료했습니다.", "ddate", "2024.01.15"),
+			Map.of("dltitle", "배나무 물주기 및 유인작업", "dlcontent", "가지 유인 및 수분 관리 작업을 진행했습니다.", "ddate", "2024.01.14"),
+			Map.of("dltitle", "사과나무 병해충 예방 스프레이", "dlcontent", "병해충 예방을 위한 스프레이 작업을 진행했습니다.", "ddate", "2024.01.13")
+		));
 		return "farmlog/board";
 	}
 	
