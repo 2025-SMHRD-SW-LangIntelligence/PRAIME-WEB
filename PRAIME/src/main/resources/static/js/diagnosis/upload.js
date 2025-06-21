@@ -212,9 +212,9 @@ $(function(){
   }
 
   /**
-   * @function saveDiagnosisResult
-   * @description 진단 결과를 Spring Boot 백엔드에 저장 요청합니다.
-   */
+  * @function saveDiagnosisResult
+  * @description 진단 결과를 Spring Boot 백엔드에 저장 요청합니다.
+  */
   function saveDiagnosisResult() {
     if (lastDiagnosisResult.label === '' || lastDiagnosisResult.confidence === 0) {
         alert('저장할 진단 결과가 없습니다. 먼저 이미지를 업로드하고 진단을 완료해주세요.');
@@ -233,7 +233,7 @@ $(function(){
     console.log("저장할 데이터:", saveData);
 
     // Spring Boot 백엔드 API로 POST 요청
-    axios.post('http://localhost:8087/api/diagnosis/save', saveData, { 
+    axios.post('http://localhost:8087/api/diagnosis/save', saveData, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -241,6 +241,9 @@ $(function(){
     .then(response => {
       console.log('결과 저장 성공:', response.data);
       alert('진단 결과가 성공적으로 저장되었습니다!');
+      // --- 변경된 부분 시작 ---
+      window.location.href = '/diagnosisBoardPage'; // 저장 성공 후 페이지 이동
+      // --- 변경된 부분 끝 ---
     })
     .catch(error => {
       console.error('결과 저장 실패:', error);
