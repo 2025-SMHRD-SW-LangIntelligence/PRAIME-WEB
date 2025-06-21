@@ -1,10 +1,12 @@
 package com.smhrd.praime.controller;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smhrd.praime.DiagnosisDTO;
-import com.smhrd.praime.entiry.DiagnosisEntity;
+import com.smhrd.praime.entity.DiagnosisEntity;
 import com.smhrd.praime.service.DiagnosisService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +35,9 @@ import lombok.extern.slf4j.Slf4j;
 	)
 public class DiagnosisController {
 
-    private final DiagnosisService diagnosisService;
+    private final DiagnosisService diagnosisService; // 서비스 주입
+
+
 
     /**
      * 진단 결과 저장 API

@@ -1,29 +1,41 @@
 package com.smhrd.praime.controller;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.smhrd.praime.entiry.UserEntity;
+import com.smhrd.praime.entity.DiagnosisEntity;
+import com.smhrd.praime.entity.UserEntity;
+import com.smhrd.praime.repository.DiagnosisRepository;
 import com.smhrd.praime.repository.UserRepository;
 import com.smhrd.praime.service.CommonService;
+import com.smhrd.praime.service.DiagnosisService;
 import com.smhrd.praime.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 public class PageController {
+	
 
 
 	@Autowired
     CommonService commonService;
 	UserService userService;
-    private UserRepository userRepository;
+	private final DiagnosisService diagnosisService;
+    UserRepository userRepository;
+    DiagnosisRepository diagnosisRepository;
+    
 
 
 	// ---------- 공용 ---------- //
@@ -182,11 +194,58 @@ public class PageController {
 		return "diagnosis/upload";
 	}
 	
-	// 병해충진단 목록 페이지 이동
-	@GetMapping(value = "/diagnosisBoardPage")
-	public String diagnosisBoardPage() {
-		return "diagnosis/board";
-	}
-	
+
+
+
+    // 이미지 경로를 웹 접근 가능한 형태로 변환하는 헬퍼 메서드
+    private String convertToWebPath(String fullLocalPath) {
+        if (fullLocalPath == null || fullLocalPath.isEmpty()) {
+            return "/images/placeholder.png"; // 대체 이미지 경로 (필요시 조정)
+        }
+        // File 객체를 사용하여 파일명만 추출
+        File file = new File(fullLocalPath);
+        String filename = file.getName(); // 예: "diagnosis_20250620_174212_131b2efa.jpg"
+
+        // WebConfig에 설정된 핸들러 경로와 파일명을 결합하여 반환
+        return "/uploads/diagnosis/" + filename; // 예: "/uploads/diagnosis/diagnosis_20250620_174212_131b2efa.jpg"
+    }
+
+    // 병해충진단 목록 페이지 이동
+    @GetMapping("/diagnosisBoardPage")
+    public String diagnosisBoardPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "desc") String sortOrder,
+            Model model) {
+
+        // 1. 페이징 처리된 진단 이력 가져오기
+        Page<DiagnosisEntity> diagnosisPage = diagnosisService.getDiagnosisHistory(page, size, sortOrder);
+        List<DiagnosisEntity> diagnosisList = diagnosisPage.getContent();
+
+        // 중요: 페이징된 목록의 각 엔티티에 대해 이미지 경로 변환
+        diagnosisList.forEach(item -> {
+            item.setImagePath(convertToWebPath(item.getImagePath()));
+        });
+
+        model.addAttribute("diagnosisList", diagnosisList);
+        model.addAttribute("currentPage", diagnosisPage.getNumber());
+        model.addAttribute("totalPages", diagnosisPage.getTotalPages());
+        model.addAttribute("totalElements", diagnosisPage.getTotalElements());
+        model.addAttribute("pageSize", size);
+
+        // 2. 모든 진단 결과 가져오기 (새로 추가된 기능)
+        List<DiagnosisEntity> allDiagnosisResults = diagnosisService.getAllDiagnosisResultsOrderedByCreationDateDesc();
+
+        // 중요: 모든 진단 결과 목록의 각 엔티티에 대해 이미지 경로 변환
+        allDiagnosisResults.forEach(item -> {
+            item.setImagePath(convertToWebPath(item.getImagePath()));
+        });
+
+        model.addAttribute("allDiagnosisResults", allDiagnosisResults);
+
+        return "diagnosis/board";
+    }
+
+
 	
 }

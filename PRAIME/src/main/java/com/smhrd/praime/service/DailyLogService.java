@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.smhrd.praime.entiry.DailyLogEntity;
+import com.smhrd.praime.entity.DailyLogEntity;
 import com.smhrd.praime.repository.DailyLogRepository;
 
 @Service

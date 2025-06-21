@@ -1,4 +1,4 @@
-package com.smhrd.praime.entiry; // 패키지명은 실제 프로젝트에 맞게 확인해주세요
+package com.smhrd.praime.entity; // 패키지명은 실제 프로젝트에 맞게 확인해주세요
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;

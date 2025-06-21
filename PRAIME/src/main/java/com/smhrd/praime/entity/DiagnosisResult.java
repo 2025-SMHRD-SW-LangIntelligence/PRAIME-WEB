@@ -1,4 +1,4 @@
-package com.smhrd.praime.entiry;
+package com.smhrd.praime.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

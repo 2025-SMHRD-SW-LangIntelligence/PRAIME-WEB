@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.smhrd.praime.entiry.DiagnosisEntity;
+import com.smhrd.praime.entity.DiagnosisEntity;
 
 @Repository
 public interface DiagnosisRepository extends JpaRepository<DiagnosisEntity, Long> {
@@ -19,6 +19,12 @@ public interface DiagnosisRepository extends JpaRepository<DiagnosisEntity, Long
      * 최근 진단 결과 조회 (생성일 기준 내림차순)
      */
     Page<DiagnosisEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    /**
+     * 모든 진단 결과 조회 (생성일 기준 내림차순) - 페이징 없이 모든 데이터
+     */
+    List<DiagnosisEntity> findAllByOrderByCreatedAtDesc(); 
+        
     
     /**
      * 특정 라벨로 진단 결과 조회 (대소문자 구분 없이)

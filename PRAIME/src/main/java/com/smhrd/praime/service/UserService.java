@@ -3,7 +3,7 @@ package com.smhrd.praime.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.smhrd.praime.entiry.UserEntity;
+import com.smhrd.praime.entity.UserEntity;
 import com.smhrd.praime.repository.UserRepository;
 
 import java.util.Optional;

@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.smhrd.praime.entiry.Role;
-import com.smhrd.praime.entiry.UserEntity;
+import com.smhrd.praime.entity.Role;
+import com.smhrd.praime.entity.UserEntity;
 import com.smhrd.praime.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;

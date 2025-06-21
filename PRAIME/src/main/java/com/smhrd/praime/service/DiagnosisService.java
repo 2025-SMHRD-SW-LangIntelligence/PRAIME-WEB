@@ -15,12 +15,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.smhrd.praime.DiagnosisDTO;
 import com.smhrd.praime.DiagnosisResultDto;
-import com.smhrd.praime.entiry.DiagnosisEntity;
+import com.smhrd.praime.entity.DiagnosisEntity;
 import com.smhrd.praime.repository.DiagnosisRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,25 @@ public class DiagnosisService {
 
     @Value("${app.upload.diagnosis-images:uploads/diagnosis}")
     private String uploadPath;
+
+    
+
+    // --- 기존의 페이징 처리된 진단 기록 조회 메서드 (수정 가능성 있음) ---
+    // PageController에서 PageRequest.of(page, size, sort)로 Pageable 객체를 직접 생성하고 있으므로,
+    // 이 메서드는 단순히 Repository의 Pageable 버전을 호출하도록 합니다.
+    public Page<DiagnosisEntity> getDiagnosisHistory(int page, int size, String sortOrder) {
+        Sort sort = Sort.by(sortOrder.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return diagnosisRepository.findAllByOrderByCreatedAtDesc(pageable);
+    }
+    /**
+     * 모든 진단 결과를 생성일 기준 내림차순으로 가져옵니다. (페이징 없음)
+     *
+     * @return 모든 진단 결과를 담은 리스트
+     */
+    public List<DiagnosisEntity> getAllDiagnosisResultsOrderedByCreationDateDesc() {
+        return diagnosisRepository.findAllByOrderByCreatedAtDesc();
+    }    
 
     /**
      * 진단 결과 저장 (Base64 이미지 → 파일 저장 + DB 저장)
