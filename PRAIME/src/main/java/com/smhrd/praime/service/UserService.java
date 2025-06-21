@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.smhrd.praime.entity.UserEntity;
 import com.smhrd.praime.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.util.Optional;
 
 @Service
@@ -51,5 +53,14 @@ public class UserService {
 	// 회원 농장정보 수정
 	public void updateFarmInfo(UserEntity user) {
 		userRepository.save(user);
+	}
+	// 회원 탈퇴 
+	@Transactional
+	public void deleteUserAndRelatedData(String uid) {
+		// 1. 연관 데이터 먼저 삭제
+		
+		// diaryRepository.deleteByUserUid(uid); ....
+		// 2. 마지막에 회원 정보 삭제
+		userRepository.deleteById(uid);
 	}
 }
