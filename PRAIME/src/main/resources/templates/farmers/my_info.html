@@ -1,71 +1,73 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>내 정보 페이지</title>
-    <link th:href="@{/css/font.css}" rel="stylesheet">
-    <link th:href="@{/css/common.css}" rel="stylesheet">
-    <link th:href="@{/css/farmers/my_info.css}" rel="stylesheet">
-	
-    <!-- Font Awesome CDN 추가 -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-   	<!-- jQuery CDN  -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- Axios CDN  -->
-   	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- 파일   -->
-    <script th:src="@{/js/common.js}"></script>
-    <script th:src="@{/js/farmers/my_info.js}"></script> 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내 정보 페이지</title>
+<link th:href="@{/css/font.css}" rel="stylesheet">
+<link th:href="@{/css/common.css}" rel="stylesheet">
+<link th:href="@{/css/farmers/my_info.css}" rel="stylesheet">
+
+<!-- Font Awesome CDN 추가 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- jQuery CDN  -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Axios CDN  -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 파일   -->
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/farmers/my_info.js}"></script>
 </head>
 <body>
-    <div class="container">
+	<div class="container">
 		<div class="wrapper">
 			<header>
 				<div class="header-group">
-				<a href="#" class="prevPage" onclick="history.back()"> < </a>
+					<a href="#" class="prevPage" onclick="history.back()"> < </a>
 					<div class="header-title-group">
 						<h1 class="header-title">설정</h1>
 					</div>
 				</div>
-		    </header>
-            <main>
-                <div class="profile-box"> 
-                    <h2>프로필 정보</h2>
-                        <div class="profile-contents">
-                            <!-- 프로필 사진 -->
-                            <div class="avatar">
-                                이
-                            </div>
-                            <div>
-                                <h3 th:text="${session.user?.uid}">이름</h3>
-                                <p th:text="${session.user?.address}"></p>
-                                <p th:text="${session.user?.farmName}"></p>
-                            </div>
-                        </div>
-                        
-                        <div class="profile-actions">
-                            <a href="/myInfoFarmerEditPage" class="user-edit">
-                                <span class="icon">👤</span>
-                                <span>내 정보 수정</span>
-                                <span class="arrow">⭢</span>
-                            </a>
+			</header>
+			<main>
+				<div class="profile-box">
+					<h2>프로필 정보</h2>
+					<div class="profile-contents">
+						<!-- 프로필 사진 -->
+						<div class="avatar">이</div>
+						<div>
+							<h3 th:text="${session.user?.uid}">이름</h3>
+							<p th:text="${session.user?.address}"></p>
+							<p th:text="${session.user?.farmName}"></p>
+						</div>
+					</div>
 
-                            <a href="/myFarmEditPage" class="farm-edit">
-                                <span class="icon">🏡</span>
-                                <span>농장 정보 수정</span>
-                                <span class="arrow">⭢</span>
-                            </a>
+					<div class="profile-actions">
+						<a href="/myInfoFarmerEditPage" class="user-edit"> <span
+							class="icon">👤</span> <span>내 정보 수정</span> <span class="arrow">⭢</span>
+						</a> <a href="/myFarmEditPage" class="farm-edit"> <span
+							class="icon">🏡</span> <span>농장 정보 수정</span> <span class="arrow">⭢</span>
+						</a>
 
-                        </div>
-                </div>
-                <div class="logout-box">
-                    <a th:href="@{/logout.do}" class="logout-btn">로그아웃</a>
-                </div>
-            </main>       
-    		<!-- Footer -->
-            <div th:replace="/global/footer::footer "></div> 
-    	</div>    
-    </div>
+					</div>
+				</div>
+				<div class="logout-box">
+					<a th:href="@{/logout.do}" class="logout-btn">로그아웃</a>
+				</div>
+
+				<!-- 회원탈퇴 박스 추가 -->
+				<div class="withdraw-box">
+					<form id="withdrawForm" th:action="@{/withdraw.do}" method="post"
+						style="margin-top: 10px;">
+						<button type="submit" class="withdraw-btn"
+							onclick="return confirmWithdraw();">회원 탈퇴</button>
+					</form>
+				</div>
+			</main>
+			<!-- Footer -->
+			<div th:replace="/global/footer::footer "></div>
+		</div>
+	</div>
 </body>
 </html>
