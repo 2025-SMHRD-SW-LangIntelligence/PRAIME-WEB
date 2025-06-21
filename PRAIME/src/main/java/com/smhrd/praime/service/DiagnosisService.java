@@ -69,7 +69,6 @@ public class DiagnosisService {
             .label(dto.getLabel())
             .confidence(dto.getConfidence())
             .imagePath(imagePath)
-            .resultImageBase64(dto.getResultImageBase64())
             .build();
 
         diagnosisRepository.save(entity);

@@ -233,15 +233,15 @@ public class PageController {
         model.addAttribute("totalElements", diagnosisPage.getTotalElements());
         model.addAttribute("pageSize", size);
 
-        // 2. 모든 진단 결과 가져오기 (새로 추가된 기능)
-        List<DiagnosisEntity> allDiagnosisResults = diagnosisService.getAllDiagnosisResultsOrderedByCreationDateDesc();
-
-        // 중요: 모든 진단 결과 목록의 각 엔티티에 대해 이미지 경로 변환
-        allDiagnosisResults.forEach(item -> {
-            item.setImagePath(convertToWebPath(item.getImagePath()));
-        });
-
-        model.addAttribute("allDiagnosisResults", allDiagnosisResults);
+//        // 2. 모든 진단 결과 가져오기 (새로 추가된 기능)
+//        List<DiagnosisEntity> allDiagnosisResults = diagnosisService.getAllDiagnosisResultsOrderedByCreationDateDesc();
+//
+//        // 중요: 모든 진단 결과 목록의 각 엔티티에 대해 이미지 경로 변환
+//        allDiagnosisResults.forEach(item -> {
+//            item.setImagePath(convertToWebPath(item.getImagePath()));
+//        });
+//
+//        model.addAttribute("allDiagnosisResults", allDiagnosisResults);
 
         return "diagnosis/board";
     }
