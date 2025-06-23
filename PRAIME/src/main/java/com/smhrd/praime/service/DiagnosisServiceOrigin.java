@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class DiagnosisService {
+public class DiagnosisServiceOrigin {
 
     private final DiagnosisRepository diagnosisRepository;
 
@@ -40,28 +40,14 @@ public class DiagnosisService {
 
     
 
-    /**
-     * 페이징 처리된 진단 기록 조회 메서드.
-     * sortOrder 파라미터에 따라 createdAt 필드를 기준으로 동적으로 정렬
-     * Controller에서 전달하는 sortOrder 값을 기반으로 Pageable 객체에 Sort 정보를 추가
-     * @param page 현재 페이지 번호 (0부터 시작)
-     * @param size 페이지당 아이템 수
-     * @param sortOrder 정렬 순서 ("asc" 또는 "desc")
-     * @return 페이징된 DiagnosisEntity 목록
-     */
-    @Transactional(readOnly = true) // 읽기 전용 트랜잭션으로 성능 최적화
+    // --- 기존의 페이징 처리된 진단 기록 조회 메서드 (수정 가능성 있음) ---
+    // PageController에서 PageRequest.of(page, size, sort)로 Pageable 객체를 직접 생성하고 있으므로,
+    // 이 메서드는 단순히 Repository의 Pageable 버전을 호출하도록 합니다.
     public Page<DiagnosisEntity> getDiagnosisHistory(int page, int size, String sortOrder) {
-        try {
-            Sort sort = Sort.by(sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
-            Pageable pageable = PageRequest.of(page, size, sort);
-            // Repository의 기본 findAll(Pageable) 메서드를 사용하여 동적 정렬을 적용합니다.
-            return diagnosisRepository.findAll(pageable); // findAllByOrderByCreatedAtDesc 대신 findAll 사용
-        } catch (Exception e) {
-            log.error("진단 이력 조회 중 오류 발생 (페이지: {}, 크기: {}, 정렬: {})", page, size, sortOrder, e);
-            throw new RuntimeException("진단 이력 조회에 실패했습니다.", e);
-        }
+        Sort sort = Sort.by(sortOrder.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return diagnosisRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
-    
     /**
      * 모든 진단 결과를 생성일 기준 내림차순으로 가져옵니다. (페이징 없음)
      *
@@ -161,21 +147,21 @@ public class DiagnosisService {
     }
 
     /**
-     * 진단 결과 입력값 검증 (DiagnosisResultDto용)
+     * 진단 결과 입력값 검증
      */
-    private void validateDiagnosisResult(DiagnosisResultDto dto) { // DTO 타입 통일
+    private void validateDiagnosisResult(DiagnosisResultDto dto) {
         if (dto.getLabel() == null || dto.getLabel().trim().isEmpty()) {
             throw new IllegalArgumentException("진단 라벨은 필수입니다.");
         }
-
+        
         if (dto.getConfidence() == null || dto.getConfidence() < 0 || dto.getConfidence() > 100) {
             throw new IllegalArgumentException("신뢰도는 0-100 사이의 값이어야 합니다.");
         }
-
+        
         if (dto.getResultImageBase64() == null || dto.getResultImageBase64().trim().isEmpty()) {
             throw new IllegalArgumentException("결과 이미지는 필수입니다.");
         }
-
+        
         // Base64 형식 검증
         try {
             Base64.getDecoder().decode(dto.getResultImageBase64());
@@ -214,12 +200,12 @@ public class DiagnosisService {
     }
 
     /**
-     * 최신순으로 페이지의 데이터 호출
+     * 신순으로 페이지의 데이터호출
      * getContent()를 호출하여 List<DiagnosisEntity>로 반환
-     * 이 메서드도 상단의 getDiagnosisHistory(int, int, String)으로 대체 가능
      */
     public List<DiagnosisEntity> findRecentDiagnoses(Pageable pageable) {
         return diagnosisRepository.findAll(pageable).getContent();
-    }
+    }    
+    
     
 }

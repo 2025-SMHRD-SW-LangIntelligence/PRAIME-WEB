@@ -32,8 +32,9 @@
 
     <main>
         <div class="sort-buttons">
-            <button data-sort-order="desc">최신순</button>
-            <button data-sort-order="asc">오래된순</button>
+            <button id="sort-toggle-button">
+                <i class="fas fa-sort-amount-down-alt"></i> 최신순
+            </button>
         </div>
 
         <div class="card-list" id="card-list">
@@ -65,8 +66,7 @@
                 현재 진단 기록이 없습니다.
             </div>
         </div>
-
-        </main>
+    </main>
 
     <div id="imageModal" class="modal">
         <div class="modal-content-wrapper">
@@ -81,5 +81,6 @@
 
     <div th:replace="/global/footer::footer"></div>
 </div>
+
 </body>
 </html>

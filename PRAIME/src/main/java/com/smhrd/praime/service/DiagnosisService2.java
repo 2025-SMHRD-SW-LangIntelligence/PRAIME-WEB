@@ -19,8 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.smhrd.praime.DiagnosisDTO;
-import com.smhrd.praime.DiagnosisResultDto;
+import com.smhrd.praime.DiagnosisResultDto; 
 import com.smhrd.praime.entity.DiagnosisEntity;
 import com.smhrd.praime.repository.DiagnosisRepository;
 
@@ -31,14 +30,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class DiagnosisService {
+public class DiagnosisService2 {
 
     private final DiagnosisRepository diagnosisRepository;
 
     @Value("${app.upload.diagnosis-images:uploads/diagnosis}")
     private String uploadPath;
-
-    
 
     /**
      * 페이징 처리된 진단 기록 조회 메서드.
@@ -61,21 +58,24 @@ public class DiagnosisService {
             throw new RuntimeException("진단 이력 조회에 실패했습니다.", e);
         }
     }
-    
+
     /**
      * 모든 진단 결과를 생성일 기준 내림차순으로 가져옵니다. (페이징 없음)
      *
      * @return 모든 진단 결과를 담은 리스트
      */
     public List<DiagnosisEntity> getAllDiagnosisResultsOrderedByCreationDateDesc() {
-        return diagnosisRepository.findAllByOrderByCreatedAtDesc();
-    }    
+        // 이 메서드는 페이징이 필요 없을 때만 사용
+        // 특정 정렬 순서로 모든 데이터를 가져올 때 유용
+        return diagnosisRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+    }
 
     /**
      * 진단 결과 저장 (Base64 이미지 → 파일 저장 + DB 저장)
+     * DiagnosisDTO 대신 DiagnosisResultDto를 사용하는 것으로 통일
      */
-    public Long saveDiagnosis(DiagnosisDTO dto) throws IOException {
-        validateDiagnosisResult(dto);
+    public Long saveDiagnosis(DiagnosisResultDto dto) throws IOException { // DTO 타입 통일
+        validateDiagnosisResult(dto); // 사용하는 DTO에 맞춰 메서드 이름 통일
 
         String imagePath = saveBase64Image(dto.getResultImageBase64());
         System.out.println("imagePath : "+imagePath);
@@ -89,24 +89,7 @@ public class DiagnosisService {
         return entity.getId();
     }
 
-    private void validateDiagnosisResult(DiagnosisDTO dto) {
-        if (dto.getLabel() == null || dto.getLabel().trim().isEmpty()) {
-            throw new IllegalArgumentException("진단 라벨은 필수입니다.");
-        }
-        if (dto.getConfidence() < 0 || dto.getConfidence() > 100) {
-            throw new IllegalArgumentException("신뢰도는 0~100 사이여야 합니다.");
-        }
-        if (dto.getResultImageBase64() == null || dto.getResultImageBase64().trim().isEmpty()) {
-            throw new IllegalArgumentException("결과 이미지가 필요합니다.");
-        }
-        try {
-            Base64.getDecoder().decode(dto.getResultImageBase64());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("올바르지 않은 Base64 이미지입니다.");
-        }
-    }
 
-    
     /**
      * 진단 이력 조회 (페이징)
      */
@@ -194,22 +177,22 @@ public class DiagnosisService {
             Files.createDirectories(uploadDir);
             log.info("업로드 디렉토리 생성: {}", uploadDir.toString());
         }
-        
+
         // Base64 디코딩
         byte[] imageBytes = Base64.getDecoder().decode(base64Image);
-        
+
         // 파일명 생성 (UUID + 타임스탬프)
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
         String fileName = String.format("diagnosis_%s_%s.jpg", timestamp, UUID.randomUUID().toString().substring(0, 8));
-        
+
         // 파일 저장
         Path filePath = uploadDir.resolve(fileName);
         try (FileOutputStream fos = new FileOutputStream(filePath.toFile())) {
             fos.write(imageBytes);
         }
-        
+
         log.info("이미지 파일 저장 완료: {}", filePath.toString());
-        
+
         return filePath.toString();
     }
 
@@ -221,5 +204,4 @@ public class DiagnosisService {
     public List<DiagnosisEntity> findRecentDiagnoses(Pageable pageable) {
         return diagnosisRepository.findAll(pageable).getContent();
     }
-    
 }

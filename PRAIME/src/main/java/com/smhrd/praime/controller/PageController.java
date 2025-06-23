@@ -262,14 +262,14 @@ public class PageController {
     // 이미지 경로를 웹 접근 가능한 형태로 변환하는 헬퍼 메서드
     private String convertToWebPath(String fullLocalPath) {
         if (fullLocalPath == null || fullLocalPath.isEmpty()) {
-            return "/images/placeholder.png"; // 대체 이미지 경로 (필요시 조정)
+            return "/images/placeholder.png"; // 대체 이미지 경로
         }
         // File 객체를 사용하여 파일명만 추출
         File file = new File(fullLocalPath);
-        String filename = file.getName(); // 예: "diagnosis_20250620_174212_131b2efa.jpg"
+        String filename = file.getName(); 
 
         // WebConfig에 설정된 핸들러 경로와 파일명을 결합하여 반환
-        return "/uploads/diagnosis/" + filename; // 예: "/uploads/diagnosis/diagnosis_20250620_174212_131b2efa.jpg"
+        return "/uploads/diagnosis/" + filename; 
     }
 
     // 병해충진단 목록 페이지 이동 (초기 페이지 렌더링용)
@@ -290,15 +290,13 @@ public class PageController {
         });
 
         model.addAttribute("diagnosisList", diagnosisList);
-        // 무한 스크롤에서는 이 값들이 JavaScript에서 관리되지만,
-        // 첫 페이지 렌더링 시 Thymeleaf가 사용할 수 있도록 전달
         model.addAttribute("currentPage", diagnosisPage.getNumber());
         model.addAttribute("totalPages", diagnosisPage.getTotalPages());
         model.addAttribute("totalElements", diagnosisPage.getTotalElements());
         model.addAttribute("pageSize", size);
         model.addAttribute("sortOrder", sortOrder); // JS 초기화 시 사용
 
-        return "diagnosis/board"; // src/main/resources/templates/diagnosis/board.html 반환
+        return "diagnosis/board"; 
     }
     
     // 무한스크롤을 위한 REST API (HTML 프래그먼트 반환)
@@ -320,12 +318,7 @@ public class PageController {
         });
         
         model.addAttribute("diagnosisList", diagnosisList);
-        // hasNext는 사실 프론트엔드 JS의 newCards.length === pageSize 로 판단하므로 굳이 넘길 필요는 없음
-        // model.addAttribute("hasNext", diagnosisPage.hasNext());
-        // currentPage도 JS가 관리하므로 굳이 넘길 필요 없음
-        // model.addAttribute("currentPage", page);
-        
-        // diagnosis/board.html 파일 내의 'diagnosis-list' 프래그먼트만 반환
+
         return "diagnosis/board :: diagnosis-list";
     }
 

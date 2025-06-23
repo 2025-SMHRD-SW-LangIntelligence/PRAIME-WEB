@@ -22,19 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.querySelector(".modal-close");
 
     // card-list 내 이미지 클릭 시 이벤트 위임
-    // 이 리스너는 한 번만 등록되며, 동적으로 추가되는 .card-thumb img 요소에도 적용됩니다.
     document.getElementById('card-list').addEventListener('click', function(event) {
         const clickedImg = event.target.closest('.card-thumb img');
         if (clickedImg) {
-            modal.classList.add('show'); // 'show' 클래스를 추가하여 모달 표시
-            modalImage.src = clickedImg.src; // 이미지 소스 설정
-            modalLabel.textContent = clickedImg.dataset.label; // data 속성에서 라벨 설정
-            modalConfidence.textContent = '신뢰도: ' + clickedImg.dataset.confidence; // data 속성에서 신뢰도 설정
+            modal.classList.add('show');
+            modalImage.src = clickedImg.src;
+            modalLabel.textContent = clickedImg.dataset.label;
+            modalConfidence.textContent = '신뢰도: ' + clickedImg.dataset.confidence;
 
-            // 모달 이미지 로드 실패 시 대체 이미지 표시
             modalImage.onerror = function() {
-                this.onerror = null; // 중복 호출 방지
-                this.src = '/images/placeholder.png'; // 대체 이미지 경로
+                this.onerror = null;
+                this.src = '/images/placeholder.png';
             };
         }
     });
@@ -42,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 닫기 버튼 클릭 시 모달 닫기
     if (closeBtn) {
         closeBtn.addEventListener('click', function() {
-            modal.classList.remove('show'); // 'show' 클래스를 제거하여 모달 숨김
+            modal.classList.remove('show');
         });
     }
 
@@ -50,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modal) {
         modal.addEventListener('click', function(event) {
             if (event.target === modal) {
-                modal.classList.remove('show'); // 'show' 클래스를 제거하여 모달 숨김
+                modal.classList.remove('show');
             }
         });
     }
@@ -58,51 +56,67 @@ document.addEventListener('DOMContentLoaded', () => {
     // ESC 키 눌렀을 때 모달 닫기
     document.addEventListener('keydown', function(event) {
         if (event.key === "Escape" && modal && modal.classList.contains('show')) {
-            modal.classList.remove('show'); // 'show' 클래스를 제거하여 모달 숨김
+            modal.classList.remove('show');
         }
     });
 
-    // 정렬 버튼에 이벤트 리스너 추가
-    document.querySelectorAll('.sort-buttons button').forEach(button => {
-        button.addEventListener('click', function() {
-            // 모든 버튼에서 'active' 클래스 제거
-            document.querySelectorAll('.sort-buttons button').forEach(btn => btn.classList.remove('active'));
-            // 클릭된 버튼에 'active' 클래스 추가
-            this.classList.add('active');
+    // 정렬 버튼 클릭 이벤트 (하나의 버튼으로 토글)
+    const sortButton = document.getElementById('sort-toggle-button');
+    if (sortButton) {
+        sortButton.addEventListener('click', function() {
+            // 현재 정렬 순서를 토글
+            currentSortOrder = (currentSortOrder === 'desc') ? 'asc' : 'desc';
 
-            const order = this.dataset.sortOrder; // data-sort-order 속성에서 값 가져오기
-            resetInfiniteScroll(); // 무한 스크롤 상태 재설정 (데이터 초기화)
-            loadMoreDiagnosis(true, order); // 초기 로드로 간주하고, 정렬 순서 전달
+            // 버튼 텍스트 및 아이콘 업데이트
+            updateSortButtonUI(sortButton, currentSortOrder);
+
+            // 무한 스크롤 상태 재설정 및 데이터 다시 로드
+            resetInfiniteScroll();
+            loadMoreDiagnosis(true, currentSortOrder);
         });
-    });
+    }
 });
 
 // 무한스크롤 관련 변수
-let currentPage = 0; // 현재 페이지 번호 (0부터 시작)
-let isLoading = false; // 데이터 로딩 중인지 여부
-let hasMoreData = true; // 서버에 더 이상 데이터가 없는지 여부
-const pageSize = 10; // 한 번에 가져올 아이템 수 (백엔드 페이지 크기와 일치해야 함)
-let currentSortOrder = 'desc'; // 현재 정렬 순서 (초기값 'desc')
+let currentPage = 0;
+let isLoading = false;
+let hasMoreData = true;
+const pageSize = 10;
+let currentSortOrder = 'desc'; // 초기 정렬 순서: 최신순
+
+/**
+ * 정렬 버튼의 UI를 업데이트합니다. (텍스트, 아이콘)
+ * @param {HTMLElement} button - 정렬 버튼 요소.
+ * @param {string} order - 현재 정렬 순서 ('desc' 또는 'asc').
+ */
+function updateSortButtonUI(button, order) {
+    const icon = button.querySelector('i');
+    if (order === 'desc') {
+        button.innerHTML = '<i class="fas fa-sort-amount-down-alt"></i> 최신순';
+    } else {
+        button.innerHTML = '<i class="fas fa-sort-amount-up-alt"></i> 오래된순';
+    }
+}
+
 
 /**
  * 무한 스크롤 시스템을 초기화합니다.
  * 스크롤 이벤트 리스너를 등록하고 첫 페이지 데이터를 로드합니다.
  */
 function initInfiniteScroll() {
-    window.addEventListener('scroll', handleScroll); // 스크롤 이벤트 리스너 등록
+    window.addEventListener('scroll', handleScroll);
 
     // URL 파라미터에서 초기 정렬 순서를 가져와 currentSortOrder에 설정
     const urlParams = new URLSearchParams(window.location.search);
     currentSortOrder = urlParams.get('sortOrder') || 'desc';
 
-    // 초기 로드 시 'currentSortOrder'에 해당하는 버튼을 활성화 상태로 설정
-    const initialSortButton = document.querySelector(`.sort-buttons button[data-sort-order="${currentSortOrder}"]`);
-    if (initialSortButton) {
-        initialSortButton.classList.add('active');
+    // 초기 로드 시 정렬 버튼 UI 업데이트
+    const sortButton = document.getElementById('sort-toggle-button');
+    if (sortButton) {
+        updateSortButtonUI(sortButton, currentSortOrder);
     }
 
     // 첫 페이지 데이터 로드를 시작합니다.
-    // isInitialLoad = true 로 전달하여 Thymeleaf로 렌더링된 초기 콘텐츠를 비우도록 합니다.
     loadMoreDiagnosis(true, currentSortOrder);
 }
 
@@ -111,17 +125,15 @@ function initInfiniteScroll() {
  * 주로 정렬 기준 변경 시 호출됩니다.
  */
 function resetInfiniteScroll() {
-    currentPage = 0; // 페이지 번호 초기화
-    isLoading = false; // 로딩 상태 해제
-    hasMoreData = true; // 데이터가 다시 있다고 가정
+    currentPage = 0;
+    isLoading = false;
+    hasMoreData = true;
     const cardList = document.getElementById('card-list');
-    cardList.innerHTML = ''; // 모든 기존 카드 요소 제거
-    // "진단 기록 없음" 메시지가 있다면 제거
+    cardList.innerHTML = '';
     const noRecordsMessage = cardList.querySelector('.no-records');
     if (noRecordsMessage) {
         noRecordsMessage.remove();
     }
-    // 혹시 모를 오류 메시지도 제거
     const errorMessage = cardList.querySelector('.error-message');
     if (errorMessage) {
         errorMessage.remove();
@@ -132,87 +144,63 @@ function resetInfiniteScroll() {
  * 스크롤 이벤트를 처리하여 페이지 하단에 도달했을 때 다음 데이터를 로드합니다.
  */
 function handleScroll() {
-    // 이미 로딩 중이거나 더 이상 데이터가 없으면 함수를 실행하지 않습니다.
     if (isLoading || !hasMoreData) return;
 
-    // 현재 스크롤 위치, 뷰포트 높이, 문서 전체 높이를 계산합니다.
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
 
-    // 문서 하단에서 100px 이내로 스크롤하면 다음 페이지 데이터를 로드합니다.
     if (scrollTop + windowHeight >= documentHeight - 100) {
-        loadMoreDiagnosis(); // 다음 페이지 로드
+        loadMoreDiagnosis();
     }
 }
 
 /**
  * 진단 데이터를 서버에서 비동기적으로 로드하여 페이지에 추가합니다.
  * @param {boolean} [isInitialLoad=false] - 현재 호출이 무한 스크롤의 초기 로드(또는 재정렬 후 첫 로드)인지 여부.
- * true이면 card-list를 비웁니다.
- * @param {string} [sortOrder=currentSortOrder] - 사용할 정렬 순서 ('asc' 또는 'desc'). 기본값은 현재 설정된 정렬 순서.
+ * @param {string} [sortOrder=currentSortOrder] - 사용할 정렬 순서 ('asc' 또는 'desc').
  */
 function loadMoreDiagnosis(isInitialLoad = false, sortOrder = currentSortOrder) {
-    // 이미 로딩 중이거나 더 이상 데이터가 없으면 함수를 실행하지 않습니다.
     if (isLoading || !hasMoreData) return;
 
-    isLoading = true; // 로딩 시작 상태로 설정
-    showLoadingIndicator(); // 로딩 인디케이터 표시
+    isLoading = true;
+    showLoadingIndicator();
 
-    // 현재 정렬 순서를 업데이트 (정렬 버튼 클릭으로 변경될 수 있음)
-    currentSortOrder = sortOrder;
+    currentSortOrder = sortOrder; // 현재 정렬 순서 업데이트
 
-    // 서버에서 데이터를 가져올 API 엔드포인트 URL을 구성합니다.
-    // 백엔드의 @GetMapping(value = "/api/diagnosis")와 일치해야 합니다.
     const url = `/api/diagnosis?page=${currentPage}&size=${pageSize}&sortOrder=${currentSortOrder}`;
 
     fetch(url)
         .then(response => {
-            // HTTP 응답이 성공적인지 확인합니다.
             if (!response.ok) {
-                // 에러 발생 시 콘솔에 상태 코드와 메시지를 출력
                 console.error(`Error loading data: ${response.status} ${response.statusText}`);
                 throw new Error(`HTTP 오류 발생! 상태: ${response.status}`);
             }
-            return response.text(); // 응답 본문을 텍스트 (HTML 스니펫)로 파싱합니다.
+            return response.text();
         })
         .then(html => {
             const parser = new DOMParser();
-            // 받아온 HTML 문자열을 DOM 객체로 파싱합니다.
-            // HTML 스니펫 전체를 파싱합니다.
             const doc = parser.parseFromString(html, 'text/html');
-            // 파싱된 문서에서 '.card-item' 클래스를 가진 모든 요소를 선택합니다.
-            const newCards = doc.querySelectorAll('.card-item'); // 이제 doc.body.children[0].children 등으로 접근하는 대신, 바로 querySelectorAll 사용
+            const newCards = doc.querySelectorAll('.card-item');
             const cardList = document.getElementById('card-list');
 
-            // 초기 로드(isInitialLoad가 true)일 경우 기존 콘텐츠를 모두 제거합니다.
-            // 이 부분은 resetInfiniteScroll()에서 이미 처리되므로, 중복될 필요는 없지만,
-            // 방어적으로 유지하거나 resetInfiniteScroll()이 항상 호출되도록 보장하는 것이 좋습니다.
             if (isInitialLoad) {
-                cardList.innerHTML = '';
+                cardList.innerHTML = ''; // 초기 로드 시 기존 콘텐츠 비우기
             }
 
-            // "현재 진단 기록이 없습니다." 메시지 요소가 있는지 확인합니다.
             const noRecordsMessage = cardList.querySelector('.no-records');
 
             if (newCards.length > 0) {
-                // 새로운 카드가 로드되었으므로 "진단 기록 없음" 메시지가 있다면 제거합니다.
                 if (noRecordsMessage) {
                     noRecordsMessage.remove();
                 }
-                // 새로 로드된 카드 요소들을 'card-list'에 추가합니다.
                 newCards.forEach(card => {
-                    cardList.appendChild(card.cloneNode(true)); // 깊은 복사로 요소 추가
+                    cardList.appendChild(card.cloneNode(true));
                 });
-                currentPage++; // 다음 페이지 번호로 증가
-                // 새로 로드된 아이템의 수가 pageSize와 같으면 더 많은 데이터가 있을 수 있다고 판단합니다.
-                // 즉, pageSize보다 적게 로드되면 마지막 페이지일 가능성이 높습니다.
+                currentPage++;
                 hasMoreData = newCards.length === pageSize;
             } else {
-                // 새로 로드된 아이템이 없으면 더 이상 로드할 데이터가 없습니다.
                 hasMoreData = false;
-                // 'card-list'에 아무런 아이템도 없고 "기록 없음" 메시지도 없을 경우에만 메시지를 추가합니다.
-                // 이는 모든 데이터가 로드된 후 더 이상 표시할 내용이 없을 때 유용합니다.
                 if (cardList.children.length === 0 && !noRecordsMessage) {
                     const noRecordsDiv = document.createElement('div');
                     noRecordsDiv.className = 'no-records';
@@ -223,9 +211,7 @@ function loadMoreDiagnosis(isInitialLoad = false, sortOrder = currentSortOrder) 
         })
         .catch(error => {
             console.error('데이터 로드 중 오류 발생:', error);
-            // 오류 발생 시 더 이상 데이터를 로드하지 않도록 설정
             hasMoreData = false;
-            // 사용자에게 오류 메시지를 표시할 수 있습니다. (중복 방지)
             const cardList = document.getElementById('card-list');
             if (cardList.querySelector('.error-message') === null) {
                 const errorDiv = document.createElement('div');
@@ -238,32 +224,26 @@ function loadMoreDiagnosis(isInitialLoad = false, sortOrder = currentSortOrder) 
             }
         })
         .finally(() => {
-            isLoading = false; // 로딩 상태 해제
-            hideLoadingIndicator(); // 로딩 인디케이터 숨김
+            isLoading = false;
+            hideLoadingIndicator();
         });
 }
 
-/**
- * 로딩 인디케이터를 페이지에 표시합니다.
- */
 function showLoadingIndicator() {
     const cardList = document.getElementById('card-list');
     let existingIndicator = cardList.querySelector('#loading-indicator');
-    if (!existingIndicator) { // 기존 인디케이터가 없으면 새로 생성하여 추가
+    if (!existingIndicator) {
         const loadingDiv = document.createElement('div');
         loadingDiv.id = 'loading-indicator';
-        loadingDiv.className = 'loading-indicator'; // CSS 스타일을 위한 클래스
+        loadingDiv.className = 'loading-indicator';
         loadingDiv.innerHTML = '<div class="loading-spinner"></div><p>로딩 중...</p>';
         cardList.appendChild(loadingDiv);
     }
 }
 
-/**
- * 로딩 인디케이터를 페이지에서 숨깁니다.
- */
 function hideLoadingIndicator() {
     const loadingIndicator = document.getElementById('loading-indicator');
     if (loadingIndicator) {
-        loadingIndicator.remove(); // 인디케이터 요소 제거
+        loadingIndicator.remove();
     }
 }

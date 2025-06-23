@@ -51,6 +51,11 @@ public class DiagnosisController {
             return ResponseEntity.status(500).body(Map.of("success", false, "message", e.getMessage()));
         }
     }
+    
+    
+    
+    
+    
 
     /**
      * 진단 이력 조회 API (페이징)
