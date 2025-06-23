@@ -20,7 +20,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextFi
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Indexed // ✅ 이 엔티티는 검색 인덱싱 대상입니다
+@Indexed 
 public class DiagnosisEntity {
 
     @Id
