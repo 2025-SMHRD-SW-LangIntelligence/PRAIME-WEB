@@ -50,7 +50,6 @@ header {
 main{
     display: flex;
     justify-content: center;
-    /* border: 1px solid #000; */
     flex-grow: 1; /* common.css의 .wrapper flex 설정에 따라 남은 공간을 차지 */
 }
 
@@ -58,21 +57,6 @@ main{
     width: 100%;
     /* 푸터가 고정되어 있으므로, 콘텐츠가 푸터 뒤에 가려지지 않도록 하단 여백 추가 */
     padding-bottom: 80px; /* common.css의 푸터 높이를 고려하여 조정 */
-}
-
-.banner-section{
-    width: 500px; /* common.css의 container max-width에 맞춰 조정 필요 */
-    box-sizing: border-box;
-    background-color: var(--background-color); /* common.css 변수 적용 */
-    margin-top:  20px;
-    padding: 20px;
-    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.3); /* 기존 값 유지, var(--card-shadow)와 다름 */
-    margin-bottom: 15px;
-}
-
-
-.card-group{
-    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.3); /* 기존 값 유지, var(--card-shadow)와 다름 */
 }
 
 /* 날씨 기능 섹션 */
@@ -431,93 +415,134 @@ main{
     box-shadow: var(--card-shadow); /* common.css 변수 적용 */
 }
 
-    /* 모달 스타일 */
-    .modal {
-        display: none; /* 기본적으로 숨김 */
-        position: fixed; /* 스크롤해도 제자리에 고정 */
-        z-index: 2000; /* 다른 콘텐츠 위에 표시 (더 높은 값) */
-        padding-top: 60px; /* 상단에서부터의 여백 (모달 내용의 시작 위치) */
-        left: 0; /* 왼쪽 정렬 */
-        top: 0; /* 상단 정렬 */
-        width: 100%; /* 전체 너비 */
-        height: 100%; /* 전체 높이 */
-        overflow: auto; /* 내용이 넘칠 경우 스크롤바 표시 */
-        background-color: rgba(0,0,0,0.9); /* 검은색 배경에 90% 투명도 적용 */
-        animation: fadeIn 0.3s; /* fadeIn 애니메이션을 0.3초 동안 적용 */
-    }
+/* 모달 스타일 */
+.modal {
+    display: none; /* 기본적으로 숨김 - 이 부분이 중요합니다! */
+    position: fixed; /* 스크롤해도 제자리에 고정 */
+    z-index: 2000; /* 다른 콘텐츠 위에 표시 (더 높은 값) */
+    left: 0; /* 왼쪽 정렬 */
+    top: 0; /* 상단 정렬 */
+    width: 100%; /* 전체 너비 */
+    height: 100%; /* 전체 높이 */
+    overflow: auto; /* 내용이 넘칠 경우 스크롤바 표시 */
+    background-color: rgba(0,0,0,0.9); /* 검은색 배경에 90% 투명도 적용 */
+    animation: fadeIn 0.3s; /* fadeIn 애니메이션을 0.3초 동안 적용 */
 
-    /* 모달 콘텐츠 (이미지) */
+    /* 모달 내용을 중앙에 배치하기 위한 flexbox 설정. */
+    /* 이 속성들은 JavaScript에서 `modal.style.display = "flex";`로 제어됩니다. */
+    /* CSS에서 기본적으로 flex를 설정하지 않음으로써 모달이 자동으로 뜨는 것을 방지합니다. */
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+/* 모달 콘텐츠 래퍼 */
+.modal-content-wrapper {
+    position: relative; /* 닫기 버튼 위치 지정을 위한 기준 */
+    background-color: #fefefe; /* 모달 배경 색상 */
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%; /* 모달 콘텐츠 너비 조정 */
+    max-width: 700px; /* 최대 너비 */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column; /* 이미지와 정보 세로로 쌓기 */
+    align-items: center; /* 내부 요소 중앙 정렬 */
+}
+
+
+/* 모달 콘텐츠 (이미지) */
+.modal-content {
+    display: block; /* 블록 요소로 표시 */
+    width: 100%; /* 부모 래퍼에 맞춰 100% */
+    max-width: 600px; /* 이미지 최대 너비 */
+    max-height: 60vh; /* 화면 높이의 60%를 넘지 않도록 제한 */
+    object-fit: contain; /* 이미지 비율을 유지하면서 컨테이너에 맞춤 (잘리지 않게) */
+    margin-bottom: 20px; /* 이미지와 정보 사이 간격 */
+}
+
+/* 모달 정보 영역 */
+.modal-info {
+    width: 100%; /* 부모 래퍼에 맞춰 너비 설정 */
+    text-align: left; /* 텍스트 왼쪽 정렬 (필요시 중앙 또는 오른쪽으로 변경 가능) */
+    color: var(--text-color); /* common.css 변수 적용 */
+    font-size: 1rem;
+}
+
+.modal-info p {
+    margin-bottom: 8px; /* 각 정보 줄 간격 */
+    line-height: 1.4;
+}
+
+.modal-label {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.modal-confidence {
+    color: var(--success-color); /* 예: 초록색 계열 */
+    font-weight: 500;
+}
+
+.modal-description {
+    font-size: 0.95rem;
+    color: var(--subtitle-color);
+}
+
+
+/* 닫기 버튼 */
+.close-button {
+    position: absolute; /* 부모 요소(.modal-content-wrapper)를 기준으로 위치 지정 */
+    top: 10px; /* 상단에서 10px 떨어진 위치 */
+    right: 15px; /* 오른쪽에서 15px 떨어진 위치 */
+    color: #888; /* 글자색 진한 회색 */
+    font-size: 30px; /* 글자 크기 30px */
+    font-weight: bold; /* 글자 굵게 */
+    transition: 0.3s; /* 모든 속성 변경에 0.3초 동안 부드러운 전환 효과 적용 */
+    cursor: pointer; /* 마우스 오버 시 포인터 모양으로 변경 */
+    z-index: 2001; /* 모달 이미지 위에 오도록 */
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #555;
+    text-decoration: none;
+}
+
+/* 모달 페이드인 애니메이션 */
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+/* 미디어 쿼리: 화면 너비가 700px 이하일 때 적용되는 스타일 */
+@media only screen and (max-width: 700px){
+    .modal-content-wrapper {
+        width: 95%; /* 모바일에서 너비 더 넓게 */
+        padding: 15px;
+    }
     .modal-content {
-        margin: auto; /* 가로 중앙 정렬 */
-        display: block; /* 블록 요소로 표시 */
-        width: 80%; /* 너비 80% */
-        max-width: 700px; /* 최대 너비 700px */
-        max-height: 80vh; /* 화면 높이의 80%를 넘지 않도록 제한 */
-        object-fit: contain; /* 이미지 비율을 유지하면서 컨테이너에 맞춤 (잘리지 않게) */
+        max-width: 100%; /* 모바일에서 이미지 너비 100% */
+        max-height: 50vh; /* 모바일에서 이미지 높이 조정 */
     }
-
-    /* 모달 이미지 캡션 */
-    #modalCaption {
-        margin: auto; /* 가로 중앙 정렬 */
-        display: block; /* 블록 요소로 표시 */
-        width: 80%; /* 너비 80% */
-        max-width: 700px; /* 최대 너비 700px */
-        text-align: center; /* 텍스트 중앙 정렬 */
-        color: #ccc; /* 글자색 밝은 회색 */
-        padding: 10px 0; /* 상하 10px, 좌우 0px 패딩 */
-        height: 150px; /* 캡션 공간 확보 */
-    }
-
-    /* 닫기 버튼 */
     .close-button {
-        position: absolute; /* 부모 요소(.modal)를 기준으로 위치 지정 */
-        top: 15px; /* 상단에서 15px 떨어진 위치 */
-        right: 35px; /* 오른쪽에서 35px 떨어진 위치 */
-        color: #f1f1f1; /* 글자색 밝은 흰색 */
-        font-size: 40px; /* 글자 크기 40px */
-        font-weight: bold; /* 글자 굵게 */
-        transition: 0.3s; /* 모든 속성 변경에 0.3초 동안 부드러운 전환 효과 적용 */
-        cursor: pointer; /* 마우스 오버 시 포인터 모양으로 변경 */
+        top: 8px;
+        right: 12px;
+        font-size: 25px;
     }
-
-    .close-button:hover, /* 마우스 오버 시 */
-    .close-button:focus { /* 포커스 시 */
-        color: #bbb; /* 글자색을 약간 어두운 회색으로 변경 */
-        text-decoration: none; /* 텍스트 밑줄 제거 */
-        cursor: pointer; /* 마우스 오버 시 포인터 모양으로 변경 */
+    .modal-info {
+        font-size: 0.9rem;
     }
-
-    /* 모달 페이드인 애니메이션 */
-    @keyframes fadeIn {
-        from {opacity: 0;} /* 시작: 투명도 0 (완전히 투명) */
-        to {opacity: 1;} /* 끝: 투명도 1 (완전히 불투명) */
+    .modal-label {
+        font-size: 1rem;
     }
-
-    /* 미디어 쿼리: 화면 너비가 700px 이하일 때 적용되는 스타일 */
-    @media only screen and (max-width: 700px){
-        .modal-content {
-            width: 100%; /* 모달 콘텐츠 너비를 100%로 설정 */
-        }
-        .close-button {
-            top: 10px; /* 닫기 버튼 상단 위치 조정 */
-            right: 25px; /* 닫기 버튼 오른쪽 위치 조정 */
-            font-size: 30px; /* 닫기 버튼 글자 크기 조정 */
-        }
-        #modalCaption {
-            width: 90%; /* 캡션 너비 조정 */
-            height: 100px; /* 캡션 높이 조정 */
-        }
-    }
-
-
-
+}
 
 
 /* 반응형 */
 @media (max-width: 480px) {
-/* common.css의 반응형 미디어 쿼리가 더 넓은 범위 (600px)를 커버하므로
-   이 부분은 삭제하거나 common.css에 통합하는 것이 좋습니다.
-   여기서는 원본 main.css에 있던 내용만 유지하고 푸터 관련은 삭제합니다.
+/* 이전에 주석 처리되었던 .banner-section 관련 스타일은 HTML에 해당 요소가 없으므로
+   실제 페이지에 영향을 주지 않습니다. 유지해도 무방하나, 불필요하다면 삭제 가능합니다.
 */
 .banner-section {
     width: 100%; /* 모바일에서 너비 100% 사용 */

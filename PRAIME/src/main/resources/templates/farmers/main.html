@@ -6,12 +6,10 @@
 <title>농담</title>
 <link th:href="@{/css/font.css}" rel="stylesheet">
 <link th:href="@{/css/common.css}" rel="stylesheet">
-<link th:href="@{/css/farmers/main.css}" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<link th:href="@{/css/farmers/main.css}" rel="stylesheet"> <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:src="@{/js/common.js}"></script>
-<script th:src="@{/js/farmers/main.js}"></script>
-<link rel="stylesheet"
+<script th:src="@{/js/farmers/main.js}"></script> <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -20,13 +18,12 @@
 			<header>
 				<div class="header-group">
 					<div class="header-title-group">
-						<h1 th:text="${session.user.name}" class="header-title">SuperNova
+						<h1 th:text="${session.user.name} + ' 님'" class="header-title">SuperNova
 							님</h1>
 						<p class="header-subtitle">오늘도 좋은하루 되세요</p>
 					</div>
 					<div class="today-group">
-						<span class="today">2025년 6월 17일</span>
-					</div>
+						<span class="today">2025년 6월 17일</span> </div>
 				</div>
 			</header>
 			<main>
@@ -89,7 +86,10 @@
 						</div>
 
 						<div class="journal-list">
-							<div th:each="log : ${recentLogs}" class="journal-item" th:onclick="'location.href=\'/view/' + ${log.dlid} + '\''">
+							<div th:if="${#lists.isEmpty(recentLogs)}" class="no-journal">
+								등록된 영농일지가 없습니다.
+							</div>
+							<div th:each="log : ${recentLogs}" class="journal-item" th:onclick="'location.href=\'/farmlog/view/' + ${log.dlid} + '\''">
 								<div class="journal-date" th:text="${#temporals.format(log.dldate, 'MM.dd')}">날짜</div>
 								<div class="journal-content">
 									<div class="journal-title" th:text="${log.dltitle}">제목</div>
@@ -101,41 +101,7 @@
 									</div>
 								</div>
 							</div>
-							<!-- 데이터가 없을 때 표시할 메시지 -->
-							<div th:if="${#lists.isEmpty(recentLogs)}" class="no-journal">
-								등록된 영농일지가 없습니다.
-							<div class="journal-item">
-								<div class="journal-date">오늘</div>
-								<div class="journal-content">
-									<div class="journal-title">사과나무 물주기 및 유인작업</div>
-									<div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
-								</div>
 							</div>
-							<div class="journal-item">
-								<div class="journal-date">오늘</div>
-								<div class="journal-content">
-									<div class="journal-title">사과나무 물주기 및 유인작업</div>
-									<div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
-								</div>
-							</div>
-							<div class="journal-item">
-								<div class="journal-date">어제</div>
-								<div class="journal-content">
-									<div class="journal-title">사과나무 전정 작업</div>
-									<div
-										class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
-								</div>
-							</div>
-							<div class="journal-item">
-								<div class="journal-date">06.15</div>
-								<div class="journal-content">
-									<div class="journal-title">사과나무 전정 작업</div>
-									<div
-										class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
-								</div>
->>>>>>> branch 'dev' of https://github.com/2025-SMHRD-SW-LangIntelligence/PRAIME-WEB.git
-							</div>
-						</div>
 
 						<div class="journal-add-button">
 							<button class="add-journal-btn" onclick="goToFarmlogWritePage()">+
@@ -156,7 +122,15 @@
                             <div th:if="${#lists.isEmpty(diagnosisList)}" class="no-records">
                                 진단 기록이 없습니다.
                             </div>
-                            <div class="journal-item" th:each="diagnosis : ${diagnosisList}">
+                            <div class="journal-item"
+                                 th:each="diagnosis : ${diagnosisList}"
+                                 data-toggle="modal"                          
+                                 data-target="#imageModal"                    
+                                 th:data-image-src="${diagnosis.imagePath}"   
+                                 th:data-label="${diagnosis.label}"           
+                                 th:data-confidence="${#numbers.formatDecimal(diagnosis.confidence, 0, 'POINT', 0, 'POINT')} + '%'" 
+                                 th:data-description="${diagnosis.description}" 
+                            >
                                 <div class="journal-date" 
                                      th:text="${#temporals.format(diagnosis.createdAt, 'MM.dd').equals(#temporals.format(#temporals.createNow(), 'MM.dd'))} ? '오늘' : ${#temporals.format(diagnosis.createdAt, 'yy.MM.dd')}">
                                      </div>
@@ -164,7 +138,8 @@
                                     <div class="journal-image-thumbnail">
                                         <img th:src="@{${diagnosis.imagePath}}" th:alt="${diagnosis.label} + ' 진단 이미지'">
                                     </div>
-                                    <div class="journal-text-content"> <div class="journal-title" th:text="${diagnosis.label}"></div>
+                                    <div class="journal-text-content"> 
+                                        <div class="journal-title" th:text="${diagnosis.label}"></div>
                                         <div class="journal-desc">
                                             신뢰도: <span th:text="${#numbers.formatDecimal(diagnosis.confidence, 0, 'COMMA', 0, 'POINT')} + '%'"></span>
                                             <div class="card-bar" th:styleappend="'--confidence-width: ' + ${#numbers.formatDecimal(diagnosis.confidence, 0, 0)} + '%'"></div>
@@ -184,11 +159,16 @@
 			<div th:replace="/global/footer::footer "></div>
 		</div>
 	</div>
-<!-- 이미지 모달 -->	
 <div id="imageModal" class="modal">
-    <span class="close-button">&times;</span>
-    <img class="modal-content" id="modalImage">
-    <div id="modalCaption"></div>
+    <div class="modal-content-wrapper"> 
+        <span class="close-button">&times;</span>
+        <img class="modal-content" id="modalImage" alt="진단 이미지">
+        <div class="modal-info"> 
+            <p class="modal-label" id="modalLabel"></p>
+            <p class="modal-confidence" id="modalConfidence"></p>
+            <p class="modal-description" id="modalDescription"></p>
+        </div>
+    </div>
 </div>	
 </body>
 </html>
