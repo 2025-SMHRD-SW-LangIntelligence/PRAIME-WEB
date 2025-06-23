@@ -1,199 +1,206 @@
 @charset "UTF-8";
+/* common.css는 수정하지 않고 그대로 적용됩니다. */
+
 /* 헤더 */
 .diagnosis-header {
-	background-color: var(--primary-color);
-	color: white;
-	padding: 1rem;
-	display: flex;
-	align-items: center;
-	position: sticky;
-	top: 0;
-	z-index: 1000;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .prevPage {
-	font-size: 1.5rem;
-	color: white;
-	text-decoration: none;
-	margin-right: 1rem;
+    font-size: 1.5rem;
+    color: white;
+    text-decoration: none;
+    margin-right: 1rem;
 }
 
 .header-title {
-	font-size: 1.8rem;
-	color: var(--secondary-color);
-	margin: 0;
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+    margin: 0;
 }
 
-/* 진단하기, 진단 이력 버튼 - 기존과 동일 */
+main {
+    margin-bottom: 100px; /* 고정된 푸터 공간 확보 */
+}
+
+/* 진단하기, 진단 이력 버튼 */
 .btn {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .top-actions {
-	padding: 5px;
-	background-color: var(--secondary-color);
-	border-radius: 50px;
-	box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
-	display: flex;
-	justify-content: right;
-	width: 50%;
-	margin: 20px;
+    padding: 5px;
+    background-color: var(--secondary-color);
+    border-radius: 50px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    display: flex;
+    justify-content: right;
+    width: 50%;
+    margin: 20px;
 }
 
 .top-actions .btn {
-	flex: 1;
-	border: none;
-	background-color: transparent;
-	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-	border-radius: 40px;
-	padding-top: 12px;
-	padding-bottom: 12px;
+    flex: 1;
+    border: none;
+    background-color: transparent;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border-radius: 40px;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 .top-actions .btn.btn-primary {
-	background-color: var(--background-color);
-	color: var(--primary-color);
-	box-shadow: var(--card-shadow);
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    box-shadow: var(--card-shadow);
 }
 
 .top-actions .btn.btn-primary i {
-	color: var(--primary-color);
+    color: var(--primary-color);
 }
 
 .top-actions .btn.btn-outline {
-	color: var(--placeholder-color);
-	box-shadow: none;
+    color: var(--placeholder-color);
+    box-shadow: none;
 }
 
 .top-actions .btn.btn-outline i {
-	color: var(--placeholder-color);
+    color: var(--placeholder-color);
 }
 
 .top-actions .btn.btn-outline:hover {
-	color: var(--label-color);
+    color: var(--label-color);
 }
 
 /* 게시판 정렬 버튼 */
 .sort-buttons {
-	display: flex;
-	gap: 8px;
-	margin-bottom: 16px;
-	padding: 0 30px 0;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 0 30px 0;
 }
 
 .sort-buttons button {
-	padding: 7px 18px;
-	background-color: var(--primary-color);
-	color: var(--button-text);
-	border: none;
-	border-radius: 8px;
-	font-size: 1rem;
-	cursor: pointer;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-	transition: background 0.2s, box-shadow 0.2s;
-	outline: none;
+    padding: 7px 18px;
+    background-color: var(--primary-color);
+    color: var(--button-text);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: background 0.2s, box-shadow 0.2s;
+    outline: none;
 }
 
 .sort-buttons button:hover, .sort-buttons button.active {
-	background-color: var(--primary-hover);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    background-color: var(--primary-hover);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
+/* 카드 목록 */
 .card-list {
-	display: flex;
-	flex-direction: column;
-	gap: 18px;
-	padding: 0 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 0 20px 0;
 }
 
 .card-item {
-	background: var(--card-bg, #fff);
-	border-radius: 14px;
-	box-shadow: var(--card-shadow, 0 4px 14px rgba(0, 0, 0, 0.09));
-	padding: 16px 18px 16px 18px;
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
+    background: var(--card-bg, #fff);
+    border-radius: 14px;
+    box-shadow: var(--card-shadow, 0 4px 14px rgba(0, 0, 0, 0.09));
+    padding: 16px 18px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .card-date {
-	font-size: 0.96rem;
-	color: #a8a38c;
-	font-weight: 600;
-	margin-bottom: 5px;
+    font-size: 0.96rem;
+    color: #a8a38c;
+    font-weight: 600;
+    margin-bottom: 5px;
 }
 
 .card-main {
-	display: flex;
-	gap: 14px;
+    display: flex;
+    gap: 14px;
 }
 
 .card-thumb {
-	min-width: 48px;
-	height: 48px;
-	border-radius: 7px;
-	background: #eee;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow: hidden;
+    min-width: 48px;
+    height: 48px;
+    border-radius: 7px;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer; /* 클릭 가능함을 나타냄 */
 }
 
 .card-thumb img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .card-content {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .card-title-row {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
 }
 
 .card-title {
-	font-size: 1.11rem;
-	color: var(--primary-color, #0f4f35);
-	font-weight: bold;
+    font-size: 1.11rem;
+    color: var(--primary-color, #0f4f35);
+    font-weight: bold;
 }
 
 .card-badge {
-	font-size: 0.78rem;
-	background: #d8e3db;
-	color: #436e5e;
-	border-radius: 4px;
-	padding: 2px 8px;
-	font-weight: 600;
+    font-size: 0.78rem;
+    background: #d8e3db;
+    color: #436e5e;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-weight: 600;
 }
 
-
 .card-info-row {
-	display: flex;
-	align-items: center;
-	gap: 16px;
-	font-size: 0.8rem;
-	margin-top: 2px;
-	color : var(--placeholder-color);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.8rem;
+    margin-top: 2px;
+    color : var(--placeholder-color);
 }
 
 .card-time {
-	color: #8d8981;
+    color: #8d8981;
 }
 
 .card-ai {
-	display: flex;
-	align-items: center;
-	gap: 6px;
-	font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
 }
 
 .card-bar {
@@ -211,83 +218,29 @@
     display: block;
     height: 100%;
     background: #4CAF50; /* 바의 채워지는 부분 색상 (초록색) */
-    width: var(--confidence-width, 0%); /* 이 부분이 신뢰도에 따라 동적으로 변경됩니다. */
+    width: var(--confidence-width, 0%); /* 신뢰도에 따라 동적으로 변경되는 부분 */
     border-radius: 5px;
 }
 
-
-.bar-92 {
-	background: #41c664;
+/* 로딩 인디케이터 */
+.loading-indicator {
+    text-align: center;
+    padding: 20px;
+    font-size: 1.1em;
+    color: #555;
 }
 
-.bar-95 {
-	background: #18b573;
+.loading-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
 }
 
-.bar-85 {
-	background: #d9c84b;
-	color: #3d3d2d;
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
-
-.bar-78 {
-	background: #f8b641;
-	color: #3d3d2d;
-}
-
-
-    /* 기존 스타일 유지 */
-    .no-records { text-align: center; color: #888; padding: 20px; background: #f9f9f9; border-radius: 5px; }
-    .total-count { text-align: right; font-size: 0.9em; color: #555; margin: 10px 0 20px; }
-    .pagination { text-align: center; margin: 20px 0; }
-    .pagination a, .pagination span { padding: 8px 12px; margin: 0 4px; border: 1px solid #007bff; border-radius: 4px; text-decoration: none; color: #007bff; }
-    .pagination span.current-page { background: #007bff; color: white; font-weight: bold; }
-
-/* 모달 스타일 시작 */
-.modal {
-    display: none; /* <-- 이 줄만 남기고, 아래의 display: flex;는 제거 */
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.8);
-    /* display: flex; <-- 이 줄을 완전히 제거하세요! */
-    justify-content: center;
-    align-items: center;
-}
-
-/* JavaScript에서 .modal.classList.add('show') 할 때 적용될 스타일 */
-.modal.show {
-    display: flex; /* 모달을 보이게 할 때만 flex로 변경 */
-}
-
-.modal-content {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-    margin: auto;
-    display: block;
-    border: 5px solid white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-}
-
-.modal-close {
-    position: absolute;
-    top: 20px;
-    right: 35px;
-    color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
-    transition: 0.3s;
-    cursor: pointer;
-}
-
-.modal-close:hover,
-.modal-close:focus {
-    color: #bbb;
-    text-decoration: none;
-    cursor: pointer;
-}
-/* 모달 스타일 끝 */

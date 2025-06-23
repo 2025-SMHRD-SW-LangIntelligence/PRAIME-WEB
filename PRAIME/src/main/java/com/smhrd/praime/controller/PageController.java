@@ -272,8 +272,8 @@ public class PageController {
         return "/uploads/diagnosis/" + filename; // 예: "/uploads/diagnosis/diagnosis_20250620_174212_131b2efa.jpg"
     }
 
-    // 병해충진단 목록 페이지 이동
-    @GetMapping("/diagnosisBoardPage")
+    // 병해충진단 목록 페이지 이동 (초기 페이지 렌더링용)
+    @GetMapping("/diagnosisBoardPage") // 실제 웹 페이지 URL
     public String diagnosisBoardPage(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -290,15 +290,19 @@ public class PageController {
         });
 
         model.addAttribute("diagnosisList", diagnosisList);
+        // 무한 스크롤에서는 이 값들이 JavaScript에서 관리되지만,
+        // 첫 페이지 렌더링 시 Thymeleaf가 사용할 수 있도록 전달
         model.addAttribute("currentPage", diagnosisPage.getNumber());
         model.addAttribute("totalPages", diagnosisPage.getTotalPages());
         model.addAttribute("totalElements", diagnosisPage.getTotalElements());
         model.addAttribute("pageSize", size);
+        model.addAttribute("sortOrder", sortOrder); // JS 초기화 시 사용
 
-        return "diagnosis/board";
+        return "diagnosis/board"; // src/main/resources/templates/diagnosis/board.html 반환
     }
     
-    // 무한스크롤을 위한 REST API
+    // 무한스크롤을 위한 REST API (HTML 프래그먼트 반환)
+    // JavaScript에서 '/api/diagnosis'로 호출
     @GetMapping(value = "/api/diagnosis")
     public String getDiagnosisData(
             @RequestParam(defaultValue = "0") int page,
@@ -316,9 +320,12 @@ public class PageController {
         });
         
         model.addAttribute("diagnosisList", diagnosisList);
-        model.addAttribute("hasNext", diagnosisPage.hasNext());
-        model.addAttribute("currentPage", page);
+        // hasNext는 사실 프론트엔드 JS의 newCards.length === pageSize 로 판단하므로 굳이 넘길 필요는 없음
+        // model.addAttribute("hasNext", diagnosisPage.hasNext());
+        // currentPage도 JS가 관리하므로 굳이 넘길 필요 없음
+        // model.addAttribute("currentPage", page);
         
+        // diagnosis/board.html 파일 내의 'diagnosis-list' 프래그먼트만 반환
         return "diagnosis/board :: diagnosis-list";
     }
 

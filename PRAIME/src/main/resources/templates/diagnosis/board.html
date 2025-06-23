@@ -4,26 +4,18 @@
     <meta charset="UTF-8">
     <title>병해충 AI 진단</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link th:href="@{/css/font.css}" rel="stylesheet">
     <link th:href="@{/css/common.css}" rel="stylesheet">
     <link th:href="@{/css/diagnosis/board.css}" rel="stylesheet">
+    <link th:href="@{/css/diagnosis/img_modal.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script th:src="@{/js/common.js}"></script>
     <script th:src="@{/js/diagnosis/board.js}"></script>
 
-    <style>
-        .no-records { text-align: center; color: #888; padding: 20px; background: #f9f9f9; border-radius: 5px; }
-        .total-count { text-align: right; font-size: 0.9em; color: #555; margin: 10px 0 20px; }
-        .pagination { text-align: center; margin: 20px 0; }
-        .pagination a, .pagination span { padding: 8px 12px; margin: 0 4px; border: 1px solid #007bff; border-radius: 4px; text-decoration: none; color: #007bff; }
-        .pagination span.current-page { background: #007bff; color: white; font-weight: bold; }
-        .card-bar { display: inline-block; height: 10px; background: #e0e0e0; border-radius: 5px; width: 100px; overflow: hidden; margin-left: 5px; }
-        .card-bar::before { content: ''; display: block; height: 100%; background: #4CAF50; width: var(--confidence-width, 0%); border-radius: 5px; }
-    </style>
 </head>
 
 <body>
@@ -40,8 +32,8 @@
 
     <main>
         <div class="sort-buttons">
-            <button onclick="sortByDate('desc')">최신순</button>
-            <button onclick="sortByDate('asc')">오래된순</button>
+            <button data-sort-order="desc">최신순</button>
+            <button data-sort-order="asc">오래된순</button>
         </div>
 
         <div class="card-list" id="card-list">
@@ -50,7 +42,11 @@
                     <div class="card-date" th:text="${#temporals.format(item.createdAt, 'yyyy년 MM월 dd일 HH:mm')}"></div>
                     <div class="card-main">
                         <div class="card-thumb">
-                            <img th:src="@{${item.imagePath}}" th:alt="${item.label} + ' 이미지'"/>
+                            <img th:src="@{${item.imagePath}}"
+                                 th:alt="${item.label} + ' 이미지'"
+                                 th:data-label="${item.label}"
+                                 th:data-confidence="${#numbers.formatDecimal(item.confidence, 0, 'POINT', 0, 'POINT')} + '%'"
+                            />
                         </div>
                         <div class="card-content">
                             <div class="card-title-row">
@@ -66,37 +62,24 @@
             </div>
 
             <div th:if="${#lists.isEmpty(diagnosisList)}" class="no-records">
-                현재 페이지에 진단 기록이 없습니다.
+                현재 진단 기록이 없습니다.
             </div>
         </div>
 
-        <div class="pagination" th:if="${totalPages > 1}">
-            <a th:if="${currentPage > 0}" th:href="@{/diagnosisBoardPage(page=${currentPage - 1}, size=${pageSize}, sortOrder=${sortOrder})}">이전</a>
-            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                <a th:if="${i != currentPage}" th:href="@{/diagnosisBoardPage(page=${i}, size=${pageSize}, sortOrder=${sortOrder})}" th:text="${i + 1}"></a>
-                <span th:if="${i == currentPage}" class="current-page" th:text="${i + 1}"></span>
-            </span>
-            <a th:if="${currentPage < totalPages - 1}" th:href="@{/diagnosisBoardPage(page=${currentPage + 1}, size=${pageSize}, sortOrder=${sortOrder})}">다음</a>
-        </div>
+        </main>
 
-        <!-- <p class="total-count">총 진단 건수: <span th:text="${totalElements}"></span></p> -->
-
-    </main>
-    
     <div id="imageModal" class="modal">
-        <span class="modal-close">&times;</span>
-        <img class="modal-content" id="modalImage">
-    </div>    
+        <div class="modal-content-wrapper">
+            <span class="modal-close">&times;</span>
+            <img class="modal-content" id="modalImage" alt="진단 이미지">
+            <div class="modal-info">
+                <p class="modal-label" id="modalLabel"></p>
+                <p class="modal-confidence" id="modalConfidence"></p>
+            </div>
+        </div>
+    </div>
 
     <div th:replace="/global/footer::footer"></div>
 </div>
-
-<script th:inline="javascript">
-function sortByDate(order) {
-    const size = /*[[${pageSize}]]*/ 10;
-    location.href = `/diagnosisBoardPage?page=0&size=${size}&sortOrder=${order}`;
-}
-</script>
-
 </body>
 </html>
