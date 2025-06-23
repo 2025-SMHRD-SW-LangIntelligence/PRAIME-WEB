@@ -8,10 +8,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const viewHistoryBtn = document.getElementById('view-history');
     if (viewHistoryBtn) {
+        // view-history 버튼 클릭 시 진단 이력 섹션으로 스크롤 (기존 로직 유지)
         viewHistoryBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+        // view-history 버튼 클릭 시 '활성화된 탭'으로 표시 (CSS .active-tab 적용)
+        viewHistoryBtn.classList.add('active-tab');
+        const startDiagnosisBtn = document.getElementById('start-diagnosis');
+        if (startDiagnosisBtn) {
+            startDiagnosisBtn.classList.remove('active-tab');
+            startDiagnosisBtn.classList.add('btn-outline'); // 비활성화 스타일 적용
+            startDiagnosisBtn.classList.remove('btn-primary'); // 활성화 스타일 제거
+        }
+        viewHistoryBtn.classList.remove('btn-outline'); // 비활성화 스타일 제거
+        viewHistoryBtn.classList.add('btn-primary'); // 활성화 스타일 적용
 
-    // 무한스크롤 초기화
+    }
+    // 페이지 로드 시 URL에서 sortOrder를 가져와 초기 currentSortOrder 설정
+    const urlParams = new URLSearchParams(window.location.search);
+    currentSortOrder = urlParams.get('sortOrder') || 'desc';
+
+    // 무한스크롤 초기화 (sortOrder 전달)
     initInfiniteScroll();
 
     // 이미지 모달 기능
@@ -82,7 +97,7 @@ let currentPage = 0;
 let isLoading = false;
 let hasMoreData = true;
 const pageSize = 10;
-let currentSortOrder = 'desc'; // 초기 정렬 순서: 최신순
+let currentSortOrder = 'desc'; // 초기 정렬 순서: 최신순 (백엔드 기본값과 일치)
 
 /**
  * 정렬 버튼의 UI를 업데이트합니다. (텍스트, 아이콘)

@@ -101,7 +101,7 @@ main {
     padding: 0 30px 0;
 }
 
-.fa-sort-amount-down-alt{
+.fa-sort-amount-down-alt,.fa-sort-amount-up-alt{
 	color: #f0f0f0 !important;
 	
 }

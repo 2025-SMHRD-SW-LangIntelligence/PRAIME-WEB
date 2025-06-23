@@ -12,7 +12,7 @@ public interface DailyLogRepository extends JpaRepository<DailyLogEntity, Long> 
 	
 	// 최신순으로 모든 일지 조회
 	ArrayList<DailyLogEntity> findAllByOrderByDldateDesc();
-	
+
 	// 검색 메서드들 (최신순 정렬)
 	ArrayList<DailyLogEntity> findByDltitleContainingOrderByDldateDesc(String keyword);
 	ArrayList<DailyLogEntity> findByDlcontentContainingOrderByDldateDesc(String keyword);

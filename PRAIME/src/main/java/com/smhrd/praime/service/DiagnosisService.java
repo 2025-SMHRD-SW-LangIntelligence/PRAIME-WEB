@@ -38,10 +38,8 @@ public class DiagnosisService {
     @Value("${app.upload.diagnosis-images:uploads/diagnosis}")
     private String uploadPath;
 
-    
-
     /**
-     * 페이징 처리된 진단 기록 조회 메서드.
+     * 페이징 처리된 진단 기록 조회 메서드 (전체 사용자).
      * sortOrder 파라미터에 따라 createdAt 필드를 기준으로 동적으로 정렬
      * Controller에서 전달하는 sortOrder 값을 기반으로 Pageable 객체에 Sort 정보를 추가
      * @param page 현재 페이지 번호 (0부터 시작)
@@ -63,6 +61,23 @@ public class DiagnosisService {
     }
     
     /**
+     * 특정 사용자의 페이징 처리된 진단 기록 조회 메서드.
+     * sortOrder 파라미터에 따라 createdAt 필드를 기준으로 동적으로 정렬
+     * @param page 현재 페이지 번호 (0부터 시작)
+     * @param size 페이지당 아이템 수
+     * @param sortOrder 정렬 순서 ("asc" 또는 "desc")
+     * @param uid 사용자 ID
+     * @return 페이징된 DiagnosisEntity 목록
+     */
+    @Transactional(readOnly = true)
+    public Page<DiagnosisEntity> getDiagnosisHistory(int page, int size, String sortOrder, String uid) {
+        Sort sort = Sort.by(sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        // 수정된 Repository 메서드 호출
+        return diagnosisRepository.findByUid(uid, pageable);
+    }
+
+    /**
      * 모든 진단 결과를 생성일 기준 내림차순으로 가져옵니다. (페이징 없음)
      *
      * @return 모든 진단 결과를 담은 리스트
@@ -83,6 +98,7 @@ public class DiagnosisService {
             .label(dto.getLabel())
             .confidence(dto.getConfidence())
             .imagePath(imagePath)
+            .uid(dto.getUid())
             .build();
 
         diagnosisRepository.save(entity);
@@ -106,15 +122,15 @@ public class DiagnosisService {
         }
     }
 
-    
+    // 이 메서드는 이제 getDiagnosisHistory(int, int, String, String) 또는 getDiagnosisHistory(int, int, String)으로 대체 가능
     /**
-     * 진단 이력 조회 (페이징)
+     * 진단 이력 조회 (페이징) - uid별 조회 없이 모든 진단 기록을 페이징
      */
     @Transactional(readOnly = true)
     public Page<DiagnosisEntity> getDiagnosisHistory(int page, int size) {
         try {
-            Pageable pageable = PageRequest.of(page, size);
-            return diagnosisRepository.findAllByOrderByCreatedAtDesc(pageable);
+            Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending()); // 기본 정렬 추가
+            return diagnosisRepository.findAll(pageable);
         } catch (Exception e) {
             log.error("진단 이력 조회 중 오류 발생", e);
             throw new RuntimeException("진단 이력 조회에 실패했습니다.", e);
@@ -214,12 +230,11 @@ public class DiagnosisService {
     }
 
     /**
-     * 최신순으로 페이지의 데이터 호출
-     * getContent()를 호출하여 List<DiagnosisEntity>로 반환
-     * 이 메서드도 상단의 getDiagnosisHistory(int, int, String)으로 대체 가능
+     * 최신순으로 페이지의 데이터 호출 (특정 사용자)
+     * 이 메서드도 상단의 getDiagnosisHistory(int, int, String, String)으로 대체 가능
      */
-    public List<DiagnosisEntity> findRecentDiagnoses(Pageable pageable) {
-        return diagnosisRepository.findAll(pageable).getContent();
+    public List<DiagnosisEntity> findRecentDiagnosesByUid(String uid, Pageable pageable) {
+        // findByUid를 사용하고 Pageable에 정렬 정보가 포함되도록 합니다.
+        return diagnosisRepository.findByUid(uid, pageable).getContent();
     }
-    
 }

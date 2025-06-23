@@ -43,6 +43,10 @@ public class DiagnosisEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    // 사용자 ID (외래키)
+    @Column(name = "uid", nullable = false)
+    private String uid;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

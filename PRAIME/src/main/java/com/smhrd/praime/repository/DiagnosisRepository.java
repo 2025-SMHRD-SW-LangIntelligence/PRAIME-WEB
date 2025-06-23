@@ -15,6 +15,13 @@ import com.smhrd.praime.entity.DiagnosisEntity;
 @Repository
 public interface DiagnosisRepository extends JpaRepository<DiagnosisEntity, Long> {
     
+	
+	/**
+	 * 사용자 ID로 진단 기록을 조회하고, Pageable에 따라 페이징 및 정렬을 적용
+	 */
+    Page<DiagnosisEntity> findByUid(String uid, Pageable pageable);
+	
+	
     /**
      * 최근 진단 결과 조회 (생성일 기준 내림차순)
      */
@@ -49,4 +56,6 @@ public interface DiagnosisRepository extends JpaRepository<DiagnosisEntity, Long
     @Query("SELECT d FROM DiagnosisEntity d WHERE d.label = :label AND d.confidence >= :minConfidence ORDER BY d.createdAt DESC")
     List<DiagnosisEntity> findByLabelAndMinConfidence(@Param("label") String label, 
                                                       @Param("minConfidence") Double minConfidence);
+
+    Page<DiagnosisEntity> findAllByUidOrderByCreatedAtDesc(String uid, Pageable pageable);
 }

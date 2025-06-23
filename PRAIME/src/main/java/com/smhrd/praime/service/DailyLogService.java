@@ -18,10 +18,10 @@ import com.smhrd.praime.repository.DailyLogRepository;
 
 @Service
 public class DailyLogService {
-
+	
 	@Autowired
 	DailyLogRepository dailyLogRepository;
-
+	
 	// 영농일지 모든 일지 불러오기(최신순)
 	public ArrayList<DailyLogEntity> readAll(Model model) {
 		return (ArrayList<DailyLogEntity>) dailyLogRepository.findAllByOrderByDldateDesc();
@@ -32,7 +32,7 @@ public class DailyLogService {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dldate"));
 		return dailyLogRepository.findAll(pageable);
 	}
-
+	
 	// 영농일지 상세페이지 확인
 	public Optional<DailyLogEntity> viewPage(Long dlid) {
 		return dailyLogRepository.findById(dlid);
@@ -41,7 +41,7 @@ public class DailyLogService {
 	// 영농일지 작성
 	public DailyLogEntity writeLog(String dltitle, String dlcontent, String dlcrop, String dlweather, Double dltemp, List<MultipartFile> dlimages) {
 		DailyLogEntity lEntity = new DailyLogEntity();
-		
+				
 		lEntity.setDltitle(dltitle);
 		lEntity.setDlcontent(dlcontent);
 		lEntity.setDlcrop(dlcrop);
