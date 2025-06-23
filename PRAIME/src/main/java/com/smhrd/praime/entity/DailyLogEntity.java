@@ -1,13 +1,21 @@
 package com.smhrd.praime.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -16,9 +24,10 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "daily_log")
+@Table(name = "dailyLog")
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DailyLogEntity {
 	
 	@Id
@@ -26,30 +35,29 @@ public class DailyLogEntity {
 	private Long dlid;
 	
 	@Column(nullable = false)
-	private String dlcontent;
-	
-	@Column(nullable = false)
 	private String dlcrop;
-	
+	@Column(nullable = false)
+	private String dlweather;
+	@Column(nullable = false)
+	private Float dltemp;
+	@Column(nullable = false)
+	private String dltitle;
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String dlcontent;
 	@Column(nullable = false, updatable = false)
 	private LocalDate dldate;
 	
-	private Double dltemp; // 온도 데이터
-	
-	@Column(nullable = false)
-	private String dltitle;
-	
-	@Column(nullable = false)
-	private String dlweather;
-	
-	private String writeDay; // 사용하지 않지만 테이블에 존재
-	
-	private String uid; // 사용하지 않지만 테이블에 존재
-	
 	@PrePersist
-	protected void onCreate() {
-		if (this.dldate == null) {
-			this.dldate = LocalDate.now();
-		}
-	}
+    protected void onCreate() {
+        this.dldate = LocalDate.now();
+    }
+
+    @OneToMany(mappedBy = "dailyLog", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference  // 부모 → 자식 방향
+    private List<DailyImageEntity> dlimage = new ArrayList<>();
+	
+    @ManyToOne
+    @JoinColumn(name = "uid", nullable = false)
+    private UserEntity user;
+    
 }

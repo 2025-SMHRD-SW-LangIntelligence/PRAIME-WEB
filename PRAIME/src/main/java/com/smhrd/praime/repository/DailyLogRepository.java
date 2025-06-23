@@ -1,7 +1,9 @@
 package com.smhrd.praime.repository;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +20,8 @@ public interface DailyLogRepository extends JpaRepository<DailyLogEntity, Long> 
 	ArrayList<DailyLogEntity> findByDlcontentContainingOrderByDldateDesc(String keyword);
 	ArrayList<DailyLogEntity> findByDlcropContainingOrderByDldateDesc(String keyword);
 	ArrayList<DailyLogEntity> findByDlweatherContainingOrderByDldateDesc(String keyword);
+	
+	// 상세 조회 (이미지 포함 fetch)
+    @EntityGraph(attributePaths = {"dlimage"})
+    Optional<DailyLogEntity> findWithImagesByDlid(Long dlid);
 }

@@ -13,10 +13,11 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <!-- Axios CDN  -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- 파일   -->
-<script th:src="@{/js/common.js}"></script>
-<script th:src="@{/js/farmlog/write.js}"></script>
-<title>내 정보 페이지</title>
+<!-- 작성/수정 페이지 공통 JS   -->
+<script th:src="@{/js/farmlog/farmlog.js}"></script>
+<!-- 작성 페이지 전용 JS   -->
+<script th:src="@{/js/farmlog/write.js}" defer></script>
+<title>영농일지 작성</title>
 </head>
 <body>
 	<div class="container">
@@ -25,62 +26,51 @@
 				<div class="header-group">
 					<a href="#" class="prevPage" onclick="history.back()"> < </a>
 					<div class="header-title-group">
-						<span class="header-title">영농일지 작성</span>
+						<span class="header-title">영농 일지 작성</span>
 					</div>
 				</div>
 			</header>
 			<main>
-				<!-- <div th:text="${user.uid}"></div> -->
-<!--      <div class="crop-selection">
-        <h3>나의 재배 작물:</h3>
-        <ul th:if="${not #lists.isEmpty(userCrops)}">
-            <li th:each="crop : ${userCrops}">
-                <input type="checkbox" th:id="${crop}" th:name="selectedCrops" th:value="${crop}">
-                <label th:for="${crop}" th:text="${crop}"></label>
-            </li>
-        </ul>
-        <p th:if="${#lists.isEmpty(userCrops)}">등록된 작물이 없습니다. 마이페이지에서 작물을 등록해주세요.</p>
-    </div>  -->
-	
-				<form action="" class="journal-form" enctype="multipart/form-data">
-					<input type="text" id="weather" name="weather" hidden> <input
-						type="text" id="date" name="date" hidden>
-					<div class="crops-select">
-						<div class="crop-select-group">
-							<input type="radio" name="crop" id="apple" value="사과" hidden>
-							<label for="apple" class="crop-card" >사과</label> <input
-								type="radio" name="crop" id="pear" value="배" hidden> <label
-								for="pear" class="crop-card">배</label>
+				<form action="/farmlog/write" method = "post" id="journal-form" class="journal-form"
+					enctype="multipart/form-data">
+					<input type="text" id="dlweather" name="dlweather" hidden>
+					<input type="text" id="dltemp" name="dltemp" hidden> <input
+						type="text" id="dldate" name="dldate" hidden>
+					<div class="crop-select-group">
+						<label for="dlcrop">작물 선택</label>
+						<div id="crop-container" class="crop-selection-container">
+							<!-- 라디오 버튼들이 여기에 JS로 삽입됩니다 -->
 						</div>
 					</div>
 					<div class="journal-title">
 						<p>제목</p>
-						<input type="text" name="dtitle" id="dtitle" placeholder="제목을 입력하세요">
+						<input type="text" name="dltitle" id="dltitle"
+							placeholder="제목을 입력하세요">
 					</div>
 					<div class="journal-content">
 						<p>내용</p>
-						<textarea rows="20" cols="60" name="dcontent" id="dcontent"
-								placeholder="내용을 입력하세요"></textarea>
+						<textarea rows="20" cols="60" name="dlcontent" id="dlcontent"
+							placeholder="내용을 입력하세요"></textarea>
 					</div>
 					<div class="journal-image">
 						<div class="image-upload-panel">
-							<label for="dimages" class="upload-box"> <i
+							<label for="dlimages" class="upload-box"> <i
 								class="fas fa-camera"></i>
-								<p>사진 추가</p> 
-								<input type="file" id = "dimages" name = "dimages" multiple hidden>
+								<p>사진 추가</p> <input type="file" id="dlimages" name="dlimages"
+								accept="image/*" multiple hidden>
 							</label>
 							<div id="upload-preview" class="upload-preview"></div>
 						</div>
 					</div>
 					<div class="journal-buttons">
-						<button type="button" class="cancel-btn" onclick="history.back()">취소</button>
+						<button type="button" class="cancel-btn">취소</button>
 						<button type="submit" class="submit-btn">저장하기</button>
 					</div>
 				</form>
 			</main>
+			<!-- Footer -->
+			<div th:replace="/global/footer::footer "></div>
 		</div>
-        <!-- Footer -->
-        <div th:replace="/global/footer::footer "></div> 		
 	</div>
 </body>
 </html>

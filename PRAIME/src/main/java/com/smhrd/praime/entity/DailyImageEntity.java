@@ -1,5 +1,8 @@
 package com.smhrd.praime.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,10 +16,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "daily_log_image")
+@Table(name = "dailyLogImage")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DailyImageEntity {
 	
 	@Id
@@ -24,11 +28,11 @@ public class DailyImageEntity {
 	private Long dliid;
 	
 	@Column(nullable = false)
-	private String dlipath; // 실제 사용할 이미지 경로
+	private String dlipath;
 	
 	@ManyToOne
-	@JoinColumn(name = "dlid", nullable = false)
-	private DailyLogEntity dailyLog;
+    @JoinColumn(name = "dlid") // FK로 dlid 저장됨
+	@JsonBackReference  // 자식 → 부모 방향
+    private DailyLogEntity dailyLog;
 	
-	private String dpath; // 사용하지 않지만 테이블에 존재
 }
