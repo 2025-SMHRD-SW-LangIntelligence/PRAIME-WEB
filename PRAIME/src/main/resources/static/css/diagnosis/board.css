@@ -157,8 +157,8 @@ main {
 }
 
 .card-thumb {
-    min-width: 48px;
-    height: 48px;
+    min-width: 128px;
+    height: 128px;
     border-radius: 7px;
     background: #eee;
     display: flex;
@@ -211,6 +211,14 @@ main {
     margin-top: 2px;
     color : var(--placeholder-color);
 }
+
+.card-info-row .confidence-note {
+    color: green;
+    font-size: 0.8em; 
+    margin-top: 5px;  
+    line-height: 1.2; 
+}
+
 
 .card-time {
     color: #8d8981;

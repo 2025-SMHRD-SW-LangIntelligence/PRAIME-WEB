@@ -26,8 +26,8 @@
     </header>
 
     <div class="diagnosis-actions top-actions">
-        <button class="btn btn-primary" id="start-diagnosis"><i class="fas fa-stethoscope"></i> 진단하기</button>
-        <button class="btn btn-outline" id="view-history"><i class="fas fa-history"></i> 진단 이력</button>
+        <button class="btn btn-outline" id="start-diagnosis"><i class="fas fa-stethoscope"></i> 진단하기</button>
+        <button class="btn btn-primary active-tab" id="view-history"><i class="fas fa-history"></i> 진단 이력</button>
     </div>
 
     <main>
@@ -53,17 +53,20 @@
                             <div class="card-title-row">
                                 <span class="card-title" th:text="${item.label}"></span>
                             </div>
+                            
                             <div class="card-info-row">
                                 신뢰도: <span th:text="${#numbers.formatDecimal(item.confidence, 0, 'COMMA', 0, 'POINT')} + '%'"></span>
                                 <span class="card-bar" th:styleappend="'--confidence-width: ' + ${#numbers.formatDecimal(item.confidence, 0, 0)} + '%'"></span>
+                                
+	                                                        
                             </div>
+	                        <hr class="divider"/>
+                                <p class="confidence-note" style="color: green; font-size: 0.8em; margin-top: 5px;">
+                                    신뢰도는 단순히 AI모델이 업로드한 이미지의 결과를 판단한 결과이므로 실제 이미지에 대한 신뢰도가 아니며 단순히 참고용입니다
+                                </p>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div th:if="${#lists.isEmpty(diagnosisList)}" class="no-records">
-                현재 진단 기록이 없습니다.
             </div>
         </div>
     </main>

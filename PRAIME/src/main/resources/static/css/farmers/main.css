@@ -158,11 +158,6 @@ main{
     color: var(--text-color); /* common.css 변수 적용 */
 }
 
-.divider {
-    margin: 15px 0;
-    border: none;
-    border-top: 1px solid var(--border-color); /* common.css 변수 적용 */
-}
 
 .weather-bottom {
     display: flex;
