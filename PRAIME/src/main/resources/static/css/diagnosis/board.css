@@ -88,11 +88,12 @@ main {
 }
 
 
-.btn-outline{
+/* .btn-outline{
 	background-color: #fff !important;
 	color: var(--primary-color) !important;
 }
-
+ */
+ 
 /* 게시판 정렬 버튼 */
 .sort-buttons {
     display: flex;
