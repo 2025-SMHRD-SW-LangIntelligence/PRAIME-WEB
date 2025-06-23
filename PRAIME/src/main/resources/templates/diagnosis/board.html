@@ -53,19 +53,21 @@
                             <div class="card-title-row">
                                 <span class="card-title" th:text="${item.label}"></span>
                             </div>
-                            
-                            <div class="card-info-row">
-                                신뢰도: <span th:text="${#numbers.formatDecimal(item.confidence, 0, 'COMMA', 0, 'POINT')} + '%'"></span>
-                                <span class="card-bar" th:styleappend="'--confidence-width: ' + ${#numbers.formatDecimal(item.confidence, 0, 0)} + '%'"></span>
-                                
-	                                                        
-                            </div>
-	                        <hr class="divider"/>
-                                <p class="confidence-note" style="color: green; font-size: 0.8em; margin-top: 5px;">
-                                    신뢰도는 단순히 AI모델이 업로드한 이미지의 결과를 판단한 결과이므로 실제 이미지에 대한 신뢰도가 아니며 단순히 참고용입니다
+                            <div class="card-description">
+                                <p>
+                                    검은별무늬병은 보통 15~25도(℃)에서 잎 뒷면이나 열매 표면에 비나 안 개로 생긴 물방울이 9~10시간 맺혀 있을 때 발생한다. 생육 초기 2일 동 안 25mm 이상 비가 내리면 더 많이 퍼진다.
                                 </p>
+                            </div>
                         </div>
                     </div>
+                    <hr class="divider"/>
+                    <div class="card-info-row">
+                        신뢰도: <span th:text="${#numbers.formatDecimal(item.confidence, 0, 'COMMA', 0, 'POINT')} + '%'"></span>
+                        <span class="card-bar" th:styleappend="'--confidence-width: ' + ${#numbers.formatDecimal(item.confidence, 0, 0)} + '%'"></span>
+                    </div>
+                    <p class="confidence-note">
+                        신뢰도는 단순히 AI모델이 업로드한 이미지의 결과를 판단한 결과로 단순히 참고용입니다
+                    </p>
                 </div>
             </div>
         </div>

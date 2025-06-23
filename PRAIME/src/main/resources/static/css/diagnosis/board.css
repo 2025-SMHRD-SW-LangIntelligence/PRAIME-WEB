@@ -43,7 +43,6 @@ main {
     border-radius: 50px;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
     display: flex;
-    /* justify-content: right;  <-- 이 부분 제거 */
     width: 50%; /* 이 값은 필요에 따라 조절하세요. */
     margin: 20px auto; /* <-- 이 부분 수정 (중앙 정렬) */
 }
@@ -86,13 +85,6 @@ main {
 .top-actions .btn:not(.active-tab):hover {
     color: var(--label-color); /* 호버 시 텍스트 색상 변경 */
 }
-
-
-/* .btn-outline{
-	background-color: #fff !important;
-	color: var(--primary-color) !important;
-}
- */
  
 /* 게시판 정렬 버튼 */
 .sort-buttons {
@@ -140,7 +132,7 @@ main {
     box-shadow: var(--card-shadow, 0 4px 14px rgba(0, 0, 0, 0.09));
     padding: 16px 18px 16px 18px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Changed to column to stack elements */
     gap: 6px;
 }
 
@@ -149,11 +141,15 @@ main {
     color: #a8a38c;
     font-weight: 600;
     margin-bottom: 5px;
+    /* This will be the black border area */
+    /* border: 1px solid black; */ /* For reference only, remove in actual implementation */
 }
 
 .card-main {
-    display: flex;
+    display: flex; /* Aligns image and content side-by-side */
     gap: 14px;
+    /* This will be the red border area */
+    /* border: 1px solid red; */ /* For reference only, remove in actual implementation */
 }
 
 .card-thumb {
@@ -175,10 +171,12 @@ main {
 }
 
 .card-content {
-    flex: 1;
+    flex: 1; /* Takes up remaining space */
     display: flex;
     flex-direction: column;
     gap: 4px;
+    /* This will be the blue border area */
+    /* border: 1px solid blue; */ /* For reference only, remove in actual implementation */
 }
 
 .card-title-row {
@@ -192,6 +190,13 @@ main {
     font-size: 1.11rem;
     color: var(--primary-color, #0f4f35);
     font-weight: bold;
+}
+
+.card-description {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: #444;
+    line-height: 1.45;
 }
 
 .card-badge {
@@ -210,15 +215,23 @@ main {
     font-size: 0.8rem;
     margin-top: 2px;
     color : var(--placeholder-color);
+    /* No border needed here for the new layout, it's outside card-main */
 }
 
-.card-info-row .confidence-note {
+.confidence-note {
     color: green;
-    font-size: 0.8em; 
-    margin-top: 5px;  
-    line-height: 1.2; 
+    font-size: 0.8em;
+    margin-top: 5px;
+    line-height: 1.2;
 }
 
+/* Divider line */
+.divider {
+    border: 0;
+    height: 1px;
+    background: #e0e0e0; /* Light gray line */
+    margin: 10px 0; /* Adjust vertical spacing as needed */
+}
 
 .card-time {
     color: #8d8981;
@@ -236,7 +249,8 @@ main {
     height: 10px;
     background: #e0e0e0; /* 바의 배경색 (채워지지 않은 부분) */
     border-radius: 5px;
-    width: 100px; /* 전체 바의 너비 */
+    /* width: 100px; 전체 바의 너비 */
+    min-width : 360px;
     overflow: hidden;
     margin-left: 5px;
 }
