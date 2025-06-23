@@ -7,11 +7,8 @@
 <link th:href="@{/css/font.css}" rel="stylesheet">
 <link th:href="@{/css/common.css}" rel="stylesheet">
 <link th:href="@{/css/farmers/main.css}" rel="stylesheet">
-<!-- jQuery CDN  -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<!-- Axios CDN  -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- JS 파일 -->
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/farmers/main.js}"></script>
 <link rel="stylesheet"
@@ -34,8 +31,6 @@
 			</header>
 			<main>
 				<div class="main-wrap">
-					<!-- 날씨 섹션 -->
-					<!-- weather-section 내부 -->
 					<section class="weather-section">
 						<div class="weather-box">
 							<div class="weather-top">
@@ -43,9 +38,7 @@
 									<h1 class="weather-title">오늘의 날씨</h1>
 									<div class="weather-info">
 										<div class="weather-icon">
-											<input type="hidden" id="weatherIconPrefix"
-												value="@{/img/weather/}"> <img id="weatherIcon"
-												src="" alt="날씨 아이콘">
+											<img id="weatherIcon" src="" alt="날씨 아이콘" width="128" height="128">
 										</div>
 										<div class="weather-detail">
 											<div class="temperature" id="temperature"></div>
@@ -69,16 +62,13 @@
 							</div>
 						</div>
 					</section>
-
-					<!-- 핵심 기능 섹션 -->
+					
+					<hr class="divider" />
+					
 					<section class="core-func-section">
 						<div class="core-title">핵심 기능</div>
 						<div class="core-card-group">
-
-
-
 							<div class="core-card" onclick="goToFarmlogWritePage()">
-
 								<img th:src="@{/img/log.png}" alt="작업 일지" class="core-icon">
 								<span class="core-label">영농일지</span>
 							</div>
@@ -88,8 +78,10 @@
 							</div>
 						</div>
 					</section>
-
-					<!-- 최근 일지 (샘플) -->
+					
+					<hr class="divider" />
+					
+					
 					<section class="recent-journal-section">
 						<div class="section-header">
 							<h2 class="section-title">최근 일지</h2>
@@ -122,14 +114,16 @@
 								<div class="journal-date">어제</div>
 								<div class="journal-content">
 									<div class="journal-title">사과나무 전정 작업</div>
-									<div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
+									<div
+										class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
 								</div>
 							</div>
 							<div class="journal-item">
 								<div class="journal-date">06.15</div>
 								<div class="journal-content">
 									<div class="journal-title">사과나무 전정 작업</div>
-									<div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
+									<div
+										class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
 								</div>
 							</div>
 						</div>
@@ -139,11 +133,53 @@
 								새 영농일지 작성하기</button>
 						</div>
 					</section>
+					
+					<hr class="divider" />
+					
+					
+                    <section class="recent-diagnosis-section">
+                        <div class="section-header">
+                            <h2 class="section-title">최근 진단 이력</h2>
+                            <a href="/diagnosisBoardPage" class="view-all">전체보기 &gt;</a>
+                        </div>
+                    
+                        <div class="journal-list">
+                            <div th:if="${#lists.isEmpty(diagnosisList)}" class="no-records">
+                                진단 기록이 없습니다.
+                            </div>
+                            <div class="journal-item" th:each="diagnosis : ${diagnosisList}">
+                                <div class="journal-date" 
+                                     th:text="${#temporals.format(diagnosis.createdAt, 'MM.dd').equals(#temporals.format(#temporals.createNow(), 'MM.dd'))} ? '오늘' : ${#temporals.format(diagnosis.createdAt, 'yy.MM.dd')}">
+                                     </div>
+                                <div class="journal-content">
+                                    <div class="journal-image-thumbnail">
+                                        <img th:src="@{${diagnosis.imagePath}}" th:alt="${diagnosis.label} + ' 진단 이미지'">
+                                    </div>
+                                    <div class="journal-text-content"> <div class="journal-title" th:text="${diagnosis.label}"></div>
+                                        <div class="journal-desc">
+                                            신뢰도: <span th:text="${#numbers.formatDecimal(diagnosis.confidence, 0, 'COMMA', 0, 'POINT')} + '%'"></span>
+                                            <div class="card-bar" th:styleappend="'--confidence-width: ' + ${#numbers.formatDecimal(diagnosis.confidence, 0, 0)} + '%'"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="journal-add-button">
+                            <button class="add-journal-btn" onclick="goToDiagnosisUploadPage()">+ 병해충 진단 하기</button>
+                        </div>
+                    </section>
+					
 				</div>
 			</main>
-			<!-- Footer -->
 			<div th:replace="/global/footer::footer "></div>
 		</div>
 	</div>
+<!-- 이미지 모달 -->	
+<div id="imageModal" class="modal">
+    <span class="close-button">&times;</span>
+    <img class="modal-content" id="modalImage">
+    <div id="modalCaption"></div>
+</div>	
 </body>
 </html>

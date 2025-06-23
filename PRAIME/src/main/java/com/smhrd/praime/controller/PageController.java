@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,22 +89,36 @@ public class PageController {
 		return "consumer/my_info_edit";
 	}
 
-	// ---------- 농부 ---------- //
+    // ---------- 농부 ---------- //
     @GetMapping("/farmerMainPage")
     public String farmerMainPage(HttpSession session, Model model) {
 
         // 세션에서 유저 정보 가져오기 (예외처리 포함)
         UserEntity user = (UserEntity) session.getAttribute("user");
         if (user == null) {
-            return "redirect:/login"; 
+            return "redirect:/login";
         }
         // 오늘 날짜를 모델에 추가
         commonService.addCurrentDateToModel(model);
-        
+
         model.addAttribute("user", user);
+
+        // --- 최근 진단 이력 5개만 가져오는 로직 추가 ---
+        // Pageable 객체를 사용하여 첫 번째 페이지(0), 5개의 결과, 최신순(createdAt 기준 내림차순)으로 정렬
+        Pageable pageable = PageRequest.of(0, 5, Sort.by("createdAt").descending());
+        List<DiagnosisEntity> recentDiagnoses = diagnosisService.findRecentDiagnoses(pageable); // Service 메서드 호출
+
+        // 중요: 불러온 진단 이력 목록의 각 엔티티에 대해 이미지 경로 변환
+        recentDiagnoses.forEach(item -> {
+            item.setImagePath(convertToWebPath(item.getImagePath()));
+        });
+
+        model.addAttribute("diagnosisList", recentDiagnoses);
 
         return "farmers/main";
     }
+
+
 	
 	// 농부 회원가입 페이지 이동
 	@GetMapping(value = "/joinFarmerPage")
@@ -232,16 +249,6 @@ public class PageController {
         model.addAttribute("totalPages", diagnosisPage.getTotalPages());
         model.addAttribute("totalElements", diagnosisPage.getTotalElements());
         model.addAttribute("pageSize", size);
-
-//        // 2. 모든 진단 결과 가져오기 (새로 추가된 기능)
-//        List<DiagnosisEntity> allDiagnosisResults = diagnosisService.getAllDiagnosisResultsOrderedByCreationDateDesc();
-//
-//        // 중요: 모든 진단 결과 목록의 각 엔티티에 대해 이미지 경로 변환
-//        allDiagnosisResults.forEach(item -> {
-//            item.setImagePath(convertToWebPath(item.getImagePath()));
-//        });
-//
-//        model.addAttribute("allDiagnosisResults", allDiagnosisResults);
 
         return "diagnosis/board";
     }

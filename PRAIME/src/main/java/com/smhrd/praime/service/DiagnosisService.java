@@ -198,4 +198,14 @@ public class DiagnosisService {
         
         return filePath.toString();
     }
+
+    /**
+     * 신순으로 페이지의 데이터호출
+     * getContent()를 호출하여 List<DiagnosisEntity>로 반환
+     */
+    public List<DiagnosisEntity> findRecentDiagnoses(Pageable pageable) {
+        return diagnosisRepository.findAll(pageable).getContent();
+    }    
+    
+    
 }
