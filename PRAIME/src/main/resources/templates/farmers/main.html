@@ -97,40 +97,22 @@
 						</div>
 
 						<div class="journal-list">
-							<div class="journal-item">
-								<div class="journal-date">오늘</div>
+							<div th:each="log : ${recentLogs}" class="journal-item" th:onclick="'location.href=\'/view/' + ${log.dlid} + '\''">
+								<div class="journal-date" th:text="${#temporals.format(log.dldate, 'MM.dd')}">날짜</div>
 								<div class="journal-content">
-									<div class="journal-title">사과나무 물주기 및 유인작업</div>
-									<div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
+									<div class="journal-title" th:text="${log.dltitle}">제목</div>
+									<div class="journal-desc" th:text="${log.dlcontent}">내용</div>
+									<div class="journal-meta">
+										<span class="journal-crop" th:text="${log.dlcrop}">작물</span>
+										<span class="journal-weather" th:text="${log.dlweather}">날씨</span>
+										<span class="journal-temp" th:if="${log.dltemp != null}" th:text="${log.dltemp + '°C'}">온도</span>
+									</div>
 								</div>
 							</div>
-							<div class="journal-item">
-								<div class="journal-date">오늘</div>
-								<div class="journal-content">
-									<div class="journal-title">사과나무 물주기 및 유인작업</div>
-									<div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
-								</div>
-							</div>
-							<div class="journal-item">
-								<div class="journal-date">오늘</div>
-								<div class="journal-content">
-									<div class="journal-title">사과나무 물주기 및 유인작업</div>
-									<div class="journal-desc">가지 유인 및 수분 관리 작업을 진행했습니다.</div>
-								</div>
-							</div>
-							<div class="journal-item">
-								<div class="journal-date">어제</div>
-								<div class="journal-content">
-									<div class="journal-title">사과나무 전정 작업</div>
-									<div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
-								</div>
-							</div>
-							<div class="journal-item">
-								<div class="journal-date">06.15</div>
-								<div class="journal-content">
-									<div class="journal-title">사과나무 전정 작업</div>
-									<div class="journal-desc">주요 가지 전정 작업과 순 제거를 했습니다.</div>
-								</div>
+							
+							<!-- 데이터가 없을 때 표시할 메시지 -->
+							<div th:if="${#lists.isEmpty(recentLogs)}" class="no-journal">
+								등록된 영농일지가 없습니다.
 							</div>
 						</div>
 

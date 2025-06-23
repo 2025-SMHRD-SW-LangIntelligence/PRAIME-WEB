@@ -1,6 +1,7 @@
 package com.smhrd.praime.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.smhrd.praime.entity.DiagnosisEntity;
 import com.smhrd.praime.entity.UserEntity;
+import com.smhrd.praime.entity.DailyLogEntity;
 import com.smhrd.praime.repository.DiagnosisRepository;
 import com.smhrd.praime.repository.UserRepository;
 import com.smhrd.praime.service.CommonService;
 import com.smhrd.praime.service.DiagnosisService;
 import com.smhrd.praime.service.UserService;
+import com.smhrd.praime.service.DailyLogService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,7 @@ public class PageController {
 	private final DiagnosisService diagnosisService;
     UserRepository userRepository;
     DiagnosisRepository diagnosisRepository;
+    private final DailyLogService dailyLogService;
     
 
 
@@ -98,7 +102,12 @@ public class PageController {
         // 오늘 날짜를 모델에 추가
         commonService.addCurrentDateToModel(model);
         
+        // 최신 5개 영농일지 데이터 가져오기
+        Page<DailyLogEntity> recentLogsPage = dailyLogService.readAllWithPaging(0, 5);
+        List<DailyLogEntity> recentLogs = recentLogsPage.getContent();
+        
         model.addAttribute("user", user);
+        model.addAttribute("recentLogs", recentLogs);
 
         return "farmers/main";
     }
@@ -158,17 +167,53 @@ public class PageController {
 	
 	// 영농일지 게시판 페이지 이동
 	@GetMapping(value = "/farmlogBoardPage")
-	public String farmlogBoardPage(Model model) {
-		// 더미데이터 추가 (선택사항)
-		// 실제로는 DailyLogService에서 데이터를 가져와야 함
-		model.addAttribute("boardList", java.util.Arrays.asList(
-			Map.of("dltitle", "사과나무 전정 작업 완료", "dlcontent", "오늘 사과나무 전정 작업을 완료했습니다.", "ddate", "2024.01.15"),
-			Map.of("dltitle", "배나무 물주기 및 유인작업", "dlcontent", "가지 유인 및 수분 관리 작업을 진행했습니다.", "ddate", "2024.01.14"),
-			Map.of("dltitle", "사과나무 병해충 예방 스프레이", "dlcontent", "병해충 예방을 위한 스프레이 작업을 진행했습니다.", "ddate", "2024.01.13")
-		));
+	public String farmlogBoardPage(
+			@RequestParam(required = false) String keyword,
+			@RequestParam(required = false, defaultValue = "title") String searchOption,
+			Model model) {
+		
+		ArrayList<DailyLogEntity> boardList;
+		
+		// 검색어가 있으면 검색, 없으면 전체 목록
+		if (keyword != null && !keyword.trim().isEmpty()) {
+			boardList = dailyLogService.searchLogs(keyword.trim(), searchOption);
+		} else {
+			boardList = dailyLogService.readAll(model);
+		}
+		
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("searchOption", searchOption);
 		return "farmlog/board";
 	}
 	
+	// 무한스크롤을 위한 REST API
+	@GetMapping(value = "/api/farmlog")
+	public String getFarmlogData(
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size,
+			@RequestParam(required = false) String keyword,
+			@RequestParam(required = false, defaultValue = "title") String searchOption,
+			Model model) {
+		
+		Page<DailyLogEntity> farmlogPage;
+		
+		// 검색어가 있으면 검색, 없으면 전체 목록
+		if (keyword != null && !keyword.trim().isEmpty()) {
+			// 검색 결과를 페이징으로 처리
+			ArrayList<DailyLogEntity> searchResults = dailyLogService.searchLogs(keyword.trim(), searchOption);
+			// TODO: 검색 결과도 페이징 처리 필요
+			farmlogPage = dailyLogService.readAllWithPaging(page, size);
+		} else {
+			farmlogPage = dailyLogService.readAllWithPaging(page, size);
+		}
+		
+		model.addAttribute("farmlogList", farmlogPage.getContent());
+		model.addAttribute("hasNext", farmlogPage.hasNext());
+		model.addAttribute("currentPage", page);
+		
+		return "farmlog/board :: board-list";
+	}
 
 	// 영농일지 작성 페이지 이동
     @GetMapping("/farmlogWritePage")
@@ -245,7 +290,29 @@ public class PageController {
 
         return "diagnosis/board";
     }
+    
+    // 무한스크롤을 위한 REST API
+    @GetMapping(value = "/api/diagnosis")
+    public String getDiagnosisData(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "desc") String sortOrder,
+            Model model) {
+        
+        // 페이징 처리된 진단 이력 가져오기
+        Page<DiagnosisEntity> diagnosisPage = diagnosisService.getDiagnosisHistory(page, size, sortOrder);
+        List<DiagnosisEntity> diagnosisList = diagnosisPage.getContent();
+        
+        // 이미지 경로 변환
+        diagnosisList.forEach(item -> {
+            item.setImagePath(convertToWebPath(item.getImagePath()));
+        });
+        
+        model.addAttribute("diagnosisList", diagnosisList);
+        model.addAttribute("hasNext", diagnosisPage.hasNext());
+        model.addAttribute("currentPage", page);
+        
+        return "diagnosis/board :: diagnosis-list";
+    }
 
-
-	
 }

@@ -34,29 +34,73 @@
         <main>
 	        <section class = "search-section">
 		        <div class = "search-board">
-			        <form action = "#" class = "search-form">
-			        	<input type = "text" class = "search-input" name = "keyword" id = "keyword" placeholder = "일지 검색">
+			        <form action = "/farmlogBoardPage" method = "get" class = "search-form">
+			        	<input type = "text" class = "search-input" name = "keyword" id = "keyword" 
+			        		   placeholder = "일지 검색" th:value="${keyword}">
 			        	
 			        		<select class = "search-select" name = "searchOption" id = "searchOption">
-			        			<option value = "title">제목</option>
-			        			<option value = "content">내용</option>        			
-			        			<option value = "writer">작성자</option>       			
-			        			<option value = "weather">날씨</option>       			
-			        			<option value = "day">날짜</option>      			
+			        			<option value = "title" th:selected="${searchOption == 'title'}">제목</option>
+			        			<option value = "content" th:selected="${searchOption == 'content'}">내용</option>        			
+			        			<option value = "crop" th:selected="${searchOption == 'crop'}">작물</option>       			
+			        			<option value = "weather" th:selected="${searchOption == 'weather'}">날씨</option>       			
 			        		</select>
 			        	<button type = "submit" class="btn btn-primary">검색</button>
 			        </form>
 		        </div>
 	        </section>
 	        <section class = "board-section">
-	        	<div class = "board-list">
-	        		<!-- JavaScript로 동적 생성됨 (무한 스크롤) -->
+	        	<div class = "board-list" id="board-list">
+	        		<!-- Thymeleaf를 사용한 실제 DB 데이터 표시 -->
+	        		<div th:each="log : ${boardList}" class="board-card" th:onclick="'location.href=\'/view/' + ${log.dlid} + '\''">
+	        			<div class="board-card-image">
+	        				<img th:src="@{/img/log.png}" alt="영농일지 이미지" class="card-thumbnail">
+	        			</div>
+	        			<div class="board-card-content-wrapper">
+	        				<div class="board-card-title" th:text="${log.dltitle}">제목</div>
+	        				<div class="board-card-content" th:text="${log.dlcontent}">내용</div>
+	        				<div class="board-card-meta">
+	        					<span class="board-card-crop" th:text="${log.dlcrop}">작물</span>
+	        					<span class="board-card-weather" th:text="${log.dlweather}">날씨</span>
+	        					<span class="board-card-temp" th:if="${log.dltemp != null}" th:text="${log.dltemp + '°C'}">온도</span>
+	        					<span class="board-card-date" th:text="${#temporals.format(log.dldate, 'yyyy년 MM월 dd일')}">날짜</span>
+	        				</div>
+	        			</div>
+	        		</div>
+	        		
+	        		<!-- 데이터가 없을 때 표시할 메시지 -->
+	        		<div th:if="${#lists.isEmpty(boardList)}" class="no-result">
+	        			<span th:if="${keyword != null and keyword != ''}">
+	        				'<span th:text="${keyword}"></span>'에 대한 검색 결과가 없습니다.
+	        			</span>
+	        			<span th:unless="${keyword != null and keyword != ''}">
+	        				등록된 영농일지가 없습니다.
+	        			</span>
+	        		</div>
 	        	</div>
 	        </section>
         </main>
         <!-- Footer -->
         <div th:replace="/global/footer::footer "></div> 
 		</div>
+    </div>
+    
+    <!-- 무한스크롤을 위한 fragment -->
+    <div th:fragment="board-list">
+        <div th:each="log : ${farmlogList}" class="board-card" th:onclick="'location.href=\'/view/' + ${log.dlid} + '\''">
+            <div class="board-card-image">
+                <img th:src="@{/img/log.png}" alt="영농일지 이미지" class="card-thumbnail">
+            </div>
+            <div class="board-card-content-wrapper">
+                <div class="board-card-title" th:text="${log.dltitle}">제목</div>
+                <div class="board-card-content" th:text="${log.dlcontent}">내용</div>
+                <div class="board-card-meta">
+                    <span class="board-card-crop" th:text="${log.dlcrop}">작물</span>
+                    <span class="board-card-weather" th:text="${log.dlweather}">날씨</span>
+                    <span class="board-card-temp" th:if="${log.dltemp != null}" th:text="${log.dltemp + '°C'}">온도</span>
+                    <span class="board-card-date" th:text="${#temporals.format(log.dldate, 'yyyy년 MM월 dd일')}">날짜</span>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

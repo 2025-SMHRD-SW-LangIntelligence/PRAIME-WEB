@@ -126,6 +126,8 @@ main {
   border: 1px solid #f0f0f0;
   margin-bottom: 0.8rem;
   will-change: transform; /* GPU 가속 활성화 */
+  display: flex;
+  gap: 1rem;
 }
 
 .board-list .board-card:hover {
@@ -134,10 +136,37 @@ main {
   border-color: #e0e0e0;
 }
 
+/* 카드 이미지 영역 */
+.board-card-image {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 카드 내용 영역 */
+.board-card-content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .board-card-title {
   font-size: 1.1rem;
   font-weight: bold;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.3rem;
   color: #333;
   line-height: 1.3;
 }
@@ -145,7 +174,7 @@ main {
 .board-card-content {
   font-size: 0.9rem;
   color: #666;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.5rem;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -158,6 +187,38 @@ main {
   font-size: 0.8rem;
   color: #999;
   font-weight: 500;
+}
+
+/* 메타 정보 스타일 추가 */
+.board-card-meta {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.board-card-crop,
+.board-card-weather,
+.board-card-temp {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.board-card-crop {
+  background-color: #e8f5e8;
+  color: #2d5a2d;
+}
+
+.board-card-weather {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.board-card-temp {
+  background-color: #fff3e0;
+  color: #e65100;
 }
 
 /* 검색 결과 없음 메시지 */

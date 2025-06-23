@@ -60,11 +60,12 @@ public class DailyLogController {
 		    @RequestParam String dlcontent,
 		    @RequestParam String dlcrop,
 		    @RequestParam String dlweather,
-		    @RequestParam List<MultipartFile> dlimages) {
+		    @RequestParam(required = false) Double dltemp,
+		    @RequestParam(required = false) List<MultipartFile> dlimages) {
 			
 		
 		
-		dailyLogService.writeLog(dltitle, dlcontent, dlcrop, dlweather, dlimages);
+		dailyLogService.writeLog(dltitle, dlcontent, dlcrop, dlweather, dltemp, dlimages);
 		
 		try {
 		
