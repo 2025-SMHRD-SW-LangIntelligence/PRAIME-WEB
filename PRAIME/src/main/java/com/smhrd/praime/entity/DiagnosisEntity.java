@@ -9,10 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// Hibernate Search 6 어노테이션 
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
 @Entity
 @Table(name = "diagnosis_results")
@@ -20,22 +16,21 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextFi
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Indexed 
 public class DiagnosisEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @FullTextField // ✅ 검색 가능한 텍스트 필드 (예: 병 이름 검색 등)
+    // @FullTextField 어노테이션 제거
     @Column(nullable = false, length = 100)
     private String label;
 
-    @GenericField // ✅ 숫자 값도 인덱싱 가능
+    // @GenericField 어노테이션 제거
     @Column(nullable = false)
     private Double confidence;
 
-    @GenericField // ✅ 검색이 필요할 경우를 위해 인덱싱
+    // @GenericField 어노테이션 제거
     @Column(nullable = false, length = 500)
     private String imagePath;
 
@@ -44,7 +39,7 @@ public class DiagnosisEntity {
     // @Column(nullable = false, columnDefinition = "LONGTEXT")
     // private String resultImageBase64;
 
-    @GenericField // ✅ 날짜 정렬이나 필터링용
+    // @GenericField 어노테이션 제거
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
