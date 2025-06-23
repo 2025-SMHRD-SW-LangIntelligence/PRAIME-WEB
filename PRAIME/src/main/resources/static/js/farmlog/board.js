@@ -17,7 +17,7 @@ function loadInitialData() {
     hasMoreData = true;
     loadMoreItems();
 }
-
+    
 // 무한스크롤 설정
 function setupInfiniteScroll() {
     window.addEventListener('scroll', handleScroll);
@@ -76,7 +76,7 @@ function loadMoreItems() {
                     boardList.appendChild(card.cloneNode(true));
                 });
                 
-                currentPage++;
+        currentPage++;
                 hasMoreData = newCards.length === pageSize;
             } else {
                 hasMoreData = false;
@@ -86,8 +86,8 @@ function loadMoreItems() {
             console.error('데이터 로드 중 오류 발생:', error);
         })
         .finally(() => {
-            isLoading = false;
-            hideLoadingIndicator();
+        isLoading = false;
+        hideLoadingIndicator();
         });
 }
 
@@ -97,11 +97,11 @@ function showLoadingIndicator() {
     const existingIndicator = boardList.querySelector('#loading-indicator');
     
     if (!existingIndicator) {
-        const loadingDiv = document.createElement('div');
-        loadingDiv.id = 'loading-indicator';
-        loadingDiv.className = 'loading-indicator';
-        loadingDiv.innerHTML = '<div class="loading-spinner"></div><p>로딩 중...</p>';
-        boardList.appendChild(loadingDiv);
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'loading-indicator';
+    loadingDiv.className = 'loading-indicator';
+    loadingDiv.innerHTML = '<div class="loading-spinner"></div><p>로딩 중...</p>';
+    boardList.appendChild(loadingDiv);
     }
 }
 

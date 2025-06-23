@@ -69,6 +69,7 @@ public class DiagnosisService {
             .label(dto.getLabel())
             .confidence(dto.getConfidence())
             .imagePath(imagePath)
+            .uid(dto.getUid())
             .build();
 
         diagnosisRepository.save(entity);
@@ -207,5 +208,13 @@ public class DiagnosisService {
         return diagnosisRepository.findAll(pageable).getContent();
     }    
     
-    
+    public Page<DiagnosisEntity> getDiagnosisHistory(int page, int size, String sortOrder, String uid) {
+        Sort sort = Sort.by(sortOrder.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return diagnosisRepository.findAllByUidOrderByCreatedAtDesc(uid, pageable);
+    }
+
+    public List<DiagnosisEntity> findRecentDiagnosesByUid(String uid, Pageable pageable) {
+        return diagnosisRepository.findAllByUidOrderByCreatedAtDesc(uid, pageable).getContent();
+    }
 }

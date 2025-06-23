@@ -112,16 +112,12 @@ public class PageController {
         model.addAttribute("user", user);
         model.addAttribute("recentLogs", recentLogs);
 
-        // --- 최근 진단 이력 5개만 가져오는 로직 추가 ---
-        // Pageable 객체를 사용하여 첫 번째 페이지(0), 5개의 결과, 최신순(createdAt 기준 내림차순)으로 정렬
+        // --- 최근 진단 이력 5개만 가져오는 로직 수정: 본인 글만 ---
         Pageable pageable = PageRequest.of(0, 5, Sort.by("createdAt").descending());
-        List<DiagnosisEntity> recentDiagnoses = diagnosisService.findRecentDiagnoses(pageable); // Service 메서드 호출
-
-        // 중요: 불러온 진단 이력 목록의 각 엔티티에 대해 이미지 경로 변환
+        List<DiagnosisEntity> recentDiagnoses = diagnosisService.findRecentDiagnosesByUid(user.getUid(), pageable);
         recentDiagnoses.forEach(item -> {
             item.setImagePath(convertToWebPath(item.getImagePath()));
         });
-
         model.addAttribute("diagnosisList", recentDiagnoses);
 
         return "farmers/main";
@@ -278,13 +274,19 @@ public class PageController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "desc") String sortOrder,
-            Model model) {
+            Model model,
+            jakarta.servlet.http.HttpSession session) {
 
-        // 1. 페이징 처리된 진단 이력 가져오기
-        Page<DiagnosisEntity> diagnosisPage = diagnosisService.getDiagnosisHistory(page, size, sortOrder);
+        Object userObj = session.getAttribute("user");
+        if (userObj == null) {
+            return "redirect:/loginPage";
+        }
+        com.smhrd.praime.entity.UserEntity user = (com.smhrd.praime.entity.UserEntity) userObj;
+        String uid = user.getUid();
+
+        Page<DiagnosisEntity> diagnosisPage = diagnosisService.getDiagnosisHistory(page, size, sortOrder, uid);
         List<DiagnosisEntity> diagnosisList = diagnosisPage.getContent();
 
-        // 중요: 페이징된 목록의 각 엔티티에 대해 이미지 경로 변환
         diagnosisList.forEach(item -> {
             item.setImagePath(convertToWebPath(item.getImagePath()));
         });
@@ -304,21 +306,25 @@ public class PageController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "desc") String sortOrder,
-            Model model) {
-        
-        // 페이징 처리된 진단 이력 가져오기
-        Page<DiagnosisEntity> diagnosisPage = diagnosisService.getDiagnosisHistory(page, size, sortOrder);
+            Model model,
+            jakarta.servlet.http.HttpSession session) {
+        Object userObj = session.getAttribute("user");
+        if (userObj == null) {
+            model.addAttribute("diagnosisList", List.of());
+            model.addAttribute("hasNext", false);
+            model.addAttribute("currentPage", page);
+            return "diagnosis/board :: diagnosis-list";
+        }
+        com.smhrd.praime.entity.UserEntity user = (com.smhrd.praime.entity.UserEntity) userObj;
+        String uid = user.getUid();
+        Page<DiagnosisEntity> diagnosisPage = diagnosisService.getDiagnosisHistory(page, size, sortOrder, uid);
         List<DiagnosisEntity> diagnosisList = diagnosisPage.getContent();
-        
-        // 이미지 경로 변환
         diagnosisList.forEach(item -> {
             item.setImagePath(convertToWebPath(item.getImagePath()));
         });
-        
         model.addAttribute("diagnosisList", diagnosisList);
         model.addAttribute("hasNext", diagnosisPage.hasNext());
         model.addAttribute("currentPage", page);
-        
         return "diagnosis/board :: diagnosis-list";
     }
 

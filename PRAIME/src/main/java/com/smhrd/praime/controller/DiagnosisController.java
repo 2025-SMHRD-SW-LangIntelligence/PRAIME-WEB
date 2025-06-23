@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import com.smhrd.praime.DiagnosisDTO;
 import com.smhrd.praime.entity.DiagnosisEntity;
 import com.smhrd.praime.service.DiagnosisService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,7 +44,14 @@ public class DiagnosisController {
      * 프론트엔드에서 Flask 서버로부터 받은 진단 결과를 데이터베이스에 저장
      */
     @PostMapping("/save")
-    public ResponseEntity<?> saveDiagnosis(@RequestBody DiagnosisDTO dto) {
+    public ResponseEntity<?> saveDiagnosis(@RequestBody DiagnosisDTO dto, HttpSession session) {
+        // 세션에서 user 꺼내기
+        Object userObj = session.getAttribute("user");
+        if (userObj == null) {
+            return ResponseEntity.status(401).body(Map.of("success", false, "message", "로그인이 필요합니다."));
+        }
+        com.smhrd.praime.entity.UserEntity user = (com.smhrd.praime.entity.UserEntity) userObj;
+        dto.setUid(user.getUid());
         try {
             Long savedId = diagnosisService.saveDiagnosis(dto);
             return ResponseEntity.ok(Map.of("success", true, "savedId", savedId));
@@ -58,29 +67,27 @@ public class DiagnosisController {
     @GetMapping("/history")
     public ResponseEntity<Map<String, Object>> getDiagnosisHistory(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        
+            @RequestParam(defaultValue = "10") int size,
+            HttpSession session) {
+
+        Object userObj = session.getAttribute("user");
+        if (userObj == null) {
+            return ResponseEntity.status(401).body(Map.of("success", false, "message", "로그인이 필요합니다."));
+        }
+        com.smhrd.praime.entity.UserEntity user = (com.smhrd.praime.entity.UserEntity) userObj;
+        String uid = user.getUid();
+
         Map<String, Object> response = new HashMap<>();
-        
         try {
-            log.info("진단 이력 조회 요청 - 페이지: {}, 크기: {}", page, size);
-            
-            // 진단 이력 조회 서비스 호출
-            var historyPage = diagnosisService.getDiagnosisHistory(page, size);
-            
+            Page<DiagnosisEntity> diagnosisPage = diagnosisService.getDiagnosisHistory(page, size, "desc", uid);
             response.put("success", true);
-            response.put("data", historyPage.getContent());
-            response.put("totalElements", historyPage.getTotalElements());
-            response.put("totalPages", historyPage.getTotalPages());
+            response.put("data", diagnosisPage.getContent());
+            response.put("totalElements", diagnosisPage.getTotalElements());
+            response.put("totalPages", diagnosisPage.getTotalPages());
             response.put("currentPage", page);
             response.put("pageSize", size);
-            
-            log.info("진단 이력 조회 성공 - 총 {}개 결과", historyPage.getTotalElements());
-            
             return ResponseEntity.ok(response);
-            
         } catch (Exception e) {
-            log.error("진단 이력 조회 중 오류 발생", e);
             response.put("success", false);
             response.put("message", "진단 이력 조회 중 오류가 발생했습니다.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);

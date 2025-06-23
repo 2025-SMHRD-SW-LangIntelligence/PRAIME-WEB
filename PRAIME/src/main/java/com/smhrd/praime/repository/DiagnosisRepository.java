@@ -49,4 +49,6 @@ public interface DiagnosisRepository extends JpaRepository<DiagnosisEntity, Long
     @Query("SELECT d FROM DiagnosisEntity d WHERE d.label = :label AND d.confidence >= :minConfidence ORDER BY d.createdAt DESC")
     List<DiagnosisEntity> findByLabelAndMinConfidence(@Param("label") String label, 
                                                       @Param("minConfidence") Double minConfidence);
+
+    Page<DiagnosisEntity> findAllByUidOrderByCreatedAtDesc(String uid, Pageable pageable);
 }

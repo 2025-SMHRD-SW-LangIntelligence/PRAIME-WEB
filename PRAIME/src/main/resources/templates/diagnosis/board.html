@@ -47,18 +47,18 @@
         <div class="card-list" id="card-list">
             <div th:fragment="diagnosis-list">
                 <div th:each="item : ${diagnosisList}" class="card-item">
-                    <div class="card-date" th:text="${#temporals.format(item.createdAt, 'yyyy년 MM월 dd일 HH:mm')}"></div>
-                    <div class="card-main">
-                        <div class="card-thumb">
-                            <img th:src="@{${item.imagePath}}" th:alt="${item.label} + ' 이미지'"/>
+                <div class="card-date" th:text="${#temporals.format(item.createdAt, 'yyyy년 MM월 dd일 HH:mm')}"></div>
+                <div class="card-main">
+                    <div class="card-thumb">
+                        <img th:src="@{${item.imagePath}}" th:alt="${item.label} + ' 이미지'"/>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title-row">
+                            <span class="card-title" th:text="${item.label}"></span>
                         </div>
-                        <div class="card-content">
-                            <div class="card-title-row">
-                                <span class="card-title" th:text="${item.label}"></span>
-                            </div>
-                            <div class="card-info-row">
-                                신뢰도: <span th:text="${#numbers.formatDecimal(item.confidence, 0, 'COMMA', 0, 'POINT')} + '%'"></span>
-                                <span class="card-bar" th:styleappend="'--confidence-width: ' + ${#numbers.formatDecimal(item.confidence, 0, 0)} + '%'"></span>
+                        <div class="card-info-row">
+                            신뢰도: <span th:text="${#numbers.formatDecimal(item.confidence, 0, 'COMMA', 0, 'POINT')} + '%'"></span>
+                            <span class="card-bar" th:styleappend="'--confidence-width: ' + ${#numbers.formatDecimal(item.confidence, 0, 0)} + '%'"></span>
                             </div>
                         </div>
                     </div>

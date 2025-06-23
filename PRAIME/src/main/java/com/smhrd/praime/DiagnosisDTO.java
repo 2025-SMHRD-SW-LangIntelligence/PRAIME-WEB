@@ -7,4 +7,5 @@ public class DiagnosisDTO {
     private String label;
     private double confidence;
     private String resultImageBase64;
+    private String uid;
 }
