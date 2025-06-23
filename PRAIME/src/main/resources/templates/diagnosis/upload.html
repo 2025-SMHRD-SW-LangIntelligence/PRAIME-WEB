@@ -60,15 +60,18 @@
 						<p>
 							신뢰도: <span id="result-confidence">--%</span>
 						</p>
-					</div>
+                        <div class="result-description hidden" id="result-description-container">
+                            <h4>간략 설명</h4>
+                            <p id="result-description">--</p>
+                        </div>
+                        </div>
 				</section>
 
                 <div class="button-group">
                     <button class="reset-btn">리셋</button>
                     <button class="diagnosis-result-btn" id="diagnosisResultSaveBtn">결과저장</button>
                 </div>
-                <!-- Footer  -->
-				<div th:replace="/global/footer::footer "></div>
+                <div th:replace="/global/footer::footer "></div>
 			</section>
 		</div>
 	</div>

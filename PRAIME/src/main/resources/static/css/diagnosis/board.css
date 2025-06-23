@@ -134,6 +134,7 @@ main {
     display: flex;
     flex-direction: column; /* Changed to column to stack elements */
     gap: 6px;
+    margin-bottom: 30px;
 }
 
 .card-date {

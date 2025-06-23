@@ -225,3 +225,23 @@
     cursor: not-allowed;
     opacity: 0.6;
 }
+
+
+/* 진단 결과 설명 영역 스타일 */
+.diagnosis-result .result-description {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee; /* 구분선 추가 */
+}
+
+.diagnosis-result .result-description h4 {
+    font-size: 1em;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.diagnosis-result .result-description p {
+    font-size: 0.9em;
+    color: var(--text-color);
+    line-height: 1.6;
+}

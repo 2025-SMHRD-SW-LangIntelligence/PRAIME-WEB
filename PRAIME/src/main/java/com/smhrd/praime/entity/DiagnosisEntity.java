@@ -38,6 +38,11 @@ public class DiagnosisEntity {
     // @Lob
     // @Column(nullable = false, columnDefinition = "LONGTEXT")
     // private String resultImageBase64;
+    
+    // 질병 설명 필드 추가 (nullable = true로 설정하여 필수가 아니도록 함)
+    @Column(columnDefinition = "TEXT") // TEXT 타입으로 설정하여 긴 설명 저장 가능
+    private String description;
+    
 
     // @GenericField 어노테이션 제거
     @Column(name = "created_at", nullable = false, updatable = false)

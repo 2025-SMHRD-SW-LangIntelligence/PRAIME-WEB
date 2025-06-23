@@ -14,6 +14,7 @@ public class FileUploadConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:" + uploadPath + "/");
+				.addResourceLocations("file:" + uploadPath + "/"); 
+        		/*.addResourceLocations(uploadPath + "/");*/
     }
 }

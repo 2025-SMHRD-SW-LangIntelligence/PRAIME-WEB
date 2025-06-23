@@ -98,6 +98,7 @@ public class DiagnosisService {
             .label(dto.getLabel())
             .confidence(dto.getConfidence())
             .imagePath(imagePath)
+            .description(dto.getDescription())
             .uid(dto.getUid())
             .build();
 

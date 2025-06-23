@@ -47,17 +47,14 @@
                                  th:alt="${item.label} + ' 이미지'"
                                  th:data-label="${item.label}"
                                  th:data-confidence="${#numbers.formatDecimal(item.confidence, 0, 'POINT', 0, 'POINT')} + '%'"
-                            />
+                                 th:data-description="${item.description}" />
                         </div>
                         <div class="card-content">
                             <div class="card-title-row">
                                 <span class="card-title" th:text="${item.label}"></span>
                             </div>
-                            <div class="card-description">
-                                <p>
-                                    검은별무늬병은 보통 15~25도(℃)에서 잎 뒷면이나 열매 표면에 비나 안 개로 생긴 물방울이 9~10시간 맺혀 있을 때 발생한다. 생육 초기 2일 동 안 25mm 이상 비가 내리면 더 많이 퍼진다.
-                                </p>
-                            </div>
+                            <div class="card-description" th:text="${item.description}">
+                                </div>
                         </div>
                     </div>
                     <hr class="divider"/>
@@ -80,6 +77,7 @@
             <div class="modal-info">
                 <p class="modal-label" id="modalLabel"></p>
                 <p class="modal-confidence" id="modalConfidence"></p>
+                <p class="modal-description" id="modalDescription"></p>
             </div>
         </div>
     </div>
