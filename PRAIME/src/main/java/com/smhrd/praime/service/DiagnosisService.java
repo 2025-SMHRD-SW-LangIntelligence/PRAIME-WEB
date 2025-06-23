@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -122,6 +123,51 @@ public class DiagnosisService {
             throw new IllegalArgumentException("올바르지 않은 Base64 이미지입니다.");
         }
     }
+    
+    @Transactional // 트랜잭션 처리
+    public boolean deleteDiagnosis(Long did, String uid) {
+        // 해당 ID의 진단 이력이 존재하고, 현재 로그인한 사용자의 것인지 확인
+        Optional<DiagnosisEntity> diagnosisOptional = diagnosisRepository.findById(did);
+        if (diagnosisOptional.isPresent()) {
+            DiagnosisEntity diagnosis = diagnosisOptional.get();
+            if (diagnosis.getUid().equals(uid)) { // 사용자 ID 일치 여부 확인
+                
+                // 1. 파일 시스템에서 이미지 삭제
+                try {
+                    Path filePath = Paths.get(diagnosis.getImagePath());
+                    
+                    // 파일이 실제로 존재하는지 확인 후 삭제
+                    if (Files.exists(filePath)) {
+                        Files.delete(filePath);
+                        log.info("이미지 파일 삭제 성공: {}", filePath.toString());
+                    } else {
+                        log.warn("이미지 파일이 존재하지 않아 삭제를 건너뜝니다: {}", filePath.toString());
+                    }
+                } catch (IOException e) {
+                    log.error("이미지 파일 삭제 실패: {} 오류: {}", diagnosis.getImagePath(), e.getMessage());
+                    // 파일 삭제 실패 시에도 DB 삭제는 진행할지, 롤백할지 정책 결정 필요
+                    // 여기서는 일단 로그만 남기고 DB 삭제는 진행하도록 합니다.
+                    // 만약 파일 삭제 실패 시 DB 롤백이 필요하면 RuntimeException을 throw 합니다.
+                    // throw new RuntimeException("이미지 파일 삭제 중 오류 발생", e);
+                }
+
+                // 2. 데이터베이스에서 레코드 삭제
+                diagnosisRepository.deleteById(did);
+                log.info("진단 이력 DB 레코드 삭제 성공: DID={}, UID={}", did, uid);
+                return true;
+            } else {
+                log.warn("진단 이력 삭제 실패: 권한 없음. DID={}, 요청 UID={}, 소유 UID={}", did, uid, diagnosis.getUid());
+                return false; // 권한 없음
+            }
+        }
+        log.warn("진단 이력 삭제 실패: 해당 DID({})를 찾을 수 없음", did);
+        return false; // 진단 이력을 찾을 수 없음
+    }
+
+
+
+
+    
 
     // 이 메서드는 이제 getDiagnosisHistory(int, int, String, String) 또는 getDiagnosisHistory(int, int, String)으로 대체 가능
     /**

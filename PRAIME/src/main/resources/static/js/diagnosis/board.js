@@ -34,20 +34,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalImage = document.getElementById("modalImage");
     const modalLabel = document.getElementById("modalLabel");
     const modalConfidence = document.getElementById("modalConfidence");
+    const modalDescription = document.getElementById("modalDescription"); // 추가: description 엘리먼트
     const closeBtn = document.querySelector(".modal-close");
 
     // card-list 내 이미지 클릭 시 이벤트 위임
     document.getElementById('card-list').addEventListener('click', function(event) {
         const clickedImg = event.target.closest('.card-thumb img');
+        const deleteIcon = event.target.closest('.delete-icon'); // 삭제 아이콘 클릭 감지
+
+        // 삭제 아이콘이 클릭된 경우, 이미지 모달을 띄우지 않고 삭제 로직 실행
+        if (deleteIcon) {
+            const cardItem = deleteIcon.closest('.card-item');
+            const diagnosisId = cardItem.dataset.diagnosisId;
+            if (diagnosisId) {
+                deleteDiagnosis(diagnosisId, cardItem);
+            }
+            return; // 이미지 클릭으로 넘어가지 않도록 함수 종료
+        }
+
         if (clickedImg) {
             modal.classList.add('show');
             modalImage.src = clickedImg.src;
-            modalLabel.textContent = clickedImg.dataset.label;
-            modalConfidence.textContent = '신뢰도: ' + clickedImg.dataset.confidence;
+            modalLabel.textContent = `진단명: ${clickedImg.dataset.label || '정보 없음'}`;
+            modalConfidence.textContent = `신뢰도: ${clickedImg.dataset.confidence || '0%'}`;
+            modalDescription.textContent = `간략 설명: ${clickedImg.dataset.description || '설명 없음'}`;
+
 
             modalImage.onerror = function() {
                 this.onerror = null;
-                this.src = '/images/placeholder.png';
+                this.src = '/images/placeholder.png'; // 오류 시 대체 이미지
             };
         }
     });
@@ -183,7 +198,8 @@ function loadMoreDiagnosis(isInitialLoad = false, sortOrder = currentSortOrder) 
 
     currentSortOrder = sortOrder; // 현재 정렬 순서 업데이트
 
-    const url = `/api/diagnosis?page=${currentPage}&size=${pageSize}&sortOrder=${currentSortOrder}`;
+    const url = `/api/diagnosis?page=${currentPage}&size=${pageSize}&sortOrder=${currentSortOrder}`; // 수정: /api/diagnosis/history -> /api/diagnosis
+    // URL 수정 (컨트롤러 @GetMapping("/history") 주석 처리 후 @GetMapping("")로 변경 예정)
 
     fetch(url)
         .then(response => {
@@ -260,5 +276,38 @@ function hideLoadingIndicator() {
     const loadingIndicator = document.getElementById('loading-indicator');
     if (loadingIndicator) {
         loadingIndicator.remove();
+    }
+}
+
+/**
+ * 진단 이력을 삭제하는 함수
+ * @param {number} diagnosisId - 삭제할 진단 이력의 ID
+ * @param {HTMLElement} cardItemElement - 삭제할 카드 아이템 DOM 요소
+ */
+function deleteDiagnosis(diagnosisId, cardItemElement) {
+    if (confirm('이 진단 이력을 정말로 삭제하시겠습니까?')) {
+        axios.delete(`/api/diagnosis/${diagnosisId}`)
+            .then(response => {
+                if (response.data.success) {
+                    alert('진단 이력이 성공적으로 삭제되었습니다.');
+                    // DOM에서 해당 카드 아이템 제거
+                    cardItemElement.remove();
+
+                    // 모든 아이템이 삭제되었는지 확인하고 '기록 없음' 메시지 표시
+                    const cardList = document.getElementById('card-list');
+                    if (cardList.children.length === 0) {
+                        const noRecordsDiv = document.createElement('div');
+                        noRecordsDiv.className = 'no-records';
+                        noRecordsDiv.textContent = '현재 진단 기록이 없습니다.';
+                        cardList.appendChild(noRecordsDiv);
+                    }
+                } else {
+                    alert('진단 이력 삭제에 실패했습니다: ' + response.data.message);
+                }
+            })
+            .catch(error => {
+                console.error('진단 이력 삭제 중 오류 발생:', error);
+                alert('진단 이력 삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+            });
     }
 }

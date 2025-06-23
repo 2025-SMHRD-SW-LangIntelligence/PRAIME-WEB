@@ -21,6 +21,14 @@ public interface DiagnosisRepository extends JpaRepository<DiagnosisEntity, Long
 	 */
     Page<DiagnosisEntity> findByUid(String uid, Pageable pageable);
 	
+    
+    // 라벨(label)을 기준으로 진단 이력을 조회
+    List<DiagnosisEntity> findByLabel(String label);
+
+    // 특정 신뢰도(confidence) 이상인 진단 이력을 조회
+    List<DiagnosisEntity> findByConfidenceGreaterThanEqual(Double minConfidence);
+
+
 	
     /**
      * 최근 진단 결과 조회 (생성일 기준 내림차순)

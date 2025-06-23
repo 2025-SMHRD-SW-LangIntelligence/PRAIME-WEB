@@ -10,7 +10,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smhrd.praime.DiagnosisDTO;
 import com.smhrd.praime.entity.DiagnosisEntity;
+import com.smhrd.praime.entity.UserEntity;
 import com.smhrd.praime.service.DiagnosisService;
 
 import jakarta.servlet.http.HttpSession;
@@ -99,6 +102,33 @@ public class DiagnosisController {
         }
     }
 
+    /**
+     * 진단 이력 삭제 API
+     */
+    @DeleteMapping("/{did}") // PathVariable로 삭제할 진단 이력 ID를 받음
+    public ResponseEntity<Map<String, Object>> deleteDiagnosis(@PathVariable Long did, HttpSession session) {
+        Object userObj = session.getAttribute("user");
+        if (userObj == null) {
+            return ResponseEntity.status(401).body(Map.of("success", false, "message", "로그인이 필요합니다."));
+        }
+        UserEntity user = (UserEntity) userObj;
+        String uid = user.getUid();
+
+        try {
+            boolean deleted = diagnosisService.deleteDiagnosis(did, uid); // Service 계층에 삭제 로직 위임
+            if (deleted) {
+                return ResponseEntity.ok(Map.of("success", true, "message", "진단 이력이 성공적으로 삭제되었습니다."));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "해당 진단 이력을 찾을 수 없거나 삭제 권한이 없습니다."));
+            }
+        } catch (Exception e) {
+            log.error("진단 이력 삭제 중 오류 발생: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "message", "진단 이력 삭제 중 오류가 발생했습니다: " + e.getMessage()));
+        }
+    }
+    
+    
+    
     /**
      * 라벨별 진단 결과 조회 API
      */

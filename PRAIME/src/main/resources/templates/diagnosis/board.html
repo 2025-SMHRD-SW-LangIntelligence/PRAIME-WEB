@@ -39,8 +39,9 @@
 
         <div class="card-list" id="card-list">
             <div th:fragment="diagnosis-list">
-                <div th:each="item : ${diagnosisList}" class="card-item">
-                    <div class="card-date" th:text="${#temporals.format(item.createdAt, 'yyyy년 MM월 dd일 HH:mm')}"></div>
+                <div th:each="item : ${diagnosisList}" class="card-item" th:data-diagnosis-id="${item.id}">
+                    <div class="card-date-wrapper"> <span class="card-date" th:text="${#temporals.format(item.createdAt, 'yyyy년 MM월 dd일 HH:mm')}"></span>
+                        <i class="fas fa-trash-alt delete-icon" title="삭제"></i> </div>
                     <div class="card-main">
                         <div class="card-thumb">
                             <img th:src="@{${item.imagePath}}"

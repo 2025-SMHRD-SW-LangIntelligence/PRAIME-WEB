@@ -137,6 +137,15 @@ main {
     margin-bottom: 30px;
 }
 
+.card-date-wrapper{
+	display: flex;
+	justify-content: space-between;
+}
+.card-date-wrapper i{
+	color: crimson !important;
+	cursor: pointer;
+}
+
 .card-date {
     font-size: 0.96rem;
     color: #a8a38c;
