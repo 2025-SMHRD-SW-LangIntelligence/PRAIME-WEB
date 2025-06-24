@@ -86,7 +86,15 @@
     
     <!-- 무한스크롤을 위한 fragment -->
     <div th:fragment="board-list">
-        <div th:each="log : ${farmlogList}" class="board-card" th:onclick="'location.href=\'/farmlog/view/' + ${log.dlid} + '\''">
+        <div th:each="log : ${farmlogList}" class="board-card" 
+             th:onclick="'location.href=\'/farmlog/view/' + ${log.dlid} + '\''"
+             th:data-dlid="${log.dlid}"
+             th:data-title="${log.dltitle}"
+             th:data-content="${log.dlcontent}"
+             th:data-crop="${log.dlcrop}"
+             th:data-weather="${log.dlweather}"
+             th:data-temp="${log.dltemp}"
+             th:data-date="${#temporals.format(log.dldate, 'yyyy-MM-dd')}">
             <div class="board-card-image">
                 <img th:src="@{/img/log.png}" alt="영농일지 이미지" class="card-thumbnail">
             </div>

@@ -46,10 +46,21 @@ public class DailyLogService {
 		return (ArrayList<DailyLogEntity>) dailyLogRepository.findAllByOrderByDldateDesc();
 	}
 	
+	// ✅ 특정 사용자의 모든 일지 불러오기(최신순)
+	public ArrayList<DailyLogEntity> readAllByUid(String uid) {
+		return dailyLogRepository.findByUserUidOrderByDldateDesc(uid);
+	}
+	
 	// 페이징을 위한 메서드 (무한스크롤용)
 	public Page<DailyLogEntity> readAllWithPaging(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dldate"));
 		return dailyLogRepository.findAll(pageable);
+	}
+	
+	// ✅ 특정 사용자의 페이징 조회 (무한스크롤용)
+	public Page<DailyLogEntity> readAllWithPagingByUid(String uid, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dldate"));
+		return dailyLogRepository.findByUserUid(uid, pageable);
 	}
 	
 	// 영농일지 상세페이지 확인
@@ -112,6 +123,22 @@ public class DailyLogService {
 				return dailyLogRepository.findByDlweatherContainingOrderByDldateDesc(keyword);
 			default:
 				return dailyLogRepository.findAllByOrderByDldateDesc();
+		}
+	}
+	
+	// ✅ 특정 사용자의 검색 기능
+	public ArrayList<DailyLogEntity> searchLogsByUid(String uid, String keyword, String searchOption) {
+		switch (searchOption) {
+			case "title":
+				return dailyLogRepository.findByUserUidAndDltitleContainingOrderByDldateDesc(uid, keyword);
+			case "content":
+				return dailyLogRepository.findByUserUidAndDlcontentContainingOrderByDldateDesc(uid, keyword);
+			case "crop":
+				return dailyLogRepository.findByUserUidAndDlcropContainingOrderByDldateDesc(uid, keyword);
+			case "weather":
+				return dailyLogRepository.findByUserUidAndDlweatherContainingOrderByDldateDesc(uid, keyword);
+			default:
+				return dailyLogRepository.findByUserUidOrderByDldateDesc(uid);
 		}
 	}
 }
