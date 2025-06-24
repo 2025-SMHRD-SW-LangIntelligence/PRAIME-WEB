@@ -4,122 +4,75 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- CSS -->
 <link th:href="@{/css/font.css}" rel="stylesheet">
 <link th:href="@{/css/common.css}" rel="stylesheet">
 <link th:href="@{/css/farmlog/view.css}" rel="stylesheet">
 
+<!-- Font Awesome -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+<!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:src="@{/js/farmlog/view.js}"></script>
-<script th:src="@{/js/common.js}"></script>
-
 
 <title>영농일지 상세 페이지</title>
 </head>
 <body>
 	<div class="container">
-    <header>
-        <div class="header-group">
-            <a href="#" class="prevPage" onclick="history.back()"> &lt; </a>
-            <div class="header-title-group">
-                <span class="header-title">일지 상세</span>
-            </div>
-        </div>
-    </header>
-        <div class="info-bar">
-            <div class="weather-info">
-            	<div class="weather-info-group">
-                	<!-- 날씨 정보에 따라 동적으로 아이콘 변경 -->
-                	<img th:src="@{${log.dlweather == '맑음' ? '/img/weather/sun.png' : 
-                                  (log.dlweather == '흐림' ? '/img/weather/cloud.png' : 
-                                   (log.dlweather == '비' ? '/img/weather/rain.png' : 
-                                    (log.dlweather == '눈' ? '/img/weather/snow.png' : '/img/weather/default.png')))}}" 
-                         alt="날씨" class="weather-icon">
-                	<div class="weather-string" th:text="${log.dlweather} ?: '날씨 정보 없음'"></div>
-            	</div>
-                <div class="weather-details">
-                	<div class="temperature-group">
-						<img src="https://icons.iconarchive.com/icons/fatcow/farm-fresh/32/temperature-hot-icon.png" width="25" height="25">
-                    	<span class="temperature" th:text="${log.dltemp != null ? '기온:' + log.dltemp + '℃' : '기온 정보 없음'}"></span>
-                	</div>
-                </div>
-            </div>
-            <div class="date-info">
-                <span class="year" th:text="${#temporals.format(log.dldate, 'yyyy년')}"></span>
-                <!-- 날짜 형식: 월일 (요일) 시분초 -->
-                <span class="month-day-dayofweek"  th:text="${#temporals.format(log.dldate, 'M월 d일 (E) HH:mm:ss')}"></span>
-            </div>
-        </div>
+		<header>
+			<div class="header-group">
+				<a href="#" class="prevPage" onclick="history.back()"> &lt; </a>
+				<div class="header-title-group">
+					<span class="header-title">일지 상세</span>
+				</div>
+			</div>
+		</header>
 
-        <main class="detail-main">
-            <div class="main-content-card">
-                <section class="basic-info-section detail-section-item">
-                    <div class="info-row">
-                        <p class="info-label">작물</p>
-                        <p class="info-value" th:text="${log.dlcrop} ?: '작물 정보 없음'"></p>
-                    </div>
-                    <div class="info-row">
-                        <p class="info-label">농작업</p>
-                        <p class="info-value" th:text="${log.dlwork} ?: '작업 정보 없음'"></p> 
-                    </div>
-					<!-- dlpesticide가 null이거나 빈 문자열이 아닐 때만 표시 -->
-					<div class="info-row" th:if="${log.dlpesticide != null and log.dlpesticide != ''}">
-					    <p class="info-label">농약</p>
-					    <p class="info-value" th:text="${log.dlpesticide}"></p>
-					</div>
-                </section>
-                <hr class="divider">
+		<main class="detail-main">
+			<section class="detail-section">
 
-                <section class="content-section detail-section-item">
-                    <h3 class="content-title" th:text="${log.dltitle} ?: '제목 정보 없음'"></h3>
-                    <p class="content-text" th:text="${log.dlcontent} ?: '내용 정보 없음'"></p>
-                </section>
-                <hr class="divider">
+				<p class="label">작물</p>
+				<p class="value" th:text="${log.dlcrop} ?: '작물 정보 없음'">작물</p>
 
-                <section class="image-section detail-section-item">
-                    <div class="main-image-display">
-                        <!-- 대표 이미지: 첫 번째 이미지가 있으면 로드, 없으면 기본 이미지 -->
-                        <img id="main-diary-image" 
-                             th:src="${not #lists.isEmpty(log.dlimage)} ? @{'/uploads/farmlog/' + ${log.dlimage[0].dlipath}} : @{/img/no-image.png}" 
-                             alt="대표 일지 이미지">
-                    </div>
-                    <div class="thumbnail-gallery">
-                        <!-- 이미지가 있을 경우 썸네일 표시 -->
-                        <div th:if="${not #lists.isEmpty(log.dlimage)}">
-                            <img th:each="img : ${log.dlimage}"
-                                th:src="@{'/uploads/farmlog/' + ${img.dlipath}}"
-                                class="thumbnail-image"
-                                alt="일지 썸네일 이미지"
-                                th:data-full-src="@{'/uploads/farmlog/' + ${img.dlipath}}" 
-                                th:data-dlipath="${img.dlipath}" />
-                        </div>
-                        <!-- 이미지가 아예 없을 경우 기본 이미지 썸네일 표시 (클릭 가능하도록) -->
-                        <div th:if="${#lists.isEmpty(log.dlimage)}">
-                            <img th:src="@{/img/no-image.png}" class="thumbnail-image default-thumbnail selected-thumbnail" alt="기본 이미지" data-full-src="@{/img/no-image.png}" data-dlipath="no-image.png" />
-                        </div>
-                    </div>
-                </section>
-                <hr class="divider">
+				<p class="label">제목</p>
+				<p class="value" th:text="${log.dltitle} ?: '제목 없음'">제목</p>
 
-                <section class="button-group-section detail-section-item">
-                    <div class="detail-buttons">
-                        <button class="btn edit-btn"
-                            th:onclick="|location.href='/farmlog/edit?id=${log.dlid}'|">
-                            <i class="fas fa-edit"></i> 수정
-                        </button>
+				<p class="label">내용</p>
+				<p class="value" th:text="${log.dlcontent} ?: '내용 없음'">내용</p>
 
-                        <button class="btn delete-btn"
-                            th:onclick="|deleteDiary(${log.dlid})|">
-                            <i class="fas fa-trash-alt"></i> 삭제
-                        </button>
-                    </div>
-                </section>
-            </div> 
-        </main>
-        <div th:replace="/global/footer::footer "></div> 		
+				<p class="label">날짜</p>
+				<p class="value" th:text="${log.dldate} ?: '날짜 정보 없음'">날짜</p>
+
+				<p class="label">날씨</p>
+				<p class="value" th:text="${log.dlweather} ?: '날씨 정보 없음'">날씨</p>
+
+				<div class="label">사진</div>
+				<div class="detail-images">
+					<img th:each="img : ${log.dlimage}"
+						th:src="@{'/img/' + ${img.dlipath}}" class="preview-image"
+						alt="일지 이미지" />
+				</div>
+
+				<div class="detail-buttons">
+					<!-- 수정 버튼 -->
+					<button class="btn edit-btn"
+						th:onclick="|location.href='/farmlog/edit/${log.dlid}'|">
+						<i class="fas fa-edit"></i> 수정
+					</button>
+
+
+					<!-- 삭제 버튼 -->
+					<button class="btn delete-btn"
+						th:onclick="|deleteDiary(${log.dlid})|">
+						<i class="fas fa-trash-alt"></i> 삭제
+					</button>
+				</div>
+
+			</section>
+		</main>
 	</div>
 </body>
 </html>
