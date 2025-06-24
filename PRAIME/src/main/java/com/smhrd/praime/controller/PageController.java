@@ -105,12 +105,6 @@ public class PageController {
         // 오늘 날짜를 모델에 추가
         commonService.addCurrentDateToModel(model);
         
-        // ✅ 최신 5개 영농일지 데이터 가져오기 (해당 사용자만)
-        Page<DailyLogEntity> recentLogsPage = dailyLogService.readAllWithPagingByUid(user.getUid(), 0, 5);
-        List<DailyLogEntity> recentLogs = recentLogsPage.getContent();
-
-        model.addAttribute("user", user);
-        model.addAttribute("recentLogs", recentLogs);
 
         // --- 최근 진단 이력 5개만 가져오는 로직 수정: 본인 글만 ---
         Pageable pageable = PageRequest.of(0, 5, Sort.by("createdAt").descending());
@@ -197,64 +191,13 @@ public class PageController {
 		
 		ArrayList<DailyLogEntity> boardList;
 		
-		// 검색어가 있으면 검색, 없으면 전체 목록 (해당 사용자만)
-		if (keyword != null && !keyword.trim().isEmpty()) {
-			boardList = dailyLogService.searchLogsByUid(uid, keyword.trim(), searchOption);
-		} else {
-			boardList = dailyLogService.readAllByUid(uid);
-		}
 		
-		model.addAttribute("boardList", boardList);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("sortOrder", sortOrder); // 정렬 순서 추가
 		return "farmlog/board";
 	}
 	
-	// 무한스크롤을 위한 REST API
-	@GetMapping(value = "/api/farmlog")
-	public String getFarmlogData(
-			@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size,
-			@RequestParam(required = false) String keyword,
-			@RequestParam(required = false, defaultValue = "title") String searchOption,
-			@RequestParam(defaultValue = "desc") String sortOrder,
-			Model model,
-			jakarta.servlet.http.HttpSession session) {
-		
-		// ✅ 세션에서 사용자 정보 가져오기
-		Object userObj = session.getAttribute("user");
-		if (userObj == null) {
-			model.addAttribute("farmlogList", new ArrayList<>());
-			model.addAttribute("hasNext", false);
-			model.addAttribute("currentPage", page);
-			return "farmlog/board :: board-list";
-		}
-		com.smhrd.praime.entity.UserEntity user = (com.smhrd.praime.entity.UserEntity) userObj;
-		String uid = user.getUid();
-		
-		List<DailyLogEntity> farmlogList;
-		boolean hasNext = false;
-		
-		// 검색어가 있으면 검색 결과 전체 반환, 없으면 페이징 처리
-		if (keyword != null && !keyword.trim().isEmpty()) {
-			// ✅ 검색 결과 전체를 반환 (JavaScript에서 페이징 처리)
-			ArrayList<DailyLogEntity> searchResults = dailyLogService.searchLogsByUid(uid, keyword.trim(), searchOption);
-			farmlogList = searchResults;
-			hasNext = false; // 검색 결과는 전체 반환하므로 hasNext는 false
-		} else {
-			// 일반 목록은 페이징 처리 (정렬 적용)
-			Page<DailyLogEntity> farmlogPage = dailyLogService.readAllWithPagingByUid(uid, page, size, sortOrder);
-			farmlogList = farmlogPage.getContent();
-			hasNext = farmlogPage.hasNext();
-		}
-		
-		model.addAttribute("farmlogList", farmlogList);
-		model.addAttribute("hasNext", hasNext);
-		model.addAttribute("currentPage", page);
-		
-		return "farmlog/board :: board-list";
-	}
 
 	// 영농일지 작성 페이지 이동
     @GetMapping("/farmlogWritePage")

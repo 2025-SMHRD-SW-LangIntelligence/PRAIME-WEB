@@ -5,14 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link th:href="@{/css/font.css}" rel="stylesheet">
 <link th:href="@{/css/common.css}" rel="stylesheet">
+<link th:href="@{/css/farmlog/farmlog.css}" rel="stylesheet">
 <link th:href="@{/css/farmlog/write.css}" rel="stylesheet">
+<!-- Font Awesome CDN 추가 -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- jQuery CDN  -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Axios CDN  -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script th:src="@{/js/common.js}"></script>
-<script th:src="@{/js/farmlog/farmlog.js}"></script>
-<script th:src="@{/js/farmlog/write.js}" defer></script>
+<!-- 작성/수정 페이지 공통 JS   -->
+<script type="module" th:src="@{/js/farmlog/farmlog.js}"></script>
+<!-- 작성 페이지 전용 JS   -->
+<script type="module" th:src="@{/js/farmlog/write.js}" defer></script>
 <title>영농일지 작성</title>
 </head>
 <body>
@@ -35,9 +40,7 @@
 					<div class="crop-select-group">
 						<label for="dlcrop">작물 선택</label>
 						<div id="crop-container" class="crop-selection-container">
-							<div style="text-align: center; padding: 20px; color: #666;">
-								<p>작물 목록을 불러오는 중...</p>
-							</div>
+							<!-- 라디오 버튼들이 여기에 JS로 삽입됩니다 -->
 						</div>
 					</div>
 					<div class="farm-work-select-group">
@@ -81,6 +84,7 @@
 					</div>
 				</form>
 			</main>
+			<!-- Footer -->
 			<div th:replace="/global/footer::footer "></div>
 		</div>
 	</div>
