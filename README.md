@@ -1,5 +1,4 @@
-# 📒 The Picday Labs 
-
+# 📒 PROJECT PRAIME
 [PRAIME](https://----주소----) 페이지 URL이동
 
 
