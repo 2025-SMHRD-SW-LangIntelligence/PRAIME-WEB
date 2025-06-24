@@ -76,6 +76,8 @@ function getWeatherIconUrl(sky, pty) {
     if (pty !== "0") {
         switch (pty) {
             case "1": // 비
+                iconUrl = "/img/weather/rain.png";
+                break;
             case "5": // 빗방울
                 iconUrl = "https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Status-weather-showers-scattered-day-icon.png";
                 break;
@@ -84,6 +86,8 @@ function getWeatherIconUrl(sky, pty) {
                 iconUrl = "https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Status-weather-snow-and-rain-icon.png";
                 break;
             case "3": // 눈
+                iconUrl = "/img/weather/snow.png";
+                break;
             case "7": // 눈날림
                 iconUrl = "https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Status-weather-snow-icon.png";
                 break;
@@ -97,13 +101,14 @@ function getWeatherIconUrl(sky, pty) {
     } else { // PTY가 0일 경우 (강수 없음), SKY (하늘 상태) 처리
         switch (sky) {
             case "1": // 맑음
-                iconUrl = "https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Status-weather-clear-icon.png";
+                /*iconUrl = "https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Status-weather-clear-icon.png";*/
+				iconUrl = "/img/weather/sun.png"
                 break;
             case "3": // 구름 많음
-                iconUrl = "https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Status-weather-clouds-icon.png";
+                iconUrl = "/img/weather/cloud.png";
                 break;
             case "4": // 흐림
-                iconUrl = "https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Status-weather-overcast-icon.png";
+                iconUrl = "/img/weather/cloud.png";
                 break;
             default:
                 iconUrl = "https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/128/Status-weather-clear-icon.png"; // Fallback
