@@ -15,7 +15,7 @@ import com.smhrd.praime.entity.DiagnosisEntity;
 @Repository
 public interface DiagnosisRepository extends JpaRepository<DiagnosisEntity, Long> {
     
-	
+	void deleteByUid(String uid);
 	/**
 	 * 사용자 ID로 진단 기록을 조회하고, Pageable에 따라 페이징 및 정렬을 적용
 	 */
