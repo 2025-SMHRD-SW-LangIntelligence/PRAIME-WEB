@@ -313,9 +313,18 @@ main{
 }
 
 .journal-desc {
-    font-size: 0.8rem;
-    color: #666;
-    margin-bottom: 5px;
+    /* 위에서 설명한 CSS 속성들을 여기에 추가 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    /* 필요에 따라 폰트 크기, 너비 등 다른 스타일도 추가 */
+    max-width: 500px; /* 예시: 컨테이너의 최대 너비 */
+    line-height: 1.5; /* 예시: 줄 간격 */
+    height: 3em; /* 예시: (line-height * line-clamp)로 대략적인 높이 설정 */
+    font-size: 14px;
 }
 
 /* 메타 정보 스타일 추가 */
