@@ -8,11 +8,19 @@ const pageSize = 10;
 let searchResults = [];
 let isSearchMode = false;
 
+// ✅ 정렬 관련 변수 추가
+let currentSortOrder = 'desc'; // 기본값: 최신순
+
 // 페이지 로드 시 초기 데이터 로드
 document.addEventListener('DOMContentLoaded', function() {
+    // ✅ URL에서 초기 정렬 순서 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    currentSortOrder = urlParams.get('sortOrder') || 'desc';
+    
     loadInitialData();
     setupInfiniteScroll();
     setupSearchForm();
+    setupSortButton(); // ✅ 정렬 버튼 설정 추가
 });
 
 // 초기 데이터 로드
@@ -68,7 +76,7 @@ function loadMoreItems() {
 
 // ✅ 서버에서 데이터 로드
 function loadFromServer(keyword, searchOption) {
-    const url = `/api/farmlog?page=${currentPage}&size=${pageSize}&keyword=${encodeURIComponent(keyword)}&searchOption=${encodeURIComponent(searchOption)}`;
+    const url = `/api/farmlog?page=${currentPage}&size=${pageSize}&keyword=${encodeURIComponent(keyword)}&searchOption=${encodeURIComponent(searchOption)}&sortOrder=${currentSortOrder}`;
     
     fetch(url)
         .then(response => response.text())
@@ -95,6 +103,9 @@ function loadFromServer(keyword, searchOption) {
                             dldate: card.getAttribute('data-date')
                         };
                     });
+                    
+                    // ✅ 검색 결과도 정렬 적용
+                    sortSearchResults();
                     
                     // 첫 페이지만 표시하고 나머지는 무한스크롤로 처리
                     const firstPageCards = searchResults.slice(0, pageSize);
@@ -297,4 +308,60 @@ function sortByLatest() {
 // 오래된순 정렬
 function sortByOldest() {
     sortByDate(true);
+}
+
+// 정렬 버튼 설정
+function setupSortButton() {
+    const sortButton = document.getElementById('sort-toggle-button');
+    if (sortButton) {
+        // 초기 정렬 버튼 UI 업데이트
+        updateSortButtonUI(sortButton, currentSortOrder);
+        
+        sortButton.addEventListener('click', function() {
+            // 현재 정렬 순서를 토글
+            currentSortOrder = (currentSortOrder === 'desc') ? 'asc' : 'desc';
+            
+            // 버튼 텍스트 및 아이콘 업데이트
+            updateSortButtonUI(sortButton, currentSortOrder);
+            
+            // ✅ 정렬 시 검색 모드 해제하여 서버에서 새로 로드
+            isSearchMode = false;
+            searchResults = [];
+            
+            // 무한 스크롤 상태 재설정 및 데이터 다시 로드
+            resetInfiniteScroll();
+            loadMoreItems();
+        });
+    }
+}
+
+// 정렬 버튼 UI 업데이트
+function updateSortButtonUI(button, order) {
+    if (order === 'desc') {
+        button.innerHTML = '<i class="fas fa-sort-amount-down-alt"></i> 최신순';
+    } else {
+        button.innerHTML = '<i class="fas fa-sort-amount-up-alt"></i> 오래된순';
+    }
+}
+
+// 무한 스크롤 상태 재설정
+function resetInfiniteScroll() {
+    currentPage = 0;
+    isLoading = false;
+    hasMoreData = true;
+    clearBoardList();
+}
+
+// ✅ 검색 결과 정렬
+function sortSearchResults() {
+    searchResults.sort((a, b) => {
+        const dateA = new Date(a.dldate);
+        const dateB = new Date(b.dldate);
+        
+        if (currentSortOrder === 'desc') {
+            return dateB - dateA; // 최신순
+        } else {
+            return dateA - dateB; // 오래된순
+        }
+    });
 } 

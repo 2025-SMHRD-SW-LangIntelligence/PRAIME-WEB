@@ -63,6 +63,13 @@ public class DailyLogService {
 		return dailyLogRepository.findByUserUid(uid, pageable);
 	}
 	
+	// ✅ 특정 사용자의 페이징 조회 (정렬 기능 포함)
+	public Page<DailyLogEntity> readAllWithPagingByUid(String uid, int page, int size, String sortOrder) {
+		Sort.Direction direction = "desc".equals(sortOrder) ? Sort.Direction.DESC : Sort.Direction.ASC;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(direction, "dldate"));
+		return dailyLogRepository.findByUserUid(uid, pageable);
+	}
+	
 	// 영농일지 상세페이지 확인
 	public Optional<DailyLogEntity> viewPage(Long dlid) {
 		return dailyLogRepository.findById(dlid);

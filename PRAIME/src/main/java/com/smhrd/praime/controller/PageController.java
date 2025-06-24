@@ -183,6 +183,7 @@ public class PageController {
 	public String farmlogBoardPage(
 			@RequestParam(required = false) String keyword,
 			@RequestParam(required = false, defaultValue = "title") String searchOption,
+			@RequestParam(defaultValue = "desc") String sortOrder,
 			Model model,
 			jakarta.servlet.http.HttpSession session) {
 		
@@ -206,6 +207,7 @@ public class PageController {
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("sortOrder", sortOrder); // 정렬 순서 추가
 		return "farmlog/board";
 	}
 	
@@ -216,6 +218,7 @@ public class PageController {
 			@RequestParam(defaultValue = "10") int size,
 			@RequestParam(required = false) String keyword,
 			@RequestParam(required = false, defaultValue = "title") String searchOption,
+			@RequestParam(defaultValue = "desc") String sortOrder,
 			Model model,
 			jakarta.servlet.http.HttpSession session) {
 		
@@ -240,8 +243,8 @@ public class PageController {
 			farmlogList = searchResults;
 			hasNext = false; // 검색 결과는 전체 반환하므로 hasNext는 false
 		} else {
-			// 일반 목록은 페이징 처리
-			Page<DailyLogEntity> farmlogPage = dailyLogService.readAllWithPagingByUid(uid, page, size);
+			// 일반 목록은 페이징 처리 (정렬 적용)
+			Page<DailyLogEntity> farmlogPage = dailyLogService.readAllWithPagingByUid(uid, page, size, sortOrder);
 			farmlogList = farmlogPage.getContent();
 			hasNext = farmlogPage.hasNext();
 		}
