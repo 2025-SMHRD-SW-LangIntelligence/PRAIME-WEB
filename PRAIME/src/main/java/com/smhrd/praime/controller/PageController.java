@@ -100,7 +100,7 @@ public class PageController {
         // 세션에서 유저 정보 가져오기 (예외처리 포함)
         UserEntity user = (UserEntity) session.getAttribute("user");
         if (user == null) {
-            return "redirect:/login";
+            return "redirect:/loginPage";
         }
         // 오늘 날짜를 모델에 추가
         commonService.addCurrentDateToModel(model);
