@@ -1,37 +1,219 @@
-/* 작물 라디오 버튼 스타일 */
-.crop-selection-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
+/* ==================== 헤더 ==================== */
+header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.crop-card {
-    display: flex;
-    align-items: center;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: 0.3s;
-    background-color: #f9f9f9;
+.header-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
-.crop-card:hover {
-    border-color: #76c7c0;
-    background-color: #eefcfb;
+.prevPage {
+  font-size: 1.5rem;
+  color: white;
+  text-decoration: none;
+  margin-right: 1rem;
 }
 
-.crop-card input[type="radio"] {
-    display: none;
+.header-title-group span,
+.header-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
 }
 
-.crop-card input[type="radio"]:checked + .crop-label {
-    font-weight: bold;
-    color: #1a936f;
+/* ==================== 메인 영역 ==================== */
+main {
+  padding: 1.5rem;
+  background-color: var(--secondary-color);
+  flex: 1;
+  padding-bottom: 3rem;
 }
 
-.crop-label {
+.journal-form > div {
+  margin-bottom: 1.5rem;
+}
+
+.journal-title p,
+.journal-content p {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--label-color);
+}
+
+.journal-title input,
+.journal-content textarea {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}
+
+.journal-content textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+/* ==================== 이미지 업로드 ==================== */
+.journal-image input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  border: 1px dashed #aaa;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  color: #555;
+  cursor: pointer;
+}
+
+.image-upload-panel {
+  margin-top: 1.5rem;
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 2px dashed var(--border-color);
+  border-radius: 1rem;
+  background-color: #ffffff;
+  color: var(--placeholder-color);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.upload-box:hover {
+  border-color: var(--primary-color);
+  background-color: var(--card-selected-bg);
+}
+
+.upload-box i {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.upload-box p {
+  margin: 0;
+  color: var(--label-color);
+}
+
+.upload-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.upload-preview div {
+  position: relative;
+}
+
+.upload-preview .thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  display: block;
+}
+
+/* ==================== 썸네일 삭제 버튼 ==================== */
+.upload-preview button,
+.delete-thumbnail {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.upload-preview button:hover,
+.upload-preview button:focus,
+.delete-thumbnail:hover {
+  background: rgba(255, 0, 0, 0.8);
+  outline: none;
+}
+
+/* ==================== 버튼 ==================== */
+.journal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.journal-buttons button {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.journal-buttons .cancel-btn {
+  background-color: var(--cancel-btn-bg);
+}
+
+.journal-buttons .cancel-btn:hover {
+  background-color: var(--cancel-btn-hover);
+}
+
+.journal-buttons .submit-btn {
+  background-color: var(--primary-color);
+  color: var(--button-text);
+}
+
+.journal-buttons .submit-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* ==================== 반응형 ==================== */
+@media (max-width: 480px) {
+  .upload-preview .thumbnail {
+    width: 100px;
+    height: 100px;
+  }
+
+  .upload-preview button {
+    width: 28px;
+    height: 28px;
     font-size: 16px;
-    margin-left: 0;
+    top: 6px;
+    right: 6px;
+  }
 }

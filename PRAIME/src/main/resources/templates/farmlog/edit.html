@@ -1,122 +1,85 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>농장일지 수정</title>
-
-<!-- Font Awesome CDN 추가 -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<!-- jQuery CDN  -->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<!-- Axios CDN  -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- 스타일 -->
-<link th:href="@{/css/font.css}" rel="stylesheet">
-<link th:href="@{/css/common.css}" rel="stylesheet">
-<link th:href="@{/css/farmlog/farmlog.css}" rel="stylesheet">
-<link th:href="@{/css/farmlog/edit.css}" rel="stylesheet">
-
-<!-- 스크립트 -->
-<script defer th:src="@{/js/common.js}"></script>
-<script type="module" th:src="@{/js/farmlog/farmlog.js}" defer></script>
-<script type="module" th:src="@{/js/farmlog/edit.js}" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link th:href="@{/css/font.css}" rel="stylesheet">
+  <link th:href="@{/css/common.css}" rel="stylesheet">
+  <link th:href="@{/css/farmlog/edit.css}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:src="@{/js/farmlog/farmlog.js}"></script>
+  <script th:src="@{/js/farmlog/edit.js}"></script>
+  <title>영농 일지 수정</title>
 </head>
 <body>
-	<div class="container">
-		<div class="wrapper">
-			<header>
-				<div class="header-group">
-					<a href="#" class="prevPage" onclick="history.back()"> < </a>
-					<div class="header-title-group">
-						<span class="header-title">영농 일지 작성</span>
-					</div>
-				</div>
-			</header>
-			<!-- 본문 -->
-			<main class="container">
-				<h2>농장일지 수정</h2>
+  <div class="container">
+    <div class="wrapper">
+      <header>
+        <div class="header-group">
+          <a href="#" class="prevPage" onclick="history.back()"> &lt; </a>
+          <div class="header-title-group">
+            <span class="header-title">영농 일지 수정</span>
+          </div>
+        </div>
+      </header>
 
-				<form th:action="@{/farmlog/update/{dlid}(dlid=${log.dlid})}"
-					th:object="${log}" method="post" enctype="multipart/form-data">
-					<input type="hidden" th:field="*{dlid}" />
+      <main>
+        <form action="#" method="POST" id="editForm" class="journal-form" enctype="multipart/form-data">
+          <input type="hidden" id="dlid" name="dlid" />
 
-					<!-- 제목 -->
-					<div class="form-group">
-						<label for="dltitle">제목</label> <input type="text" id="dltitle"
-							th:field="*{dltitle}" required />
-					</div>
+          <div class="journal-meta">
+            <div class="journal-date">
+              <input type="text" id="dldate" name="dldate" readonly hidden />
+            </div>
+            <div class="journal-weather">
+              <input type="text" id="dlweather" name="dlweather" readonly hidden />
+            </div>
+            <div class="journal-temp">
+              <input type="text" id="dltemp" name="dltemp" readonly hidden />
+            </div>
+          </div>
 
-					<!-- 내용 -->
-					<div class="form-group">
-						<label for="dlcontent">내용</label>
-						<textarea id="dlcontent" name="dlcontent" th:field="*{dlcontent}"
-							required></textarea>
-					</div>
+          <div class="crop-select-group">
+            <label>작물 선택</label>
+            <div id="cropRadioContainer"></div>
+          </div>
 
-					<!-- 날짜 -->
-					<div class="form-group">
-						<label>작성일</label> <input type="hidden" th:field="*{dldate}" /> <input
-							type="text" th:value="*{dldate}" readonly />
-					</div>
+          <div class="journal-title">
+            <p>제목</p>
+            <input type="text" name="dltitle" id="dltitle" placeholder="제목을 입력하세요" />
+          </div>
 
-					<!-- 날씨 -->
-					<div class="form-group">
-						<label>날씨</label> <input type="hidden" th:field="*{dlweather}" />
-						<input type="text" th:value="*{dlweather}" readonly />
-					</div>
+          <div class="journal-content">
+            <p>내용</p>
+            <textarea rows="20" cols="60" name="dlcontent" id="dlcontent" placeholder="내용을 입력하세요"></textarea>
+          </div>
 
-					<!-- 온도 -->
-					<div class="form-group">
-						<label>온도</label> <input type="hidden" th:field="*{dltemp}" /> <input
-							type="text" th:value="*{dltemp}" readonly />
-					</div>
+          <!-- ✅ 기존 이미지 미리보기 영역 -->
+          <div id="existingImageContainer" class="existing-image-container"></div>
 
-					<!-- 작물 선택 영역 -->
-					<div class="form-group">
-						<label for="dlcrop">작물 종류</label> <input type="hidden"
-							id="selected-crop" th:value="${selectedCrop}" />
-						<div id="crop-container" class="crop-selection-container"
-							th:data-crops="${cropList}" th:data-selected="${selectedCrop}">
-						</div>
-					</div>
+          <div class="journal-image">
+            <div class="image-upload-panel">
+              <label for="dlimages" class="upload-box">
+                <i class="fas fa-camera"></i>
+                <p>사진 추가</p>
+                <input type="file" id="dlimages" name="newImages" accept="image/*" multiple hidden />
+              </label>
 
-					<!-- 이미지 업로드 -->
-					<div class="form-group">
-						<label for="dlimages">이미지 업로드</label> <input type="file"
-							id="newImages" name="newImages" multiple accept="image/*" />
-					</div>
+              <div id="upload-preview" class="upload-preview"></div>
+            </div>
+          </div>
 
-					<!-- 이미지 미리보기 영역 -->
-					<div id="upload-preview" class="form-group">
-					<label>기존 이미지</label>
-					<div id="existing-images">
-						<th:block th:each="img : ${log.dlimage}">
-							<div class="image-wrapper">
-								<img th:src="@{'/img/' + ${img.dlipath}}"
-									class="existing-thumbnail" th:data-image-id="${img.dliid}" />
-								<button type="button" class="delete-thumbnail">삭제</button>
-							</div>
-						</th:block>
-					</div>
-		</div>
+          <div class="journal-buttons">
+            <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
+            <button type="submit" class="submit-btn">수정하기</button>
+          </div>
+        </form>
+      </main>
 
-		<!-- 삭제할 이미지 ID 저장용 hidden input -->
-		<input type="hidden" name="deletedImageIds" id="deletedImageIds" />
-
-		<!-- 버튼 그룹 -->
-		<div class="button-group">
-			<button type="submit" class="save-btn">수정 완료</button>
-			<a th:href="@{/farmlogPage}" class="cancel-btn">취소</a>
-		</div>
-		</form>
-		</main>
-
-		<!-- Footer -->
-		<div th:replace="/global/footer::footer "></div>
-	</div>
-	</div>
+      <div th:replace="/global/footer::footer "></div>
+    </div>
+  </div>
 </body>
 </html>
