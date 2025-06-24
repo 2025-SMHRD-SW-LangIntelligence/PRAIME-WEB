@@ -14,6 +14,8 @@ import com.smhrd.praime.entity.DailyLogEntity;
 @Repository
 public interface DailyLogRepository extends JpaRepository<DailyLogEntity, Long> {
 	
+	void deleteByUserUid(String uid);
+
 	// 최신순으로 모든 일지 조회
 	ArrayList<DailyLogEntity> findAllByOrderByDldateDesc();
 

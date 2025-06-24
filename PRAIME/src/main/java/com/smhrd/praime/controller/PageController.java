@@ -295,6 +295,15 @@ public class PageController {
         // WebConfig에 설정된 핸들러 경로와 파일명을 결합하여 반환
         return "/uploads/diagnosis/" + filename; 
     }
+    
+    // farmlog 이미지 경로를 웹 접근 가능한 형태로 변환하는 헬퍼 메서드
+    private String convertFarmlogImagePath(String dlipath) {
+        if (dlipath == null || dlipath.isEmpty()) {
+            return "/img/log.png"; // 기본 이미지 경로
+        }
+        // WebConfig에 설정된 핸들러 경로와 파일명을 결합하여 반환
+        return "/uploads/farmlog/" + dlipath; 
+    }
 
     // 병해충진단 목록 페이지 이동 (초기 페이지 렌더링용)
     @GetMapping("/diagnosisBoardPage") // 실제 웹 페이지 URL

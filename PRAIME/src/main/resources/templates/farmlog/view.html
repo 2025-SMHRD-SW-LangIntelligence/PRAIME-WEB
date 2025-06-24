@@ -51,9 +51,17 @@
 
 				<div class="label">사진</div>
 				<div class="detail-images">
-					<img th:each="img : ${log.dlimage}"
-						th:src="@{'/img/' + ${img.dlipath}}" class="preview-image"
-						alt="일지 이미지" />
+					<!-- 이미지가 있을 때: 모든 이미지 표시 -->
+					<div th:if="${not #lists.isEmpty(log.dlimage)}">
+						<img th:each="img : ${log.dlimage}"
+							th:src="@{'/uploads/farmlog/' + ${img.dlipath}}" class="preview-image"
+							alt="일지 이미지" />
+					</div>
+					<!-- 이미지가 없을 때: 기본 이미지 표시 -->
+					<div th:if="${#lists.isEmpty(log.dlimage)}">
+						<img th:src="@{/img/log.png}" class="preview-image"
+							alt="기본 이미지" />
+					</div>
 				</div>
 
 				<div class="detail-buttons">

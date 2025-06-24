@@ -231,21 +231,10 @@ public class UserController {
 
 	@PostMapping("/withdraw.do")
 	public String withdrawUser(HttpSession session) {
-		UserEntity user = (UserEntity) session.getAttribute("user");
-		if (user == null) {
-			return "redirect:/";
-		}
-		String uid = user.getUid();
-
-		// 탈퇴 및 연관 데이터 삭제
-		userService.deleteUserAndRelatedData(uid);
-
-		// 세션 만료(로그아웃)
-		session.invalidate();
-
-		// 탈퇴 완료 후 메인페이지로 이동
-		return "redirect:/";
+		String uid = ((UserEntity) session.getAttribute("user")).getUid();
+	    userService.deleteUserAndRelatedData(uid);
+	    session.invalidate();
+	    return "redirect:/";
 	}
-	
 
 }
