@@ -71,34 +71,45 @@
                                 <div class="crop-grid">
                                     <!-- 각 농작물 항목 -->
                                     <div class="crop-item" data-crop-id="1">
-                                        <div class="crop-icon"><span>🍎</span></div>
-                                        <span class="crop-name">사과</span>
-                                        <input type="checkbox" name="crops" value="apple" class="crop-checkbox" hidden>
+                                        <div class="crop-icon">
+                                        	<img th:src="@{/img/crops/apple.png}" width="64" height="64">
+										</div>                                        
+										<span class="crop-name">사과</span>
+                                        <input type="checkbox" name="crops" value="사과" class="crop-checkbox" hidden>
                                     </div>
                                     <div class="crop-item" data-crop-id="2">
-                                        <div class="crop-icon"><i class="fas fa-apple-alt"></i></div>
-                                        <span class="crop-name">배</span>
-                                        <input type="checkbox" name="crops" value="pear" class="crop-checkbox" hidden>
+                                        <div class="crop-icon">
+                                        	<img th:src="@{/img/crops/pear.png}" width="64" height="64">
+										</div>                                        
+										<span class="crop-name">배</span>
+                                        <input type="checkbox" name="crops" value="배" class="crop-checkbox" hidden>
                                     </div>
                                     <div class="crop-item" data-crop-id="3">
-                                        <div class="crop-icon"><i class="fas fa-lemon"></i></div>
+                                        <div class="crop-icon">
+                                        	<img src="https://icons.iconarchive.com/icons/bingxueling/fruit-vegetables/128/lemon-icon.png" width="64" height="64">
+										</div>
                                         <span class="crop-name">레몬</span>
-                                        <input type="checkbox" name="crops" value="lemon" class="crop-checkbox" hidden>
+                                        <input type="checkbox" name="crops" value="레몬" class="crop-checkbox" hidden>
                                     </div>
                                     <div class="crop-item" data-crop-id="4">
-                                        <div class="crop-icon"><i class="fas fa-leaf"></i></div>
-                                        <span class="crop-name">상추</span>
-                                        <input type="checkbox" name="crops" value="lettuce" class="crop-checkbox" hidden>
+                                        <div class="crop-icon">
+                                        	<img th:src="@{/img/crops/lettuce.png}" width="64" height="64">
+										</div>                                        
+										<span class="crop-name">상추</span>
+                                        <input type="checkbox" name="crops" value="상추" class="crop-checkbox" hidden>
                                     </div>
                                     <div class="crop-item" data-crop-id="5">
-                                        <div class="crop-icon"><i class="fas fa-seedling"></i></div>
-                                        <span class="crop-name">벼</span>
-                                        <input type="checkbox" name="crops" value="rice" class="crop-checkbox" hidden>
+                                        <div class="crop-icon">
+                                        	<img th:src="@{/img/crops/rice.png}" width="64" height="64">
+										</div>                                        
+										<span class="crop-name">벼</span>
+                                        <input type="checkbox" name="crops" value="벼" class="crop-checkbox" hidden>
                                     </div>
                                     <div class="crop-item" data-crop-id="6">
-                                        <div class="crop-icon"><i class="fas fa-wheat-alt"></i></div>
-                                        <span class="crop-name">밀</span>
-                                        <input type="checkbox" name="crops" value="wheat" class="crop-checkbox" hidden>
+                                        <div class="crop-icon">
+                                        	<img th:src="@{/img/crops/wheat.png}" width="64" height="64">
+										</div>                                        <span class="crop-name">밀</span>
+                                        <input type="checkbox" name="crops" value="밀" class="crop-checkbox" hidden>
                                     </div>
                                 </div>
                                 <div class="selected-crops-display" id="selectedCropsDisplay"></div>
