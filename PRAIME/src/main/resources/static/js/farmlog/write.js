@@ -22,6 +22,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	// 작성 폼 제출
 	form.addEventListener("submit", async (e) => {
 		e.preventDefault();
+		
+		// 작물 선택 검증
+		const selectedCrop = document.querySelector('input[name="dlcrop"]:checked');
+		if (!selectedCrop) {
+			alert("작물을 선택해주세요.");
+			return;
+		}
+		
 		const formData = new FormData(form);
 		const dt = new DataTransfer();
 		const allowed = ['jpg', 'jpeg', 'png', 'pdf'];
