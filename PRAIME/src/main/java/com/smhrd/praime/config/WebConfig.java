@@ -17,6 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
 	 */
 	
     private String uploadPath = "file:///C:/uploads/diagnosis/"; // 실제 이미지 저장 경로
+    private String farmlogUploadPath = "file:///C:/crops/"; // farmlog 이미지 저장 경로
 
 	
     @Override
@@ -32,6 +33,13 @@ public class WebConfig implements WebMvcConfigurer {
         // /uploads/diagnosis/** URL 패턴으로 요청이 오면 C:/uploads/diagnosis/ 디렉토리에서 파일을 찾도록 설정
         registry.addResourceHandler("/uploads/diagnosis/**")
                 .addResourceLocations(uploadPath);
+        
+        // /uploads/farmlog/** URL 패턴으로 요청이 오면 C:/crops/ 디렉토리에서 파일을 찾도록 설정
+        // 폴더가 없어도 자동으로 생성되도록 설정
+        registry.addResourceHandler("/uploads/farmlog/**")
+                .addResourceLocations("file:///C:/crops/")
+                .setCachePeriod(3600)
+                .resourceChain(true);
     }
     
 }

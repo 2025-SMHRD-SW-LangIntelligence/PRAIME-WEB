@@ -63,7 +63,12 @@
 	        		<!-- Thymeleaf를 사용한 실제 DB 데이터 표시 -->
 	        		<div th:each="log : ${boardList}" class="board-card" th:attr="onclick=|location.href='/farmlog/view/${log.dlid}'|">
 						<div class="board-card-image">
-	        				<img th:src="@{/img/log.png}" alt="영농일지 이미지" class="card-thumbnail">
+	        				<img th:if="${not #lists.isEmpty(log.dlimage)}" 
+	        					th:src="@{'/uploads/farmlog/' + ${log.dlimage[0].dlipath}}" 
+	        					alt="영농일지 이미지" class="card-thumbnail">
+	        				<img th:if="${#lists.isEmpty(log.dlimage)}" 
+	        					th:src="@{/img/log.png}" 
+	        					alt="기본 이미지" class="card-thumbnail">
 	        			</div>
 	        			<div class="board-card-content-wrapper">
 	        				<div class="board-card-title" th:text="${log.dltitle}">제목</div>
@@ -106,7 +111,12 @@
              th:data-temp="${log.dltemp}"
              th:data-date="${#temporals.format(log.dldate, 'yyyy-MM-dd')}">
             <div class="board-card-image">
-                <img th:src="@{/img/log.png}" alt="영농일지 이미지" class="card-thumbnail">
+                <img th:if="${not #lists.isEmpty(log.dlimage)}" 
+                    th:src="@{'/uploads/farmlog/' + ${log.dlimage[0].dlipath}}" 
+                    alt="영농일지 이미지" class="card-thumbnail">
+                <img th:if="${#lists.isEmpty(log.dlimage)}" 
+                    th:src="@{/img/log.png}" 
+                    alt="기본 이미지" class="card-thumbnail">
             </div>
             <div class="board-card-content-wrapper">
                 <div class="board-card-title" th:text="${log.dltitle}">제목</div>

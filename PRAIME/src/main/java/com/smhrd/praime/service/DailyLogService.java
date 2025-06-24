@@ -94,11 +94,18 @@ public class DailyLogService {
 
         // 2. 이미지 처리
         if (dlimages != null) {
+            // ✅ 업로드 폴더가 없으면 자동 생성
+            File uploadDirFile = new File(uploadDir);
+            if (!uploadDirFile.exists()) {
+                uploadDirFile.mkdirs();
+                System.out.println("업로드 폴더 생성: " + uploadDir);
+            }
+            
             for (MultipartFile file : dlimages) {
                 if (!file.isEmpty()) {
                     try {
                         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-                        String filePath = uploadDir + fileName;
+                        String filePath = uploadDir + File.separator + fileName;
                         file.transferTo(new File(filePath));
 
                         DailyImageEntity image = new DailyImageEntity();
