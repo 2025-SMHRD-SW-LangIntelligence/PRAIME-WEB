@@ -5,7 +5,7 @@
 // ----------------------------------------------------
 const diseaseDataById = {
     // class_id: { label: "레이블명", description: "설명" }
-    0: { label: "정상", description: "탐지된 병해충이 없거나, 모델이 객체탐지에 실패했습니다." },
+    0: { label: "정상", description: "탐지된 병해충이 없습니다." }, // '정상'에 대한 설명 명확화
     1: { label: "배검은별무늬병", description: "배 잎, 줄기, 과실 등에 검은색 별 모양의 병반이 생기는 병으로, 잎과 과실에 피해를 주며 수확량 감소를 유발합니다. 주로 겨울철 자낭각에서 월동하며 봄에 자낭포자가 퍼져 감염됩니다." },
     2: { label: "배과수화상병", description: "세균성 전염병으로, 잎과 가지, 과실 등이 불에 탄 듯 괴사하며 식물 전체가 말라 죽을 수 있는 치명적인 병입니다. 빠른 확산과 피해가 특징입니다." },
     3: { label: "사과갈색무늬병", description: "사과 잎에 갈색의 반점이 생기고 심하면 조기 낙엽을 유발하는 병으로, 나무 세력을 약화시키고 수확량에 악영향을 줍니다. 주로 6~9월에 심하게 발생합니다." },
@@ -148,39 +148,46 @@ $(function(){
 
       let resultLabel = '탐지 실패'; // 초기 레이블
       let resultConfidence = 0; // 초기 신뢰도
-      let resultDescription = '병해충 탐지에 실패했거나, 이미지를 다시 시도해 주세요.'; // 초기 설명
+      let resultDescription = '진단 중 오류가 발생했습니다.'; // 초기 설명
       let base64Image = null; // 초기 이미지 데이터
 
-      // 응답 성공 및 탐지된 병해충이 있을 경우
-      if (data.success && data.prediction_details.total_detections > 0) {
-        const firstDetection = data.prediction_details.detections[0];
-        const classId = firstDetection.class_id; // Flask에서 넘어온 class_id
-        resultConfidence = parseFloat((firstDetection.confidence * 100).toFixed(2));
-        base64Image = data.output_image.base64_encoded_image;
+      // Flask 응답에서 output_image가 있다면 미리 가져옴
+      if (data.output_image && data.output_image.base64_encoded_image) {
+          base64Image = data.output_image.base64_encoded_image;
+      }
 
-        // class_id에 해당하는 질병 정보 가져오기
-        const diseaseInfo = diseaseDataById[classId];
+      // prediction_details 유효성 검사 및 detections 배열 확인
+      if (data.success && data.prediction_details && Array.isArray(data.prediction_details.detections)) {
+        const detections = data.prediction_details.detections;
 
-        console.log('1. Flask에서 받은 class_id:', classId);
-        console.log('2. diseaseDataById에서 찾아진 정보:', diseaseInfo);
+        if (detections.length === 0) {
+          // Case 1: detections 배열이 비어있는 경우 (객체 탐지 실패)
+          resultLabel = '객체탐지 실패';
+          resultConfidence = 0;
+          resultDescription = '모델이 객체탐지에 실패했습니다.\n흐릿하거나 확대된 이미지의 경우 정확한 진단이 되지 않을 수 있습니다.';
+        } else {
+          // detections 배열에 내용이 있는 경우
+          const firstDetection = detections[0];
+          const classId = firstDetection.class_id; // Flask에서 넘어온 class_id
+          resultConfidence = parseFloat((firstDetection.confidence * 100).toFixed(2));
 
-        if (diseaseInfo) {
+          // class_id에 해당하는 질병 정보 가져오기
+          const diseaseInfo = diseaseDataById[classId];
+
+          if (diseaseInfo) {
             resultLabel = diseaseInfo.label;
             resultDescription = diseaseInfo.description;
-        } else {
+          } else {
             // 정의되지 않은 class_id인 경우
             resultLabel = '알 수 없는 질병';
             resultDescription = '알 수 없는 질병이 탐지되었습니다. 데이터베이스를 확인해주세요.';
+          }
         }
-      } 
-      // 응답 성공, 그러나 탐지된 병해충이 없을 경우 (total_detections가 0)
-      else if (data.success && data.prediction_details.total_detections === 0) {
-          // class_id 0을 "정상"으로 간주
-          const normalInfo = diseaseDataById[0];
-          resultLabel = normalInfo.label;
-          resultDescription = normalInfo.description;
-          base64Image = data.output_image ? data.output_image.base64_encoded_image : null; // 정상 이미지도 있을 수 있음
-          console.log('total_detections가 0입니다. 정상으로 처리합니다.');
+      } else {
+        // success가 false이거나 prediction_details가 없거나 detections가 배열이 아닌 경우 (예상치 못한 응답)
+        resultLabel = '탐지 실패';
+        resultConfidence = 0;
+        resultDescription = data.error || '진단 처리 중 알 수 없는 오류가 발생했습니다.';
       }
       
       // 진단 결과 UI 업데이트
@@ -188,16 +195,14 @@ $(function(){
       $resultConfidence.text(`${resultConfidence}%`); // 신뢰도 표시
       $diagnosisResultSection.removeClass('hidden'); // 결과 섹션 보이게
 
-      // 질병 설명 UI 업데이트: "정상"이 아니고, 유효한 설명이 있을 때만 표시
-      // resultLabel을 기준으로 "정상", "탐지 실패", "알 수 없는 질병"이 아닐 때 설명을 표시
-      if (resultLabel !== "정상" && resultLabel !== "탐지 실패" && resultLabel !== "알 수 없는 질병" && resultDescription) {
+      // 질병 설명 UI 업데이트
+      // resultDescription이 유효한 문자열이고 기본값인 '--'가 아닐 때만 표시
+      if (resultDescription && resultDescription !== '--') {
           $resultDescription.text(resultDescription);
           $resultDescriptionContainer.removeClass('hidden'); // 설명 컨테이너 보이게
-          console.log('4. 설명 컨테이너를 표시하고 설명을 설정했습니다.');
       } else {
           $resultDescription.text('--'); // 그 외의 경우 '--' 표시
           $resultDescriptionContainer.addClass('hidden'); // 설명 컨테이너 숨기기
-          console.log('4. 설명 컨테이너를 숨겼거나 설명이 없어 --를 설정했습니다.');
       }
 
       // 업로드 박스 텍스트 업데이트
@@ -209,7 +214,6 @@ $(function(){
         $uploadBox.css('background-image', `url(data:image/jpeg;base64,${base64Image})`);
         $uploadBox.addClass('uploaded');
         $uploadIcon.hide();
-        // 이미지가 업로드된 상태에서는 제목과 설명은 유지되어야 함
         $uploadTextH2.show(); 
         $uploadTextP.show(); 
         $uploadButtons.hide();
@@ -224,8 +228,8 @@ $(function(){
       };
 
       // '결과 저장' 버튼 활성화/비활성화
-      // "정상", "탐지 실패", "알 수 없는 질병"이 아니고 신뢰도가 0보다 클 때만 활성화
-      if (resultLabel !== '정상' && resultLabel !== '탐지 실패' && resultLabel !== '알 수 없는 질병' && resultConfidence > 0) {
+      // "객체탐지 실패"가 아니고 신뢰도가 0보다 크거나 '정상'인 경우 활성화
+      if (resultLabel !== '객체탐지 실패' && (resultConfidence > 0 || resultLabel === '정상')) {
           $diagnosisResultSaveBtn.prop('disabled', false).css('opacity', '1').css('cursor', 'pointer');
       } else {
           $diagnosisResultSaveBtn.prop('disabled', true).css('opacity', '0.6').css('cursor', 'not-allowed');
@@ -268,13 +272,13 @@ $(function(){
   */
   function saveDiagnosisResult() {
     // 저장할 데이터 유효성 검사
-    if (lastDiagnosisResult.label === '' || lastDiagnosisResult.confidence === 0) {
+    if (lastDiagnosisResult.label === '' || (lastDiagnosisResult.label !== '정상' && lastDiagnosisResult.confidence === 0)) {
         alert('저장할 진단 결과가 없습니다. 먼저 이미지를 업로드하고 진단을 완료해주세요.');
         return;
     }
-    // "정상", "탐지 실패", "알 수 없는 질병" 결과는 저장하지 않음
-    if (lastDiagnosisResult.label === '정상' || lastDiagnosisResult.label === '탐지 실패' || lastDiagnosisResult.label === '알 수 없는 질병') {
-        alert('정상 또는 탐지 실패/알 수 없는 질병 결과는 저장할 수 없습니다.');
+    // "객체탐지 실패", "알 수 없는 질병" 결과는 저장하지 않음
+    if (lastDiagnosisResult.label === '객체탐지 실패' || lastDiagnosisResult.label === '알 수 없는 질병') {
+        alert('객체 탐지 실패 또는 알 수 없는 질병 결과는 저장할 수 없습니다.');
         return;
     }
 
