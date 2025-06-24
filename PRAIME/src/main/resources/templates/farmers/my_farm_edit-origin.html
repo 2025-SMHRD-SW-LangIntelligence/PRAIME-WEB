@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내 정보 페이지</title>
+<link th:href="@{/css/font.css}" rel="stylesheet">
+<link th:href="@{/css/common.css}" rel="stylesheet">
+<link th:href="@{/css/farmers/farm_info_edit.css}" rel="stylesheet">
+
+<!-- Font Awesome CDN 추가 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- jQuery CDN  -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Axios CDN  -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 파일 -->
+<script th:src="@{/js/farmers/my_info.js}"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="wrapper">
+			<header>
+				<div class="header-group">
+					<a href="role_choice.html" class="prevPage"></a>
+					<div class="header-title-group">
+						<h1 class="header-title">농장 정보 수정</h1>
+						<p class="header-subtitle">농장정보를 수정해주세요</p>
+					</div>
+				</div>
+			</header>
+			<main>
+				<div class="join-box">
+					<div class="join-group">
+						<h2 class="join-title">농장정보</h2>
+
+						<form class="join-form" action="/farmers/update_farm"
+							method="post">
+							<div class="form-group">
+								<label for="farm-name">농장명</label>
+								 <input type="text"
+									name="farm-name" id="farm-name" placeholder="농장명을 입력해주세요"
+									required th:value="${session.user.farmName}">
+							</div>
+							<div class="form-group">
+								<label for="farm-area">농장면적</label>
+								<div class="farm-area-input-group">
+									<input type="text" name="farm-area" id="farm-area"
+										placeholder="농장면적을 입력해주세요" required
+										th:value="${session.user.farmArea != null ? session.user.farmArea.split(' ')[0] : ''}">
+									<select name="area-unit" id="area-unit" required>
+										<option value="">면적선택</option>
+										<option value="ha"
+											th:selected="${session.user.farmArea != null and session.user.farmArea.endsWith('ha')}">ha</option>
+										<option value="m2"
+											th:selected="${session.user.farmArea != null and session.user.farmArea.endsWith('m2')}">m²</option>
+									</select>
+								</div>
+
+								<div class="form-group">
+									<label for="farm-address">농장주소</label>
+									<div class="address-input-group">
+										<input type="text" name="farm-address" id="farm-address"
+											placeholder="우편번호" required
+											th:value="${session.user.farmAddress != null ? session.user.farmAddress : ''}">
+										<button type="button" class="address-find-btn"
+											onclick="/* addressFind(); */ alert('주소찾기 기능은 준비 중입니다.');">
+											주소<br>찾기
+										</button>
+									</div>
+									<div class="address-input-group">
+										<input type="text" name="farm-address-detail"
+											id="farm-address-detail" placeholder="상세주소를 입력해주세요" required
+											th:value="${session.user.farmAddressDetail != null ? session.user.farmAddressDetail : ''}">
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="crop-category-group">
+										<label for="crop">농작물 등록 </label>
+										<div class="crop-grid">
+											<div class="crop-item" data-crop-id="1">
+												<div class="crop-icon">
+													<span>🍎</span>
+												</div>
+												<span class="crop-name">사과</span> <input type="checkbox"
+													name="crops" value="apple" class="crop-checkbox" hidden
+													th:checked="${session.user.crops != null and session.user.crops.contains('apple')}" />
+
+											</div>
+											<div class="crop-item" data-crop-id="2">
+												<div class="crop-icon">
+													<i class="fas fa-apple-alt"></i>
+												</div>
+												<span class="crop-name">배</span> <input type="checkbox"
+													name="crops" value="pear" class="crop-checkbox" hidden
+													th:checked="${session.user.crops != null and session.user.crops.contains('pear')}">
+											</div>
+											<div class="crop-item" data-crop-id="3">
+												<div class="crop-icon">
+													<i class="fas fa-lemon"></i>
+												</div>
+												<span class="crop-name">레몬</span> <input type="checkbox"
+													name="crops" value="lemon" class="crop-checkbox" hidden
+													th:checked="${session.user.crops != null and session.user.crops.contains('lemon')}">
+											</div>
+											<div class="crop-item" data-crop-id="4">
+												<div class="crop-icon">
+													<i class="fas fa-leaf"></i>
+												</div>
+												<span class="crop-name">상추</span> <input type="checkbox"
+													name="crops" value="lettuce" class="crop-checkbox" hidden
+													th:checked="${session.user.crops != null and session.user.crops.contains('lettuce')}">
+											</div>
+											<div class="crop-item" data-crop-id="5">
+												<div class="crop-icon">
+													<i class="fas fa-seedling"></i>
+												</div>
+												<span class="crop-name">벼</span> <input type="checkbox"
+													name="crops" value="rice" class="crop-checkbox" hidden
+													th:checked="${session.user.crops != null and session.user.crops.contains('rice')}">
+											</div>
+											<div class="crop-item" data-crop-id="6">
+												<div class="crop-icon">
+													<i class="fas fa-wheat-alt"></i>
+												</div>
+												<span class="crop-name">밀</span> <input type="checkbox"
+													name="crops" value="wheat" class="crop-checkbox" hidden
+													th:checked="${session.user.crops != null and session.user.crops.contains('wheat')}">
+											</div>
+										</div>
+
+										<!-- join2.js에서 추가될 hidden inputs는 이 아래로 append 됩니다 -->
+										<div class="button-group">
+											<button class="back-btn" onclick="history.back()">취소</button>
+											<button type="submit" class="join-btn" id="joinBtn">저장</button>
+										</div>
+									</div>
+
+								</div>
+			</main>
+		</div>
+	</div>
+
+	<!-- 자바스크립트 파일 -->
+	<script th:src="@{/js/farmers/my_farm_edit.js}"></script>
+</body>
+</html>

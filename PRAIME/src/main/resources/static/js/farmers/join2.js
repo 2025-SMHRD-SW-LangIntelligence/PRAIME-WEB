@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.querySelector('.join-form');
     const joinBtn = document.getElementById('joinBtn');
+    const farmAreaInput = document.getElementById('farm-area'); // Add this line to get the farm-area input
 
     if (!form) {
         console.error("Error: '.join-form' not found.");
@@ -23,6 +24,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (!joinBtn) {
         console.error("Error: '#joinBtn' not found.");
+        return;
+    }
+    if (!farmAreaInput) { // Add check for farmAreaInput
+        console.error("Error: '#farm-area' input not found.");
         return;
     }
 
@@ -115,9 +120,22 @@ document.addEventListener('DOMContentLoaded', function () {
         let isValid = true;
         document.querySelectorAll('.error-message').forEach(el => el.remove());
 
+        // Validate farm-area input for numbers only
+        const farmAreaValue = farmAreaInput.value.trim();
+        if (farmAreaValue === '') {
+            createErrorMessage(farmAreaInput, '재배 면적을 입력해주세요.');
+            isValid = false;
+        } else if (isNaN(farmAreaValue) || !/^\d+$/.test(farmAreaValue)) { // Check if it's not a number or contains non-digits
+            createErrorMessage(farmAreaInput, '재배 면적은 숫자만 입력 가능합니다.');
+            isValid = false;
+        } else if (parseInt(farmAreaValue, 10) <= 0) {
+            createErrorMessage(farmAreaInput, '재배 면적은 0보다 큰 값을 입력해주세요.');
+            isValid = false;
+        }
+
         // 농민 관련 유효성 검사는 생략 (Step1 데이터만 사용 가정)
 
-        console.log('Validation passed (only checking Step1 data assumed):', isValid);
+        console.log('Validation passed (only checking Step1 data assumed) and farm-area validation:', isValid);
 
         if (isValid) {
             const formData = new FormData(form);
