@@ -17,8 +17,9 @@
 
 <title>영농일지 상세 페이지</title>
 </head>
-<body>
-	<div class="container">
+<!-- log 객체를 JSON 문자열로 data-log-data 속성에 전달 -->
+<body th:attr="data-log-data=${log != null ? @json(log) : '{}'}">
+    <!-- HEADER MOVED OUTSIDE .container FOR FULL WIDTH GREEN BACKGROUND -->
     <header>
         <div class="header-group">
             <a href="#" class="prevPage" onclick="history.back()"> &lt; </a>
@@ -27,33 +28,40 @@
             </div>
         </div>
     </header>
-        <div class="info-bar">
-            <div class="weather-info">
-            	<div class="weather-info-group">
-                	<img src="/img/weather/sun.png" alt="날씨" class="weather-icon">
-                	<div class="weather-string" th:text="${log.dlweather} ?: '날씨 정보 없음'"></div>
-            	</div>
-                <div class="weather-details">
-                	<div class="temperature-group">
-						<img src="https://icons.iconarchive.com/icons/fatcow/farm-fresh/32/temperature-hot-icon.png" width="25" height="25">
-                    	<span class="temperature" th:text="'기온:' + ${log.dltemp} + '℃'"></span>
-                    <!-- <span class="humidity">습도 : 45%</span> -->
-                	</div>
-                </div>
-            </div>
-            <div class="date-info">
-                <span class="year" th:text="${#temporals.format(log.dldate, 'yyyy년')}"></span>
-                <span class="month-day-dayofweek"  th:text="${#temporals.format(log.dldate, 'M월 d일 (E)')}"></span>
+
+	<div class="container">
+        <!-- Second Row: Weather & Date Navigation (integrated, no card-like styling) -->
+<!-- info-bar 영역 -->
+<div class="info-bar" th:each="log : ${logList}">
+    <div class="weather-info">
+        <div class="weather-info-group">
+            <img src="/img/weather/sun.png" alt="날씨" class="weather-icon">
+            <div class="weather-string" th:text="${log.dlweather} ?: '날씨 정보 없음'"></div>
+        </div>
+        <div class="weather-details">
+            <div class="temperature-group">
+                <img src="https://icons.iconarchive.com/icons/fatcow/farm-fresh/32/temperature-hot-icon.png" width="25" height="25">
+                <span class="temperature" th:text="'기온 : ' + ${log.dltemp} + '℃'"></span>
             </div>
         </div>
+    </div>
+
+    <!-- 날짜 정보 -->
+    <div class="date-info">
+        <span class="year" 
+              th:text="${#temporals.format(log.dldate, 'yyyy년')}">2025년</span>
+        <span class="month-day-dayofweek"
+              th:text="${#temporals.format(log.dldate, 'M월 d일 (E)')}">6월 24일 (화)</span>
+    </div>
+</div>
 
         <main class="detail-main">
+            <!-- Entire main content is wrapped in one card -->
             <div class="main-content-card">
                 <section class="basic-info-section detail-section-item">
                     <div class="info-row">
                         <p class="info-label">작물</p>
-                        <p class="info-value" th:text="${log.dlcrop} ?: '작물 정보 없음'"></p>
-                    </div>
+                        <p class="info-value">사과</p> </div>
                     <div class="info-row">
                         <p class="info-label">농작업</p>
                         <p class="info-value">물주기</p> </div>
@@ -64,8 +72,13 @@
                 <hr class="divider">
 
                 <section class="content-section detail-section-item">
-                    <h3 class="content-title" th:text="${log.dltitle} ?: '제목 정보 없음'"></h3>
-                    <p class="content-text" th:text="${log.dlcontent} ?: '내용 정보 없음'"></p>
+                    <h3 class="content-title">맛있는 사과를 키우기위한 100가지 방법</h3>
+                    <p class="content-text">
+                        12년차 사과와 미안마 올해도 3차 적과
+                        끝내고 우거진 가지 치기와 여름에는 잡풀이
+                        1달에 2번 이상 자동예초기로 풀을 제거 해야
+                        하기에 바쁜 일상이다
+                    </p>
                 </section>
                 <hr class="divider">
 
@@ -82,7 +95,7 @@
                                 th:data-full-src="@{'/uploads/farmlog/' + ${img.dlipath}}" />
                         </div>
                         <div th:if="${#lists.isEmpty(log.dlimage)}">
-                            <img th:src="@{/img/no-image.png}" class="thumbnail-image default-thumbnail" alt="기본 이미지" data-full-src="@{/img/no-image.png}" />
+                            <img th:src="@{/img/no-image.png}" class="thumbnail-image default-thumbnail" alt="기본 이미지" th:data-full-src="@{/img/no-image.png}" />
                         </div>
                     </div>
                 </section>

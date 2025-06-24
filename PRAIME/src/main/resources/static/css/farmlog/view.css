@@ -1,149 +1,331 @@
-/* ==================== 헤더 ==================== */
+/* farmlog/view.css */
+
+/* ==================== Header ==================== */
 header {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: center; /* Center the header-group content */
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ensure it spans full width */
 }
 
 .header-group {
-  display: flex;
-  align-items: center;
-  width: 100%;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 550px; /* Constrain content width to match .container */
 }
 
 .prevPage {
-  font-size: 1.5rem;
-  color: white;
-  text-decoration: none;
-  margin-right: 1rem;
+    font-size: 1.5rem;
+    color: white;
+    text-decoration: none;
+    margin-right: 1rem;
 }
 
 .header-title,
 .header-title-group span {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
 }
 
-/* ==================== 메인 영역 ==================== */
-main,
+/* ==================== Info Bar (Weather & Date) - No Card, Integrated ==================== */
+.info-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0  15px 0;
+    margin: 10px 1.5rem 0 1.5rem; /* Adjusted horizontal margin to match main content padding */
+    color: var(--text-color);
+    background-color: var(--secondary-color); /* Matches the container background */
+}
+
+.weather-info, .date-info {
+    /* border : 1px solid #e2e6ee; */
+    box-shadow: 0px 3px 0px 0px rgba(15,79,53,0.7);
+    padding: 10px 20px 10px 20px;      
+    width: 200px;
+    height: 75px;
+}
+
+.weather-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+}
+
+.weather-string{
+	display: flex;
+	align-items: center;
+	width: 30px;
+}
+
+.weather-info-group{
+	display: flex;
+}
+
+.weather-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+.weather-details {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.temperature-group{
+	display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.temperature {
+    color: var(--text-color);
+    width: 90px;
+}
+
+.humidity {
+    color: var(--text-color);
+}
+
+.date-info {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    font-weight: bold;
+}
+
+.year {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    text-align: end;
+}
+
+.month-day-dayofweek {
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+
+/* ==================== Main Content Card ==================== */
 .detail-main {
-  padding: 1.5rem;
-  background-color: var(--secondary-color);
-  flex: 1;
-  padding-bottom: 3rem;
+	margin-bottom : 50px;
+    padding: 0 1.5rem 1.5rem;
+    background-color: var(--secondary-color);
+    flex: 1;
+    padding-bottom: 3rem;
 }
 
-.journal-form > div {
-  margin-bottom: 1.5rem;
+
+
+.main-content-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    padding: 30px;
+    margin-top: 15px;
 }
 
-/* ==================== 제목 및 내용 영역 ==================== */
-.journal-title p,
-.journal-content p,
-.label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: var(--label-color);
+.detail-section-item {
+    padding: 10px 0;
+    margin-bottom: 0;
 }
 
-.journal-title input,
-.journal-content textarea,
-.value {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
-  background-color: var(--input-bg);
-  color: var(--text-color);
+/* Divider between sections */
+.divider {
+    margin: 15px 0;
+    border: none;
+    border-top: 1px solid var(--border-color);
 }
 
-.journal-content textarea {
-  resize: vertical;
-  min-height: 150px;
+/* --- Basic Info Section --- */
+.basic-info-section .info-row {
+    display: flex;
+    margin-bottom: 8px;
 }
 
-/* ==================== 상세보기 ==================== */
-.detail-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.basic-info-section .info-row:last-child {
+    margin-bottom: 0;
 }
 
-.value {
-  background: white;
+.basic-info-section .info-label {
+    font-weight: bold;
+    color: var(--label-color);
+    width: 80px;
+    flex-shrink: 0;
 }
 
-.detail-images {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+.basic-info-section .info-value {
+    color: var(--text-color);
+    flex-grow: 1;
 }
 
-.preview-image {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  box-shadow: var(--card-shadow);
-  transition: transform 0.2s ease;
+/* --- Content Section --- */
+.content-section .content-title {
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    padding-bottom: 10px; /* 제목 아래 간격 */
 }
 
-.preview-image:hover {
-  transform: scale(1.05);
+.content-section .content-text {
+    font-size: 1rem;
+    color: var(--text-color);
+    line-height: 2.2; /* 줄 높이 조정: 글자와 글자 줄 사이 간격 증가 */
+    white-space: normal; /* 백엔드에서 넘어오는 줄바꿈 문자(\n) 유지 및 자동 줄바꿈 */
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+    word-break: break-word; /* 긴 단어가 컨테이너를 넘어갈 경우 단어 중간에서 줄바꿈 */
+    overflow-wrap: break-word; /* word-break의 최신 버전 (동일한 목적) */
+    padding: 0; /* 내부 패딩 없음, 상위 요소의 패딩을 따름 */
+    margin: 20px 0 0 0; /* 외부 마진 없음, 상위 요소의 마진을 따름 */
 }
 
-/* ==================== 버튼 ==================== */
+/* --- Image Section --- */
+.image-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-image-display {
+    width: 100%;
+    max-width: 400px;
+    height: 250px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eee;
+}
+
+.main-image-display img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.thumbnail-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+}
+
+.thumbnail-gallery img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.thumbnail-gallery img.selected-thumbnail {
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.thumbnail-gallery img:hover {
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+
+/* --- Button Group Section --- */
+.button-group-section {
+    padding-top: 0;
+}
+
 .detail-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 2rem;
-  padding: 0 1rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    margin-top: 15px;
+    padding: 0;
 }
 
+/* Re-using existing btn styles from common.css */
 .btn {
-  padding: 0.6rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease;
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    min-width: 90px;
 }
 
 .btn i {
-  margin-right: 0.4rem;
+    margin-right: 0.4rem;
 }
 
 .edit-btn {
-  background-color: var(--primary-color);
-  color: white;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: var(--primary-hover);
 }
 
 .delete-btn {
-  background-color: var(--error-color);
-  color: white;
+    background-color: var(--error-color);
+    color: white;
 }
 
-/* ==================== 반응형 ==================== */
-@media (max-width: 480px) {
-  .detail-buttons {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.delete-btn:hover {
+    background-color: #c0392b;
+}
 
-  .detail-buttons .btn {
-    width: 100%;
-  }
+/* ==================== Responsive ==================== */
+@media (max-width: 480px) {
+    .info-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .weather-info,
+    .date-info {
+        width: 100%;
+        text-align: left;
+    }
+    .date-info {
+        text-align: left;
+    }
+
+    .detail-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .detail-buttons .btn {
+        width: 100%;
+    }
+
+    .main-content-card {
+        padding: 10px;
+    }
 }
