@@ -75,10 +75,13 @@ public class DailyLogService {
 		return dailyLogRepository.findById(dlid);
 	}
 
-	// 영농일지 작성
-	@Transactional
+    // 영농일지 작성
+    @Transactional
     public void saveLog(String dltitle, String dlcontent, String dlweather, Float dltemp,
-                        String dldate, String dlcrop, MultipartFile[] dlimages, UserEntity user) {
+                        String dldate, String dlcrop,
+                        String dlwork, // 농작업 필드 추가
+                        String dlpesticide, // 농약 필드 추가
+                        MultipartFile[] dlimages, UserEntity user) {
 
         // 1. 로그 엔티티 생성 및 필드 설정
         DailyLogEntity log = new DailyLogEntity();
@@ -89,8 +92,10 @@ public class DailyLogService {
         log.setDltemp(dltemp);
         log.setDldate(LocalDateTime.parse(dldate)); // 날짜 문자열을 LocalDateTime로 변환
         log.setDlcrop(dlcrop);
+        log.setDlwork(dlwork); // 농작업 필드 설정
+        log.setDlpesticide(dlpesticide); // 농약 필드 설정
         log.setDlimage(new ArrayList<>()); // 이미지 리스트 초기화
-        log.setUser(user); // ✅ 반드시 설정해야 함
+        // log.setUser(user); // ✅ 이미 위에서 설정했으므로 중복 제거
 
         // 2. 이미지 처리
         if (dlimages != null) {

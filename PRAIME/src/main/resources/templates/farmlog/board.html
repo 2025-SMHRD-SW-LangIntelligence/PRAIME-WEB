@@ -125,7 +125,7 @@
                     <span class="board-card-crop" th:text="${log.dlcrop}">작물</span>
                     <span class="board-card-weather" th:text="${log.dlweather}">날씨</span>
                     <span class="board-card-temp" th:if="${log.dltemp != null}" th:text="${log.dltemp + '°C'}">온도</span>
-                    <span class="board-card-date" th:text="${#temporals.format(log.dldate, 'yyyy년 MM월 dd일')}">날짜</span>
+            <span class="board-card-date" th:text="${#temporals.format(log.dldate, 'yyyy년 MM월 dd일 HH:mm')}">날짜</span>
                 </div>
             </div>
 		</div>

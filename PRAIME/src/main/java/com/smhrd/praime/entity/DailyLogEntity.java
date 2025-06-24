@@ -47,6 +47,14 @@ public class DailyLogEntity {
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime dldate;
 	
+	// 농작업 필드 추가 (NOT NULL)
+	@Column(nullable = false)
+	private String dlwork;
+	
+	// 농약 필드 추가 (NULL 가능)
+	@Column(nullable = true) // 또는 @Column만 사용해도 기본값이 true입니다.
+	private String dlpesticide;
+	
 	@PrePersist
     protected void onCreate() {
         this.dldate = LocalDateTime.now();

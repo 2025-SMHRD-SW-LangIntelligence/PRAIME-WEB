@@ -58,10 +58,12 @@
                     </div>
                     <div class="info-row">
                         <p class="info-label">농작업</p>
-                        <p class="info-value">물주기</p> </div>
-                    <div class="info-row">
-                        <p class="info-label">농약</p>
-                        <p class="info-value">HB3000-K 50nl</p> </div>
+                        <p class="info-value" th:text="${log.dlwork} ?: '작업 정보 없음'"></p> 
+                    </div>
+					<div class="info-row" th:if="${log.dlpesticide}">
+					    <p class="info-label">농약</p>
+					    <p class="info-value" th:text="${log.dlpesticide}"></p>
+					</div>
                 </section>
                 <hr class="divider">
 

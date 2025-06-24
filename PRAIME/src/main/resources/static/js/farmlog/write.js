@@ -11,11 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	const day = now.getDate().toString().padStart(2, '0');
 	const hours = now.getHours().toString().padStart(2, '0');
 	const minutes = now.getMinutes().toString().padStart(2, '0');
-	// Seconds are generally not included in datetime-local value, but if you need them:
-	// const seconds = now.getSeconds().toString().padStart(2, '0');
+	// 다음 줄을 추가하여 '초' 정보도 가져옵니다.
+	const seconds = now.getSeconds().toString().padStart(2, '0'); // 초 추가!
 
-	// Format for datetime-local: YYYY-MM-DDTHH:mm (or YYYY-MM-DDTHH:mm:ss for seconds if needed)
-	document.getElementById("dldate").value = `${year}-${month}-${day}T${hours}:${minutes}`;
+	// Format for LocalDateTime: YYYY-MM-DDTHH:mm:ss
+	// '초'까지 포함된 형식으로 dldate 값을 설정합니다.
+	document.getElementById("dldate").value = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 
 
 	// 작물 목록 불러오기
@@ -40,6 +41,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			alert("작물을 선택해주세요.");
 			return;
 		}
+
+		// 농작업 선택 검증
+        const selectedWork = document.getElementById("dlwork").value;
+        if (!selectedWork) {
+            alert("농작업을 선택해주세요.");
+            return;
+        }
 		
 		const formData = new FormData(form);
 		const dt = new DataTransfer();
