@@ -51,8 +51,8 @@
 	        <section class = "board-section">
 	        	<div class = "board-list" id="board-list">
 	        		<!-- Thymeleaf를 사용한 실제 DB 데이터 표시 -->
-	        		<div th:each="log : ${boardList}" class="board-card" th:onclick="'location.href=\'/view/' + ${log.dlid} + '\''">
-	        			<div class="board-card-image">
+	        		<div th:each="log : ${boardList}" class="board-card" th:attr="onclick=|location.href='/farmlog/view/${log.dlid}'|">
+						<div class="board-card-image">
 	        				<img th:src="@{/img/log.png}" alt="영농일지 이미지" class="card-thumbnail">
 	        			</div>
 	        			<div class="board-card-content-wrapper">
@@ -86,7 +86,7 @@
     
     <!-- 무한스크롤을 위한 fragment -->
     <div th:fragment="board-list">
-        <div th:each="log : ${farmlogList}" class="board-card" th:onclick="'location.href=\'/view/' + ${log.dlid} + '\''">
+        <div th:each="log : ${farmlogList}" class="board-card" th:onclick="'location.href=\'/farmlog/view/' + ${log.dlid} + '\''">
             <div class="board-card-image">
                 <img th:src="@{/img/log.png}" alt="영농일지 이미지" class="card-thumbnail">
             </div>

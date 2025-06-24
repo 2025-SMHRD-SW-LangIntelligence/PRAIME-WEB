@@ -17,6 +17,8 @@ import com.smhrd.praime.entity.UserEntity;
 import com.smhrd.praime.service.DailyLogService;
 
 import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.ArrayList;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +27,21 @@ public class DailyLogRestController {
 
     @Autowired
     private final DailyLogService dailyLogService;
+
+    // ✅ 현재 로그인한 사용자의 작물 목록 조회
+    @GetMapping("/write/crops")
+    public ResponseEntity<List<String>> getCrops(@SessionAttribute("user") UserEntity user) {
+        try {
+            List<String> crops = user.getCrops();
+            if (crops == null || crops.isEmpty()) {
+                return ResponseEntity.ok(new ArrayList<>());
+            }
+            return ResponseEntity.ok(crops);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ArrayList<>());
+        }
+    }
 
     // ✅ 일지 작성
     @PostMapping("/write")

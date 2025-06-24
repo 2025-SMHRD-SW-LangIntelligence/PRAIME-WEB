@@ -2,6 +2,23 @@ function fetchCropOptions(url, containerId, selectedCrop = null) {
 	fetch(url).then(res => res.json()).then(data => {
 		const container = document.getElementById(containerId);
 		container.innerHTML = "";
+		
+		if (data.length === 0) {
+			// 작물이 없을 때 안내 메시지 표시
+			const noCropsMessage = document.createElement("div");
+			noCropsMessage.className = "no-crops-message";
+			noCropsMessage.style.cssText = "text-align: center; padding: 20px; color: #666; background: #f9f9f9; border-radius: 8px; margin: 10px 0;";
+			noCropsMessage.innerHTML = `
+				<p style="margin: 0 0 10px 0; font-weight: bold;">등록된 작물이 없습니다</p>
+				<p style="margin: 0; font-size: 14px;">영농일지를 작성하려면 먼저 농장 정보에서 작물을 등록해주세요.</p>
+				<button onclick="location.href='/myFarmEditPage'" style="margin-top: 10px; padding: 8px 16px; background: #0f4f35; color: white; border: none; border-radius: 4px; cursor: pointer;">
+					농장 정보 수정하기
+				</button>
+			`;
+			container.appendChild(noCropsMessage);
+			return;
+		}
+		
 		data.forEach((crop, i) => {
 			const input = document.createElement("input");
 			input.type = "radio";
@@ -23,6 +40,15 @@ function fetchCropOptions(url, containerId, selectedCrop = null) {
 
 			container.appendChild(label);
 		});
+	}).catch(error => {
+		console.error("작물 목록을 불러오는 중 오류 발생:", error);
+		const container = document.getElementById(containerId);
+		container.innerHTML = `
+			<div style="text-align: center; padding: 20px; color: #666; background: #f9f9f9; border-radius: 8px; margin: 10px 0;">
+				<p style="margin: 0; color: #e74c3c;">작물 목록을 불러오는 중 오류가 발생했습니다.</p>
+				<p style="margin: 10px 0 0 0; font-size: 14px;">페이지를 새로고침하거나 잠시 후 다시 시도해주세요.</p>
+			</div>
+		`;
 	});
 }
 
