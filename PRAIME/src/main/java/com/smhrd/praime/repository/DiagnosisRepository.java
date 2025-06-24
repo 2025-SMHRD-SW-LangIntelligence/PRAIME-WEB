@@ -47,6 +47,7 @@ public interface DiagnosisRepository extends JpaRepository<DiagnosisEntity, Long
     List<DiagnosisEntity> findByLabelContainingIgnoreCase(String label);
     
     /**
+     * .
      * 특정 기간 내 진단 결과 조회
      */
     @Query("SELECT d FROM DiagnosisEntity d WHERE d.createdAt BETWEEN :startDate AND :endDate ORDER BY d.createdAt DESC")
