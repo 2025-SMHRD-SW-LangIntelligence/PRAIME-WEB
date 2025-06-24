@@ -2,8 +2,8 @@ package com.smhrd.praime.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -87,7 +87,7 @@ public class DailyLogService {
         log.setDlcontent(dlcontent);
         log.setDlweather(dlweather);
         log.setDltemp(dltemp);
-        log.setDldate(java.time.LocalDate.parse(dldate)); // 날짜 문자열을 LocalDate로 변환
+        log.setDldate(LocalDateTime.parse(dldate)); // 날짜 문자열을 LocalDateTime로 변환
         log.setDlcrop(dlcrop);
         log.setDlimage(new ArrayList<>()); // 이미지 리스트 초기화
         log.setUser(user); // ✅ 반드시 설정해야 함

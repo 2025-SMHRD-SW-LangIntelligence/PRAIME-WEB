@@ -1,6 +1,6 @@
 package com.smhrd.praime.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,11 +45,11 @@ public class DailyLogEntity {
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String dlcontent;
 	@Column(nullable = false, updatable = false)
-	private LocalDate dldate;
+	private LocalDateTime dldate;
 	
 	@PrePersist
     protected void onCreate() {
-        this.dldate = LocalDate.now();
+        this.dldate = LocalDateTime.now();
     }
 
     @OneToMany(mappedBy = "dailyLog", cascade = CascadeType.ALL, orphanRemoval = true)

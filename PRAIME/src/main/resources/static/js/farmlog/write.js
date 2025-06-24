@@ -5,7 +5,18 @@ document.addEventListener("DOMContentLoaded", () => {
 	let selectedFiles = [];
 
 	// 날짜 기본값 설정
-	document.getElementById("dldate").value = new Date().toISOString().split("T")[0];
+	const now = new Date();
+	const year = now.getFullYear();
+	const month = (now.getMonth() + 1).toString().padStart(2, '0');
+	const day = now.getDate().toString().padStart(2, '0');
+	const hours = now.getHours().toString().padStart(2, '0');
+	const minutes = now.getMinutes().toString().padStart(2, '0');
+	// Seconds are generally not included in datetime-local value, but if you need them:
+	// const seconds = now.getSeconds().toString().padStart(2, '0');
+
+	// Format for datetime-local: YYYY-MM-DDTHH:mm (or YYYY-MM-DDTHH:mm:ss for seconds if needed)
+	document.getElementById("dldate").value = `${year}-${month}-${day}T${hours}:${minutes}`;
+
 
 	// 작물 목록 불러오기
 	fetchCropOptions("/farmlog/write/crops", "crop-container");
