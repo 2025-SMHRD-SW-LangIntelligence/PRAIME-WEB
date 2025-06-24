@@ -32,20 +32,25 @@
         <div class="info-bar">
             <div class="weather-info">
             	<div class="weather-info-group">
-                	<img src="/img/weather/sun.png" alt="날씨" class="weather-icon">
+                	<!-- 날씨 정보에 따라 동적으로 아이콘 변경 -->
+                	<img th:src="@{${log.dlweather == '맑음' ? '/img/weather/sun.png' : 
+                                  (log.dlweather == '흐림' ? '/img/weather/cloud.png' : 
+                                   (log.dlweather == '비' ? '/img/weather/rain.png' : 
+                                    (log.dlweather == '눈' ? '/img/weather/snow.png' : '/img/weather/default.png')))}}" 
+                         alt="날씨" class="weather-icon">
                 	<div class="weather-string" th:text="${log.dlweather} ?: '날씨 정보 없음'"></div>
             	</div>
                 <div class="weather-details">
                 	<div class="temperature-group">
 						<img src="https://icons.iconarchive.com/icons/fatcow/farm-fresh/32/temperature-hot-icon.png" width="25" height="25">
-                    	<span class="temperature" th:text="'기온:' + ${log.dltemp} + '℃'"></span>
-                    <!-- <span class="humidity">습도 : 45%</span> -->
+                    	<span class="temperature" th:text="${log.dltemp != null ? '기온:' + log.dltemp + '℃' : '기온 정보 없음'}"></span>
                 	</div>
                 </div>
             </div>
             <div class="date-info">
                 <span class="year" th:text="${#temporals.format(log.dldate, 'yyyy년')}"></span>
-                <span class="month-day-dayofweek"  th:text="${#temporals.format(log.dldate, 'M월 d일 (E)')}"></span>
+                <!-- 날짜 형식: 월일 (요일) 시분초 -->
+                <span class="month-day-dayofweek"  th:text="${#temporals.format(log.dldate, 'M월 d일 (E) HH:mm:ss')}"></span>
             </div>
         </div>
 
@@ -60,7 +65,8 @@
                         <p class="info-label">농작업</p>
                         <p class="info-value" th:text="${log.dlwork} ?: '작업 정보 없음'"></p> 
                     </div>
-					<div class="info-row" th:if="${log.dlpesticide}">
+					<!-- dlpesticide가 null이거나 빈 문자열이 아닐 때만 표시 -->
+					<div class="info-row" th:if="${log.dlpesticide != null and log.dlpesticide != ''}">
 					    <p class="info-label">농약</p>
 					    <p class="info-value" th:text="${log.dlpesticide}"></p>
 					</div>
@@ -75,18 +81,24 @@
 
                 <section class="image-section detail-section-item">
                     <div class="main-image-display">
-                        <img id="main-diary-image" th:src="${not #lists.isEmpty(log.dlimage)} ? @{'/uploads/farmlog/' + ${log.dlimage[0].dlipath}} : @{/img/no-image.png}" alt="대표 일지 이미지">
+                        <!-- 대표 이미지: 첫 번째 이미지가 있으면 로드, 없으면 기본 이미지 -->
+                        <img id="main-diary-image" 
+                             th:src="${not #lists.isEmpty(log.dlimage)} ? @{'/uploads/farmlog/' + ${log.dlimage[0].dlipath}} : @{/img/no-image.png}" 
+                             alt="대표 일지 이미지">
                     </div>
                     <div class="thumbnail-gallery">
+                        <!-- 이미지가 있을 경우 썸네일 표시 -->
                         <div th:if="${not #lists.isEmpty(log.dlimage)}">
                             <img th:each="img : ${log.dlimage}"
                                 th:src="@{'/uploads/farmlog/' + ${img.dlipath}}"
                                 class="thumbnail-image"
                                 alt="일지 썸네일 이미지"
-                                th:data-full-src="@{'/uploads/farmlog/' + ${img.dlipath}}" />
+                                th:data-full-src="@{'/uploads/farmlog/' + ${img.dlipath}}" 
+                                th:data-dlipath="${img.dlipath}" />
                         </div>
+                        <!-- 이미지가 아예 없을 경우 기본 이미지 썸네일 표시 (클릭 가능하도록) -->
                         <div th:if="${#lists.isEmpty(log.dlimage)}">
-                            <img th:src="@{/img/no-image.png}" class="thumbnail-image default-thumbnail" alt="기본 이미지" data-full-src="@{/img/no-image.png}" />
+                            <img th:src="@{/img/no-image.png}" class="thumbnail-image default-thumbnail selected-thumbnail" alt="기본 이미지" data-full-src="@{/img/no-image.png}" data-dlipath="no-image.png" />
                         </div>
                     </div>
                 </section>
