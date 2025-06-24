@@ -14,6 +14,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	const cropItems = document.querySelectorAll('.crop-item');
 	const selectedCropsDisplay = document.getElementById('selectedCropsDisplay');
 
+	document.querySelectorAll('.crop-checkbox:checked').forEach(checkbox => {
+		checkbox.closest('.crop-item').classList.add('selected');
+	});
+	updateSelectedCropsDisplay();
+	
+	
 	cropItems.forEach(item => {
 		item.addEventListener('click', function() {
 			const checkbox = this.querySelector('.crop-checkbox');

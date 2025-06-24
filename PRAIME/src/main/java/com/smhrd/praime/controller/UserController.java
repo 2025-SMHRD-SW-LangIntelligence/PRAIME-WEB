@@ -200,23 +200,34 @@ public class UserController {
 	// 농장정보 수정
 
 	@PostMapping("/farmers/update_farm")
-	public String updateFarmInfo(HttpSession session, @RequestParam("farm-name") String farmName,
-			@RequestParam("farm-area") String farmArea, @RequestParam("area-unit") String areaUnit,
-			@RequestParam("farm-address") String farmAddress,
-			@RequestParam("farm-address-detail") String farmAddressDetail,
-			@RequestParam(value = "crops", required = false) List<String> crops) {
-		UserEntity user = (UserEntity) session.getAttribute("user");
-		user.setFarmName(farmName);
-		user.setFarmArea(farmArea + " " + areaUnit);
-		user.setFarmAddress(farmAddress);
-		user.setFarmAddressDetail(farmAddressDetail);
-		user.setCrops(crops != null ? crops : Collections.emptyList());
+	public String updateFarmInfo(HttpSession session,
+	        @RequestParam("farm-name") String farmName,
+	        @RequestParam("farm-area") String farmArea,
+	        @RequestParam("area-unit") String areaUnit,
+	        @RequestParam("farm-address") String farmAddress,
+	        @RequestParam("farm-address-detail") String farmAddressDetail,
+	        @RequestParam(value = "crops", required = false) List<String> crops) {
+	    // (1) 세션에서 uid만 꺼내기
+	    String uid = ((UserEntity) session.getAttribute("user")).getUid();
+	    // (2) 반드시 DB에서 다시 엔티티 조회 (JPA 영속 상태)
+	    UserEntity user = userService.findByUid(uid).orElseThrow();
 
-		userService.updateFarmInfo(user); // save/update
+	    // (3) 정보 갱신
+	    user.setFarmName(farmName);
+	    user.setFarmArea(farmArea + " " + areaUnit);
+	    user.setFarmAddress(farmAddress);
+	    user.setFarmAddressDetail(farmAddressDetail);
+	    user.setCrops(crops != null ? crops : Collections.emptyList());
 
-		session.setAttribute("user", user);
-		return "redirect:/myInfoFarmerPage";
+	    // (4) 저장
+	    userService.updateFarmInfo(user);
+
+	    // (5) 세션에도 동기화
+	    session.setAttribute("user", user);
+
+	    return "redirect:/myInfoFarmerPage";
 	}
+
 
 	@PostMapping("/withdraw.do")
 	public String withdrawUser(HttpSession session) {
@@ -235,5 +246,6 @@ public class UserController {
 		// 탈퇴 완료 후 메인페이지로 이동
 		return "redirect:/";
 	}
+	
 
 }

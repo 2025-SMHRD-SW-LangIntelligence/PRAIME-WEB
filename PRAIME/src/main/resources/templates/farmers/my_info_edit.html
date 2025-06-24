@@ -73,12 +73,22 @@
 								<div class="tel-input-group">
 									<select name="tel-0" id="tel-0">
 										<option value="">통신사선택</option>
-										<option value="KT">KT</option>
-										<option value="SKT">SKT</option>
-										<option value="LG U+">LG U+</option>
-										<option value="KT 알뜰폰">KT 알뜰폰</option>
-										<option value="SKT 알뜰폰">SKT 알뜰폰</option>
-										<option value="LG U+ 알뜰폰">LG U+ 알뜰폰</option>
+										<option value="KT"
+											th:selected="${session.user.telecom == 'KT'}">KT</option>
+										<option value="SKT"
+											th:selected="${session.user.telecom == 'SKT'}">SKT</option>
+										<option value="LG U+"
+											th:selected="${session.user.telecom == 'LG U+T'}">LG
+											U+</option>
+										<option value="KT 알뜰폰"
+											th:selected="${session.user.telecom == 'KT 알뜰폰'}">KT
+											알뜰폰</option>
+										<option value="SKT 알뜰폰"
+											th:selected="${session.user.telecom == 'SKT 알뜰폰'}">SKT
+											알뜰폰</option>
+										<option value="LG U+ 알뜰폰"
+											th:selected="${session.user.telecom == 'LG U+ 알뜰폰'}">LG
+											U+ 알뜰폰</option>
 									</select> <input type="text" name="tel-1" id="tel-1" placeholder="010"
 										maxlength="3" size="3" th:value="${session.user.tel1}">
 									<span>-</span> <input type="text" name="tel-2" id="tel-2"
@@ -97,36 +107,47 @@
 										placeholder="이메일을 입력해주세요" th:value="${session.user.emailId}">
 									<span>@</span> <select name="email-domain" id="email-domain">
 										<option value="">선택</option>
-										<option value="gmail.com">gmail.com</option>
-										<option value="naver.com">naver.com</option>
-										<option value="daum.net">daum.net</option>
-										<option value="hanmail.net">hanmail.net</option>
+										<option value="gmail.com"
+											th:selected="${session.user.emailDomain == 'gmail.com'}">gmail.com</option>
+										<option value="naver.com"
+											th:selected="${session.user.emailDomain == 'naver.com'}">naver.com</option>
+										<option value="daum.net"
+											th:selected="${session.user.emailDomain == 'daum.net'}">daum.net</option>
+										<option value="hanmail.net"
+											th:selected="${session.user.emailDomain == 'hanmail.net'}">hanmail.net</option>
 									</select>
 								</div>
 							</div>
-						<!-- 주소찾기  -->
-						<div class="form-group">
-						    <label for="address-postcode">주소</label>
-						    <div class="address-input-group">
-						        <input type="text" id="address-postcode" name="postcode" placeholder="우편번호" readonly>
-						        <button type="button" class="find-address-btn">주소찾기</button>
-						    </div>
-						    <div class="address-input-group">
-						        <input type="text" id="address" name="address" placeholder="도로명 주소" readonly>
-						    </div>
-						    <div class="address-input-group">
-						        <input type="text" id="address-detail" name="address-detail" placeholder="상세주소를 입력해주세요">
-						    </div>
-						</div>       
+							<!-- 주소찾기  -->
+							<div class="form-group">
+								<label for="address-postcode">주소</label>
+								<div class="address-input-group">
+									<input type="text" id="address-postcode" name="postcode"
+										placeholder="우편번호" readonly
+										th:value="${session.user.postcode != null ? session.user.postcode : ''}">
+									<button type="button" class="find-address-btn">주소찾기</button>
+								</div>
+								<div class="address-input-group">
+									<input type="text" id="address" name="address"
+										placeholder="도로명 주소" readonly
+										th:value="${session.user.address != null ? session.user.address : ''}">
+								</div>
+								<div class="address-input-group">
+									<input type="text" id="address-detail" name="address-detail"
+										placeholder="상세주소를 입력해주세요"
+										th:value="${session.user.addressDetail != null ? session.user.addressDetail : ''}">
+								</div>
+							</div>
+
 							<div class="button-group">
 								<button class="back-btn" onclick="history.back()">취소</button>
 								<button type="submit" class="join-btn" id="joinBtn">저장</button>
-							</div>	
+							</div>
 						</form>
 					</div>
 				</div>
-		</main>
-	</div>
+			</main>
+		</div>
 	</div>
 </body>
 </html>

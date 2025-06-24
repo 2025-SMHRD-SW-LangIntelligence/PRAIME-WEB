@@ -46,6 +46,7 @@ public class UserEntity {
     private String emailDomain;  // 이메일 도메인 부분 (gmail.com 등)
 
     // 주소
+    private String postcode;     // 우편번호
     private String address;      // 우편번호 또는 주소
     private String addressDetail; // 상세주소
 
@@ -60,7 +61,7 @@ public class UserEntity {
     private String farmAddress;
     private String farmAddressDetail;
 
-    @ElementCollection // List<String> crops를 별도 테이블로 관리
+    @ElementCollection(fetch = jakarta.persistence.FetchType.EAGER) // List<String> crops를 별도 테이블로 관리
     @CollectionTable(name = "user_crops", // 새로운 조인 테이블 이름 (farmer_crops -> user_crops)
                      joinColumns = @JoinColumn(name = "user_uid")) // UserEntity의 PK(uid)와 연결
     @Column(name = "crop") // 컬렉션 테이블 내의 작물 값 컬럼 이름
