@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
 	 */
 	
     private String uploadPath = "file:///C:/uploads/diagnosis/"; // 실제 이미지 저장 경로
-    private String farmlogUploadPath = "file:///C:/uploads/crops/"; // farmlog 이미지 저장 경로
+    private String farmlogUploadPath = "file:///C:/crops/"; // farmlog 이미지 저장 경로
 
 	
     @Override
