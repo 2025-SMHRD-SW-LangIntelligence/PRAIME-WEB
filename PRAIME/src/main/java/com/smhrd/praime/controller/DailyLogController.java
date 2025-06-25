@@ -29,8 +29,9 @@ public class DailyLogController {
 
     @Autowired
     DailyLogService dailyLogService;
+    
+    @Autowired
     private UserRepository userRepository;
-
 
     // ✅ 게시판 목록 페이지
     @GetMapping("/board")

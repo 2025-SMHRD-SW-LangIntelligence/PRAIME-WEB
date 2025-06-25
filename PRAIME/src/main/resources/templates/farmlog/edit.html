@@ -46,6 +46,23 @@
             <div id="cropRadioContainer"></div>
           </div>
 
+          <div class="farm-work-select-group">
+            <label for="dlwork">농작업 선택</label>
+            <select id="dlwork" name="dlwork" required>
+              <option value="">농작업을 선택하세요</option>
+              <option value="병해충관리">병해충관리</option>
+              <option value="비료 영양관리">비료 영양관리</option>
+              <option value="수확 및 출하관리">수확 및 출하관리</option>
+              <option value="재배관리">재배관리</option>
+              <option value="기타메모">기타메모</option>
+            </select>
+          </div>
+
+          <div class="pesticide-input-group">
+            <label for="dlpesticide">농약 입력 (선택 사항)</label>
+            <input type="text" id="dlpesticide" name="dlpesticide" placeholder="사용한 농약을 입력하세요">
+          </div>
+
           <div class="journal-title">
             <p>제목</p>
             <input type="text" name="dltitle" id="dltitle" placeholder="제목을 입력하세요" />
