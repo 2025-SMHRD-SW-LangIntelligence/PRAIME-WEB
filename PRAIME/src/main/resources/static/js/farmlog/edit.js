@@ -199,6 +199,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         // 4. FormData 생성
         const formData = new FormData(editForm);
         
+        // 디버깅: FormData 내용 확인
+        console.log("🔍 FormData 내용 확인:");
+        for (let [key, value] of formData.entries()) {
+            if (value instanceof File) {
+                console.log(`  - ${key}: ${value.name} (${value.size} bytes)`);
+            } else {
+                console.log(`  - ${key}: ${value}`);
+            }
+        }
+        
         // 5. 삭제된 이미지 ID들 수집
         const deletedImageIds = [];
         document.querySelectorAll('input[name="deletedImageIds"]').forEach(input => {

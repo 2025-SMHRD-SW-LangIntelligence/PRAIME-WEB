@@ -82,21 +82,16 @@
                 </section>
                 <hr class="divider">
 
-                <section class="image-section detail-section-item">
+                <section class="image-section detail-section-item" th:if="${not #lists.isEmpty(log.dlimage)}">
                     <div class="main-image-display">
-                        <img id="main-diary-image" th:src="${not #lists.isEmpty(log.dlimage)} ? @{'/uploads/farmlog/' + ${log.dlimage[0].dlipath}} : @{/img/no-image.png}" alt="대표 일지 이미지">
+                        <img id="main-diary-image" th:src="@{'/uploads/farmlog/' + ${log.dlimage[0].dlipath}}" alt="대표 일지 이미지">
                     </div>
                     <div class="thumbnail-gallery">
-                        <div th:if="${not #lists.isEmpty(log.dlimage)}">
-                            <img th:each="img : ${log.dlimage}"
-                                th:src="@{'/uploads/farmlog/' + ${img.dlipath}}"
-                                class="thumbnail-image"
-                                alt="일지 썸네일 이미지"
-                                th:data-full-src="@{'/uploads/farmlog/' + ${img.dlipath}}" />
-                        </div>
-                        <div th:if="${#lists.isEmpty(log.dlimage)}">
-                            <img th:src="@{/img/no-image.png}" class="thumbnail-image default-thumbnail" alt="기본 이미지" th:data-full-src="@{/img/no-image.png}" />
-                        </div>
+                        <img th:each="img : ${log.dlimage}"
+                            th:src="@{'/uploads/farmlog/' + ${img.dlipath}}"
+                            class="thumbnail-image"
+                            alt="일지 썸네일 이미지"
+                            th:data-full-src="@{'/uploads/farmlog/' + ${img.dlipath}}" />
                     </div>
                 </section>
                 <hr class="divider">
