@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		        div.classList.add("img-preview"); // This div will contain the image and the icon
 
 		        const image = document.createElement("img");
-		        image.src = `/uploads/farmlog/${img.dlipath}`;
+		        image.src = `/uploads/crops/${img.dlipath}`;
 		        image.alt = "기존 이미지";
 		        image.dataset.imageId = img.dliid;
 

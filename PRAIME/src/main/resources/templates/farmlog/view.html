@@ -83,15 +83,15 @@
 				    <div th:if="${not #lists.isEmpty(log.dlimage)}">
 				        <div class="main-image-display">
 				            <img id="main-diary-image" 
-				                 th:src="@{'/uploads/farmlog/' + ${log.dlimage[0].dlipath}}" 
+				                 th:src="@{'/uploads/crops/' + ${log.dlimage[0].dlipath}}" 
 				                 alt="대표 일지 이미지">
 				        </div>
 				        <div class="thumbnail-gallery">
 				            <img th:each="img : ${log.dlimage}"
-				                th:src="@{'/uploads/farmlog/' + ${img.dlipath}}"
+				                th:src="@{'/uploads/crops/' + ${img.dlipath}}"
 				                class="thumbnail-image"
 				                alt="일지 썸네일 이미지"
-				                th:data-full-src="@{'/uploads/farmlog/' + ${img.dlipath}}" 
+				                th:data-full-src="@{'/uploads/crops/' + ${img.dlipath}}" 
 				                th:data-dlipath="${img.dlipath}" />
 				        </div>
 				    </div>

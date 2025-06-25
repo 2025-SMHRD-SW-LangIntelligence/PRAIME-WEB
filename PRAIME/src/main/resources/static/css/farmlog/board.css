@@ -200,6 +200,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  width: 100%;
 }
 
 .board-card-title {
@@ -211,6 +212,8 @@ main {
 }
 
 .board-card-content {
+  max-width: 100%; /* 부모의 100% 너비를 차지하도록 설정 */
+  overflow-wrap: break-word; /* 최신 표준 */	
   font-size: 0.9rem;
   color: #666;
   margin-bottom: 0.5rem;
@@ -220,6 +223,7 @@ main {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  
 }
 
 .board-card-date {
