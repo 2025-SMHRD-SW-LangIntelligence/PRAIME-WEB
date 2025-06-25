@@ -1,6 +1,9 @@
-// DiagnosisDTO.java (새로 생성하거나 기존 DTO에 필드 추가)
-package com.smhrd.praime; // 패키지명은 프로젝트에 맞게 조정
+package com.smhrd.praime;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,9 +14,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class DiagnosisDTO {
+    @NotBlank(message = "진단 라벨은 필수입니다.")
     private String label;
+
+    @NotNull(message = "신뢰도는 필수입니다.")
+    @DecimalMin(value = "0.0", message = "신뢰도는 0 이상이어야 합니다.")
+    @DecimalMax(value = "100.0", message = "신뢰도는 100 이하여야 합니다.")
     private Double confidence;
+
+    @NotBlank(message = "결과 이미지는 필수입니다.")
     private String resultImageBase64;
-    private String uid;
-    private String description; // 질병 설명 필드 추가
+
+    private String uid; // 사용자 ID
+    private String description; // 질병 설명
 }

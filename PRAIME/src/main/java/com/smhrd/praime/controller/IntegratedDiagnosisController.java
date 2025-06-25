@@ -1,7 +1,8 @@
 package com.smhrd.praime.controller;
 
-import com.smhrd.praime.DiagnosisDTO;
-import com.smhrd.praime.DiagnosisResultDto;
+import com.smhrd.praime.DiagnosisDTO; // 이 DTO를 사용합니다.
+// import com.smhrd.praime.DiagnosisResultDto; // 이 줄을 삭제합니다.
+
 import com.smhrd.praime.service.DiagnosisService;
 import com.smhrd.praime.service.FlaskIntegrationService;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,7 @@ public class IntegratedDiagnosisController {
                 Map<String, Object> outputImage = (Map<String, Object>) flaskResponse.get("output_image");
 
                 if (predictionDetails != null && outputImage != null) {
+                    // 이제 DiagnosisDTO를 사용합니다.
                     DiagnosisDTO dto = new DiagnosisDTO();
                     dto.setLabel((String) predictionDetails.get("class_name"));
                     Double confidence = (Double) predictionDetails.get("confidence");
@@ -53,6 +55,19 @@ public class IntegratedDiagnosisController {
 
                     String base64Img = (String) outputImage.get("base64_encoded_image");
                     dto.setResultImageBase64(base64Img);
+
+                    // Flask 응답에서 UID를 가져와 DTO에 설정 (필요하다면)
+                    // flaskResponse에 사용자 UID가 포함되어 있다면 아래처럼 설정할 수 있습니다.
+                    // 예: String uid = (String) flaskResponse.get("user_id");
+                    // dto.setUid(uid);
+                    // 만약 UID가 다른 곳에서 제공되어야 한다면, 해당 로직을 추가해야 합니다.
+                    // 현재 코드에서는 UID를 DTO에 설정하는 부분이 없으므로, 필요에 따라 추가하세요.
+                    // 예를 들어, 세션에서 UID를 가져와서 DTO에 설정할 수 있습니다.
+                    // UserEntity user = (UserEntity) session.getAttribute("user");
+                    // if (user != null) {
+                    //     dto.setUid(user.getUid());
+                    // }
+
 
                     Long savedId = diagnosisService.saveDiagnosis(dto);
                     response.put("savedDiagnosisId", savedId);
@@ -77,12 +92,12 @@ public class IntegratedDiagnosisController {
     @GetMapping("/flask-health")
     public ResponseEntity<Map<String, Object>> checkFlaskHealth() {
         Map<String, Object> response = new HashMap<>();
-        
+
         boolean isHealthy = flaskIntegrationService.checkFlaskServerHealth();
-        
+
         response.put("flaskServerHealthy", isHealthy);
         response.put("message", isHealthy ? "Flask 서버가 정상적으로 실행 중입니다." : "Flask 서버에 연결할 수 없습니다.");
-        
+
         return ResponseEntity.ok(response);
     }
 }
