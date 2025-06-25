@@ -19,7 +19,7 @@
     <div class="wrapper">
       <header>
         <div class="header-group">
-          <a href="#" class="prevPage" onclick="window.location.href='/farmlog/view'"> &lt; </a>
+          <a href="#" class="prevPage" onclick="goToViewPage()"> &lt; </a>
           <div class="header-title-group">
             <span class="header-title">영농 일지 수정</span>
           </div>
@@ -94,7 +94,7 @@
           </div>
 
           <div class="journal-buttons">
-            <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
+            <button type="button" class="cancel-btn" onclick="goToViewPage()">취소</button>
             <button type="submit" class="submit-btn">수정하기</button>
           </div>
         </form>

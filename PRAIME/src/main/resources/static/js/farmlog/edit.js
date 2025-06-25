@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.history.back();
         return;
     }
+	
+
 
     // 숨겨진 dlid input 필드에 값 설정
     document.getElementById("dlid").value = dlid;
@@ -317,3 +319,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 });
+
+// URL에서 dlid(일지 ID) 추출
+const pathSegments = window.location.pathname.split('/');
+const dlid = pathSegments[pathSegments.length - 1]; // 예: /farmlog/edit/123 -> "123"
+// 이전게시물보기로 가기
+function goToViewPage(){
+	window.location.href='/farmlog/view/'+dlid
+}
