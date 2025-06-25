@@ -19,45 +19,45 @@ const diseaseDataById = {
 // [1] 상단 탭 (진단하기, 진단 이력) 활성화 및 페이지 이동 관리
 // ----------------------------------------------------
 $(function(){
-  const $btnDiag = $('#start-diagnosis'); // '진단하기' 버튼
-  const $btnHist = $('#view-history');   // '진단 이력' 버튼
+    const $btnDiag = $('#start-diagnosis'); // '진단하기' 버튼
+    const $btnHist = $('#view-history');    // '진단 이력' 버튼
 
-  /**
-   * @function setActive
-   * @description '진단하기' 또는 '진단 이력' 버튼의 활성/비활성 시각적 상태를 설정합니다.
-   * @param {boolean} isDiag - '진단하기' 탭을 활성화할 경우 true, '진단 이력' 탭을 활성화할 경우 false.
-   */
-  function setActive(isDiag){
-    if(isDiag){
-      $btnDiag.addClass('btn-primary').removeClass('btn-outline');
-      $btnHist.addClass('btn-outline').removeClass('btn-primary');
-    } else {
-      $btnHist.addClass('btn-primary').removeClass('btn-outline');
-      $btnDiag.addClass('btn-outline').removeClass('btn-primary');
+    /**
+     * @function setActive
+     * @description '진단하기' 또는 '진단 이력' 버튼의 활성/비활성 시각적 상태를 설정합니다.
+     * @param {boolean} isDiag - '진단하기' 탭을 활성화할 경우 true, '진단 이력' 탭을 활성화할 경우 false.
+     */
+    function setActive(isDiag){
+        if(isDiag){
+            $btnDiag.addClass('btn-primary').removeClass('btn-outline');
+            $btnHist.addClass('btn-outline').removeClass('btn-primary');
+        } else {
+            $btnHist.addClass('btn-primary').removeClass('btn-outline');
+            $btnDiag.addClass('btn-outline').removeClass('btn-primary');
+        }
     }
-  }
 
-  // 페이지 로드 시 현재 URL 경로에 따라 초기 탭 상태 설정
-  const currentPath = window.location.pathname;
-  if (currentPath === '/diagnosisUploadPage' || currentPath === '/') {
-    setActive(true); // 기본 경로 또는 업로드 페이지인 경우 '진단하기' 탭 활성화
-  } else if (currentPath === '/diagnosisBoardPage') {
-    setActive(false); // 이력 페이지인 경우 '진단 이력' 탭 활성화
-  } else {
-    setActive(true); // 그 외의 경우 기본값으로 '진단하기' 탭 활성화
-  }
+    // 페이지 로드 시 현재 URL 경로에 따라 초기 탭 상태 설정
+    const currentPath = window.location.pathname;
+    if (currentPath === '/diagnosisUploadPage' || currentPath === '/') {
+        setActive(true); // 기본 경로 또는 업로드 페이지인 경우 '진단하기' 탭 활성화
+    } else if (currentPath === '/diagnosisBoardPage') {
+        setActive(false); // 이력 페이지인 경우 '진단 이력' 탭 활성화
+    } else {
+        setActive(true); // 그 외의 경우 기본값으로 '진단하기' 탭 활성화
+    }
 
-  // '진단하기' 버튼 클릭 시 이벤트 핸들러
-  $btnDiag.on('click', function(e){
-    setActive(true); // 버튼 시각적 상태 변경
-    window.location.href = '/diagnosisUploadPage'; // '진단하기' 페이지로 이동
-  });
+    // '진단하기' 버튼 클릭 시 이벤트 핸들러
+    $btnDiag.on('click', function(e){
+        setActive(true); // 버튼 시각적 상태 변경
+        window.location.href = '/diagnosisUploadPage'; // '진단하기' 페이지로 이동
+    });
 
-  // '진단 이력' 버튼 클릭 시 이벤트 핸들러
-  $btnHist.on('click', function(e){
-    setActive(false); // 버튼 시각적 상태 변경
-    window.location.href = '/diagnosisBoardPage'; // '진단 이력' 페이지로 이동
-  });
+    // '진단 이력' 버튼 클릭 시 이벤트 핸들러
+    $btnHist.on('click', function(e){
+        setActive(false); // 버튼 시각적 상태 변경
+        window.location.href = '/diagnosisBoardPage'; // '진단 이력' 페이지로 이동
+    });
 });
 
 
@@ -65,317 +65,357 @@ $(function(){
 // [2] 작물 사진 업로드 및 AI 진단 기능 관리
 // ----------------------------------------------------
 $(function(){
-  // DOM 요소 캐싱
-  const $uploadBox = $('.upload-box');
-  const $uploadInput = $('<input type="file" id="actual-file-input" accept="image/*" style="display:none;">');
-  const $uploadIcon = $uploadBox.find('.upload-icon');
-  const $uploadTextH2 = $uploadBox.find('h2');
-  const $uploadTextP = $uploadBox.find('p');
-  const $uploadButtons = $uploadBox.find('.upload-buttons');
-  const $diagnosisResultSection = $('#diagnosisResult');
-  const $resultLabel = $('#result-label');
-  const $resultConfidence = $('#result-confidence');
-  const $resultDescriptionContainer = $('#result-description-container');
-  const $resultDescription = $('#result-description');
-  const $resetBtn = $('.reset-btn');
-  const $diagnosisResultSaveBtn = $('#diagnosisResultSaveBtn');
+    // DOM 요소 캐싱
+    const $uploadBox = $('.upload-box');
+    const $uploadInput = $('<input type="file" id="actual-file-input" accept="image/*" style="display:none;">');
+    const $uploadIcon = $uploadBox.find('.upload-icon');
+    const $uploadTextH2 = $uploadBox.find('h2');
+    const $uploadTextP = $uploadBox.find('p');
+    const $uploadButtons = $uploadBox.find('.upload-buttons');
+    const $diagnosisResultSection = $('#diagnosisResult');
+    const $resultLabel = $('#result-label');
+    const $resultConfidence = $('#result-confidence');
+    const $resultDescriptionContainer = $('#result-description-container');
+    const $resultDescription = $('#result-description');
+    const $resetBtn = $('.reset-btn');
+    const $diagnosisResultSaveBtn = $('#diagnosisResultSaveBtn');
 
-  let lastDiagnosisResult = {
-      label: '',
-      confidence: 0,
-      description: '',
-      image: ''
-  };
-
-  $('body').append($uploadInput);
-  // 초기 로드 시 '결과저장' 버튼 비활성화
-  $diagnosisResultSaveBtn.prop('disabled', true).css('opacity', '0.6').css('cursor', 'not-allowed');
-
-  // UI를 초기 상태로 리셋하는 함수
-  function resetUI() {
-    $uploadBox.css({
-      'background-image': 'none',
-      'background-size': '',
-      'background-position': '',
-      'background-repeat': ''
-    }).removeClass('uploaded'); // 업로드된 상태 클래스 제거
-
-    $uploadIcon.show(); // 업로드 아이콘 보이기
-    $uploadTextH2.show().text('작물 사진 업로드'); // 제목 초기화
-    $uploadTextP.show().text('병해충이 의심되는 부분을 촬영하거나 이미지를 업로드하세요'); // 설명 초기화
-
-    $uploadInput.val(''); // 파일 입력 필드 초기화
-
-    $diagnosisResultSection.addClass('hidden'); // 진단 결과 섹션 숨기기
-    $resultLabel.text('--'); // 레이블 초기화
-    $resultConfidence.text('--%'); // 신뢰도 초기화
-    $resultDescriptionContainer.addClass('hidden'); // 설명 컨테이너 숨기기
-    $resultDescription.text('--'); // 설명 내용 초기화
-    
-    // lastDiagnosisResult 객체 초기화
-    lastDiagnosisResult = {
+    let lastDiagnosisResult = {
         label: '',
         confidence: 0,
         description: '',
         image: ''
     };
 
-    // '결과저장' 버튼 비활성화
+    $('body').append($uploadInput);
+    // 초기 로드 시 '결과저장' 버튼 비활성화
     $diagnosisResultSaveBtn.prop('disabled', true).css('opacity', '0.6').css('cursor', 'not-allowed');
-  }
 
-  // 이미지 업로드 및 AI 진단 요청 함수
-  function uploadImage(file) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('conf_threshold', 0.5); // 신뢰도 임계값 설정
+    // UI를 초기 상태로 리셋하는 함수
+    function resetUI() {
+        $uploadBox.css({
+            'background-image': 'none',
+            'background-size': '',
+            'background-position': '',
+            'background-repeat': ''
+        }).removeClass('uploaded'); // 업로드된 상태 클래스 제거
 
-    // 진단 중 UI 상태 변경
-    $uploadBox.css('border-color', 'var(--primary-color)').css('opacity', '0.8');
-    $uploadTextH2.text('진단 중...').show();
-    $uploadTextP.text('AI가 작물을 분석하고 있습니다. 잠시만 기다려 주세요.').show();
+        $uploadIcon.show(); // 업로드 아이콘 보이기
+        $uploadTextH2.show().text('작물 사진 업로드'); // 제목 초기화
+        $uploadTextP.show().text('병해충이 의심되는 부분을 촬영하거나 이미지를 업로드하세요'); // 설명 초기화
+        $uploadButtons.show(); // 버튼 보이기 (reset 시)
 
-    // Flask 서버로 진단 요청
-    axios.post('http://localhost:5000/predict', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      timeout: 30000, // 30초 타임아웃
-    })
-    .then(response => {
-      console.log('Flask 진단 성공 응답 (전체):', response.data); // 전체 응답 로그
-      const data = response.data;
 
-      let resultLabel = '탐지 실패'; // 초기 레이블
-      let resultConfidence = 0; // 초기 신뢰도
-      let resultDescription = '진단 중 오류가 발생했습니다.'; // 초기 설명
-      let base64Image = null; // 초기 이미지 데이터
+        $uploadInput.val(''); // 파일 입력 필드 초기화
 
-      // Flask 응답에서 output_image가 있다면 미리 가져옴
-      if (data.output_image && data.output_image.base64_encoded_image) {
-          base64Image = data.output_image.base64_encoded_image;
-      }
+        $diagnosisResultSection.addClass('hidden'); // 진단 결과 섹션 숨기기
+        $resultLabel.text('--'); // 레이블 초기화
+        $resultConfidence.text('--%'); // 신뢰도 초기화
+        $resultDescriptionContainer.addClass('hidden'); // 설명 컨테이너 숨기기
+        $resultDescription.text('--'); // 설명 내용 초기화
+        
+        // lastDiagnosisResult 객체 초기화
+        lastDiagnosisResult = {
+            label: '',
+            confidence: 0,
+            description: '',
+            image: ''
+        };
 
-      // prediction_details 유효성 검사 및 detections 배열 확인
-      if (data.success && data.prediction_details && Array.isArray(data.prediction_details.detections)) {
-        const detections = data.prediction_details.detections;
-
-        if (detections.length === 0) {
-          // Case 1: detections 배열이 비어있는 경우 (객체 탐지 실패)
-          resultLabel = '객체탐지 실패';
-          resultConfidence = 0;
-          resultDescription = '모델이 객체탐지에 실패했습니다.\n흐릿하거나 확대된 이미지의 경우 정확한 진단이 되지 않을 수 있습니다.';
-        } else {
-          // detections 배열에 내용이 있는 경우
-          const firstDetection = detections[0];
-          const classId = firstDetection.class_id; // Flask에서 넘어온 class_id
-          resultConfidence = parseFloat((firstDetection.confidence * 100).toFixed(2));
-
-          // class_id에 해당하는 질병 정보 가져오기
-          const diseaseInfo = diseaseDataById[classId];
-
-          if (diseaseInfo) {
-            resultLabel = diseaseInfo.label;
-            resultDescription = diseaseInfo.description;
-          } else {
-            // 정의되지 않은 class_id인 경우
-            resultLabel = '알 수 없는 질병';
-            resultDescription = '알 수 없는 질병이 탐지되었습니다. 데이터베이스를 확인해주세요.';
-          }
-        }
-      } else {
-        // success가 false이거나 prediction_details가 없거나 detections가 배열이 아닌 경우 (예상치 못한 응답)
-        resultLabel = '탐지 실패';
-        resultConfidence = 0;
-        resultDescription = data.error || '진단 처리 중 알 수 없는 오류가 발생했습니다.';
-      }
-      
-      // 진단 결과 UI 업데이트
-      $resultLabel.text(resultLabel); // 레이블 표시
-      $resultConfidence.text(`${resultConfidence}%`); // 신뢰도 표시
-      $diagnosisResultSection.removeClass('hidden'); // 결과 섹션 보이게
-
-      // 질병 설명 UI 업데이트
-      // resultDescription이 유효한 문자열이고 기본값인 '--'가 아닐 때만 표시
-      if (resultDescription && resultDescription !== '--') {
-          $resultDescription.text(resultDescription);
-          $resultDescriptionContainer.removeClass('hidden'); // 설명 컨테이너 보이게
-      } else {
-          $resultDescription.text('--'); // 그 외의 경우 '--' 표시
-          $resultDescriptionContainer.addClass('hidden'); // 설명 컨테이너 숨기기
-      }
-
-      // 업로드 박스 텍스트 업데이트
-      $uploadTextH2.text('진단 완료').show();
-      $uploadTextP.text('결과 저장 버튼을 클릭하여 진단 내용을 저장하세요.').show();
-
-      // 진단된 이미지로 배경 변경
-      if (base64Image) {
-        $uploadBox.css('background-image', `url(data:image/jpeg;base64,${base64Image})`);
-        $uploadBox.addClass('uploaded');
-        $uploadIcon.hide();
-        $uploadTextH2.show(); 
-        $uploadTextP.show(); 
-        $uploadButtons.hide();
-      }
-
-      // 마지막 진단 결과 저장 (저장 버튼 클릭 시 사용)
-      lastDiagnosisResult = {
-          label: resultLabel,
-          confidence: resultConfidence,
-          description: resultDescription,
-          image: base64Image
-      };
-
-      // '결과 저장' 버튼 활성화/비활성화
-      // "객체탐지 실패"가 아니고 신뢰도가 0보다 크거나 '정상'인 경우 활성화
-      if (resultLabel !== '객체탐지 실패' && (resultConfidence > 0 || resultLabel === '정상')) {
-          $diagnosisResultSaveBtn.prop('disabled', false).css('opacity', '1').css('cursor', 'pointer');
-      } else {
-          $diagnosisResultSaveBtn.prop('disabled', true).css('opacity', '0.6').css('cursor', 'not-allowed');
-      }
-
-    })
-    .catch(error => {
-      console.error('진단 실패:', error); // 에러 로그
-      let errorMessage = '진단 중 오류가 발생했습니다.';
-      if (error.response) {
-        errorMessage = `서버 오류: ${error.response.data.error || error.response.statusText}`;
-      } else if (error.request) {
-        errorMessage = 'Flask 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.';
-      } else {
-        errorMessage = `요청 오류: ${error.message}`;
-      }
-      alert(errorMessage); // 사용자에게 알림
-
-      // 오류 발생 시 UI 초기화
-      $resultLabel.text('오류 발생');
-      $resultConfidence.text('---');
-      $diagnosisResultSection.removeClass('hidden');
-      $resultDescriptionContainer.addClass('hidden');
-      $resultDescription.text('--');
-      
-      $uploadTextH2.text('오류 발생').show();
-      $uploadTextP.text('진단 중 오류가 발생했습니다.').show();
-
-      $diagnosisResultSaveBtn.prop('disabled', true).css('opacity', '0.6').css('cursor', 'not-allowed');
-    })
-    .finally(() => {
-      // 진단 요청 완료 후 UI 상태 복원 (테두리 색상, 투명도)
-      $uploadBox.css('border-color', 'var(--border-color)').css('opacity', '1');
-    });
-  }
-
-  /**
-  * @function saveDiagnosisResult
-  * @description 진단 결과를 Spring Boot 백엔드에 저장 요청합니다.
-  */
-  function saveDiagnosisResult() {
-    // 저장할 데이터 유효성 검사
-    if (lastDiagnosisResult.label === '' || (lastDiagnosisResult.label !== '정상' && lastDiagnosisResult.confidence === 0)) {
-        alert('저장할 진단 결과가 없습니다. 먼저 이미지를 업로드하고 진단을 완료해주세요.');
-        return;
-    }
-    // "객체탐지 실패", "알 수 없는 질병" 결과는 저장하지 않음
-    if (lastDiagnosisResult.label === '객체탐지 실패' || lastDiagnosisResult.label === '알 수 없는 질병') {
-        alert('객체 탐지 실패 또는 알 수 없는 질병 결과는 저장할 수 없습니다.');
-        return;
-    }
-
-    // 결과 이미지의 'data:image/jpeg;base64,' 접두사를 제거 (필요한 경우)
-    const rawBase64Image = lastDiagnosisResult.image ? (lastDiagnosisResult.image.split(',')[1] || lastDiagnosisResult.image) : null;
-
-    // 저장할 데이터 객체
-    const saveData = {
-        label: lastDiagnosisResult.label,
-        confidence: lastDiagnosisResult.confidence,
-        description: lastDiagnosisResult.description,
-        resultImageBase64: rawBase64Image
-    };
-
-    console.log("저장할 데이터:", saveData);
-
-    // Spring Boot 백엔드 API로 POST 요청
-    axios.post('http://localhost:8087/api/diagnosis/save', saveData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => {
-      console.log('결과 저장 성공:', response.data);
-      alert('진단 결과가 성공적으로 저장되었습니다!');
-      window.location.href = '/diagnosisBoardPage'; // 저장 성공 후 진단 이력 페이지로 이동
-    })
-    .catch(error => {
-      console.error('결과 저장 실패:', error);
-      if (error.response) {
-        console.error('응답 데이터:', error.response.data);
-        console.error('응답 상태:', error.response.status);
-        alert(`결과 저장 실패: ${error.response.data.message || error.response.statusText}`);
-      } else if (error.request) {
-        console.error('요청 데이터 없음:', error.request);
-        alert('결과 저장 실패: 서버에 연결할 수 없습니다. 백엔드가 실행 중인지 확인해주세요.');
-      } else {
-        console.error('에러 메시지:', error.message);
-        alert('결과 저장 중 알 수 없는 오류가 발생했습니다.');
-      }
-    });
-  }
-
-  // ----------------------------------------------------
-  // [2-1] 이벤트 리스너: 파일 업로드 및 리셋, 결과 저장 버튼 동작
-  // ----------------------------------------------------
-
-  // 'upload-box' 클릭 시 숨겨진 파일 입력 필드 열기
-  $uploadBox.on('click', function() {
-    // 업로드된 상태가 아닐 때만 클릭 활성화 (오류 발생 시에도 클릭 가능하도록)
-    // if (!$uploadBox.hasClass('uploaded') || $resultLabel.text() === '오류 발생') {
-        $uploadInput.click();
-    // }
-  });
-
-  // 파일 입력 필드에 파일이 선택되었을 때 이벤트 처리
-  $uploadInput.on('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        // 이미지 미리보기 및 UI 변경 (진단 전 임시 미리보기)
-        $uploadBox.css('background-image', `url(${e.target.result})`)
-                  .css('background-size', 'cover')
-                  .css('background-position', 'center')
-                  .css('background-repeat', 'no-repeat')
-                  .addClass('uploaded'); // 업로드 상태 클래스 추가
-
-        $uploadIcon.hide(); // 아이콘 숨기기
-        $uploadTextH2.hide(); // 제목 숨기기
-        $uploadTextP.hide(); // 설명 숨기기
-        $uploadButtons.hide(); // 버튼 숨기기
-
-        // 진단 결과 섹션 및 버튼 초기화 (새 진단을 위해)
-        $diagnosisResultSection.addClass('hidden');
-        $resultLabel.text('--');
-        $resultConfidence.text('--%');
-        $resultDescriptionContainer.addClass('hidden');
-        $resultDescription.text('--');
+        // '결과저장' 버튼 비활성화
         $diagnosisResultSaveBtn.prop('disabled', true).css('opacity', '0.6').css('cursor', 'not-allowed');
-      };
-      reader.readAsDataURL(file);
-
-      // 파일 선택 후 바로 이미지 업로드 및 진단 API 호출
-      uploadImage(file);
-    } else {
-      resetUI(); // 파일 선택 취소 시 UI 리셋
     }
-  });
 
-  // '리셋' 버튼 클릭 시 UI 초기화
-  $resetBtn.on('click', function() {
-    resetUI();
-  });
+    // 이미지 미리보기 및 UI 변경 함수
+    function previewImage(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            $uploadBox.css('background-image', `url(${e.target.result})`)
+                    .css('background-size', 'cover')
+                    .css('background-position', 'center')
+                    .css('background-repeat', 'no-repeat')
+                    .addClass('uploaded'); // 업로드 상태 클래스 추가
 
-  // '결과 저장' 버튼 클릭 시 진단 결과 저장 함수 호출
-  $diagnosisResultSaveBtn.on('click', function() {
-    saveDiagnosisResult();
-  });
+            $uploadIcon.hide(); // 아이콘 숨기기
+            $uploadTextH2.hide(); // 제목 숨기기
+            $uploadTextP.hide(); // 설명 숨기기
+            $uploadButtons.hide(); // 버튼 숨기기
+
+            // 진단 결과 섹션 및 버튼 초기화 (새 진단을 위해)
+            $diagnosisResultSection.addClass('hidden');
+            $resultLabel.text('--');
+            $resultConfidence.text('--%');
+            $resultDescriptionContainer.addClass('hidden');
+            $resultDescription.text('--');
+            $diagnosisResultSaveBtn.prop('disabled', true).css('opacity', '0.6').css('cursor', 'not-allowed');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // 이미지 업로드 및 AI 진단 요청 함수
+    function uploadImage(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('conf_threshold', 0.5); // 신뢰도 임계값 설정
+
+        // 진단 중 UI 상태 변경
+        $uploadBox.css('border-color', 'var(--primary-color)').css('opacity', '0.8');
+        $uploadTextH2.text('진단 중...').show();
+        $uploadTextP.text('AI가 작물을 분석하고 있습니다. 잠시만 기다려 주세요.').show();
+
+        // Flask 서버로 진단 요청
+        axios.post('http://localhost:5000/predict', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            timeout: 30000, // 30초 타임아웃
+        })
+        .then(response => {
+            console.log('Flask 진단 성공 응답 (전체):', response.data); // 전체 응답 로그
+            const data = response.data;
+
+            let resultLabel = '탐지 실패'; // 초기 레이블
+            let resultConfidence = 0; // 초기 신뢰도
+            let resultDescription = '진단 중 오류가 발생했습니다.'; // 초기 설명
+            let base64Image = null; // 초기 이미지 데이터
+
+            // Flask 응답에서 output_image가 있다면 미리 가져옴
+            if (data.output_image && data.output_image.base64_encoded_image) {
+                base64Image = data.output_image.base64_encoded_image;
+            }
+
+            // prediction_details 유효성 검사 및 detections 배열 확인
+            if (data.success && data.prediction_details && Array.isArray(data.prediction_details.detections)) {
+                const detections = data.prediction_details.detections;
+
+                if (detections.length === 0) {
+                    // Case 1: detections 배열이 비어있는 경우 (객체 탐지 실패)
+                    resultLabel = '객체탐지 실패';
+                    resultConfidence = 0;
+                    resultDescription = '모델이 객체탐지에 실패했습니다.\n흐릿하거나 확대된 이미지의 경우 정확한 진단이 되지 않을 수 있습니다.';
+                } else {
+                    // detections 배열에 내용이 있는 경우
+                    const firstDetection = detections[0];
+                    const classId = firstDetection.class_id; // Flask에서 넘어온 class_id
+                    resultConfidence = parseFloat((firstDetection.confidence * 100).toFixed(2));
+
+                    // class_id에 해당하는 질병 정보 가져오기
+                    const diseaseInfo = diseaseDataById[classId];
+
+                    if (diseaseInfo) {
+                        resultLabel = diseaseInfo.label;
+                        resultDescription = diseaseInfo.description;
+                    } else {
+                        // 정의되지 않은 class_id인 경우
+                        resultLabel = '알 수 없는 질병';
+                        resultDescription = '알 수 없는 질병이 탐지되었습니다. 데이터베이스를 확인해주세요.';
+                    }
+                }
+            } else {
+                // success가 false이거나 prediction_details가 없거나 detections가 배열이 아닌 경우 (예상치 못한 응답)
+                resultLabel = '탐지 실패';
+                resultConfidence = 0;
+                resultDescription = data.error || '진단 처리 중 알 수 없는 오류가 발생했습니다.';
+            }
+            
+            // 진단 결과 UI 업데이트
+            $resultLabel.text(resultLabel); // 레이블 표시
+            $resultConfidence.text(`${resultConfidence}%`); // 신뢰도 표시
+            $diagnosisResultSection.removeClass('hidden'); // 결과 섹션 보이게
+
+            // 질병 설명 UI 업데이트
+            // resultDescription이 유효한 문자열이고 기본값인 '--'가 아닐 때만 표시
+            if (resultDescription && resultDescription !== '--') {
+                $resultDescription.text(resultDescription);
+                $resultDescriptionContainer.removeClass('hidden'); // 설명 컨테이너 보이게
+            } else {
+                $resultDescription.text('--'); // 그 외의 경우 '--' 표시
+                $resultDescriptionContainer.addClass('hidden'); // 설명 컨테이너 숨기기
+            }
+
+            // 업로드 박스 텍스트 업데이트
+            $uploadTextH2.text('진단 완료').show();
+            $uploadTextP.text('결과 저장 버튼을 클릭하여 진단 내용을 저장하세요.').show();
+
+            // 진단된 이미지로 배경 변경
+            if (base64Image) {
+                $uploadBox.css('background-image', `url(data:image/jpeg;base64,${base64Image})`);
+                $uploadBox.addClass('uploaded');
+                $uploadIcon.hide();
+                $uploadTextH2.show();  
+                $uploadTextP.show();  
+                $uploadButtons.hide();
+            }
+
+            // 마지막 진단 결과 저장 (저장 버튼 클릭 시 사용)
+            lastDiagnosisResult = {
+                label: resultLabel,
+                confidence: resultConfidence,
+                description: resultDescription,
+                image: base64Image
+            };
+
+            // '결과 저장' 버튼 활성화/비활성화
+            // "객체탐지 실패"가 아니고 신뢰도가 0보다 크거나 '정상'인 경우 활성화
+            if (resultLabel !== '객체탐지 실패' && (resultConfidence > 0 || resultLabel === '정상')) {
+                $diagnosisResultSaveBtn.prop('disabled', false).css('opacity', '1').css('cursor', 'pointer');
+            } else {
+                $diagnosisResultSaveBtn.prop('disabled', true).css('opacity', '0.6').css('cursor', 'not-allowed');
+            }
+
+        })
+        .catch(error => {
+            console.error('진단 실패:', error); // 에러 로그
+            let errorMessage = '진단 중 오류가 발생했습니다.';
+            if (error.response) {
+                errorMessage = `서버 오류: ${error.response.data.error || error.response.statusText}`;
+            } else if (error.request) {
+                errorMessage = 'Flask 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.';
+            } else {
+                errorMessage = `요청 오류: ${error.message}`;
+            }
+            alert(errorMessage); // 사용자에게 알림
+
+            // 오류 발생 시 UI 초기화
+            $resultLabel.text('오류 발생');
+            $resultConfidence.text('---');
+            $diagnosisResultSection.removeClass('hidden');
+            $resultDescriptionContainer.addClass('hidden');
+            $resultDescription.text('--');
+            
+            $uploadTextH2.text('오류 발생').show();
+            $uploadTextP.text('진단 중 오류가 발생했습니다.').show();
+
+            $diagnosisResultSaveBtn.prop('disabled', true).css('opacity', '0.6').css('cursor', 'not-allowed');
+        })
+        .finally(() => {
+            // 진단 요청 완료 후 UI 상태 복원 (테두리 색상, 투명도)
+            $uploadBox.css('border-color', 'var(--border-color)').css('opacity', '1');
+        });
+    }
+
+    /**
+    * @function saveDiagnosisResult
+    * @description 진단 결과를 Spring Boot 백엔드에 저장 요청합니다.
+    */
+    function saveDiagnosisResult() {
+        // 저장할 데이터 유효성 검사
+        if (lastDiagnosisResult.label === '' || (lastDiagnosisResult.label !== '정상' && lastDiagnosisResult.confidence === 0)) {
+            alert('저장할 진단 결과가 없습니다. 먼저 이미지를 업로드하고 진단을 완료해주세요.');
+            return;
+        }
+        // "객체탐지 실패", "알 수 없는 질병" 결과는 저장하지 않음
+        if (lastDiagnosisResult.label === '객체탐지 실패' || lastDiagnosisResult.label === '알 수 없는 질병') {
+            alert('객체 탐지 실패 또는 알 수 없는 질병 결과는 저장할 수 없습니다.');
+            return;
+        }
+
+        // 결과 이미지의 'data:image/jpeg;base64,' 접두사를 제거 (필요한 경우)
+        const rawBase64Image = lastDiagnosisResult.image ? (lastDiagnosisResult.image.split(',')[1] || lastDiagnosisResult.image) : null;
+
+        // 저장할 데이터 객체
+        const saveData = {
+            label: lastDiagnosisResult.label,
+            confidence: lastDiagnosisResult.confidence,
+            description: lastDiagnosisResult.description,
+            resultImageBase64: rawBase64Image
+        };
+
+        console.log("저장할 데이터:", saveData);
+
+        // Spring Boot 백엔드 API로 POST 요청
+        axios.post('http://localhost:8087/api/diagnosis/save', saveData, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            console.log('결과 저장 성공:', response.data);
+            alert('진단 결과가 성공적으로 저장되었습니다!');
+            window.location.href = '/diagnosisBoardPage'; // 저장 성공 후 진단 이력 페이지로 이동
+        })
+        .catch(error => {
+            console.error('결과 저장 실패:', error);
+            if (error.response) {
+                console.error('응답 데이터:', error.response.data);
+                console.error('응답 상태:', error.response.status);
+                alert(`결과 저장 실패: ${error.response.data.message || error.response.statusText}`);
+            } else if (error.request) {
+                console.error('요청 데이터 없음:', error.request);
+                alert('결과 저장 실패: 서버에 연결할 수 없습니다. 백엔드가 실행 중인지 확인해주세요.');
+            } else {
+                console.error('에러 메시지:', error.message);
+                alert('결과 저장 중 알 수 없는 오류가 발생했습니다.');
+            }
+        });
+    }
+
+    // ----------------------------------------------------
+    // [2-1] 이벤트 리스너: 파일 업로드 및 리셋, 결과 저장 버튼 동작
+    // ----------------------------------------------------
+
+    // 'upload-box' 클릭 시 숨겨진 파일 입력 필드 열기
+    $uploadBox.on('click', function() {
+        // 업로드된 상태가 아닐 때만 클릭 활성화 (오류 발생 시에도 클릭 가능하도록)
+        // if (!$uploadBox.hasClass('uploaded') || $resultLabel.text() === '오류 발생') {
+            $uploadInput.click();
+        // }
+    });
+
+    // 파일 입력 필드에 파일이 선택되었을 때 이벤트 처리
+    $uploadInput.on('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            previewImage(file);
+            uploadImage(file);
+        } else {
+            resetUI(); // 파일 선택 취소 시 UI 리셋
+        }
+    });
+
+    // Drag and drop functionality
+    $uploadBox.on('dragover', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).addClass('drag-over');
+    });
+
+    $uploadBox.on('dragleave', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).removeClass('drag-over');
+    });
+
+    $uploadBox.on('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).removeClass('drag-over');
+
+        const files = e.originalEvent.dataTransfer.files;
+        if (files.length > 0) {
+            const file = files[0];
+            if (file.type.startsWith('image/')) {
+                // Set the file to the hidden input for consistency
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                $uploadInput[0].files = dataTransfer.files;
+                
+                previewImage(file);
+                uploadImage(file);
+            } else {
+                alert('이미지 파일만 업로드할 수 있습니다.');
+            }
+        }
+    });
+
+
+    // '리셋' 버튼 클릭 시 UI 초기화
+    $resetBtn.on('click', function() {
+        resetUI();
+    });
+
+    // '결과 저장' 버튼 클릭 시 진단 결과 저장 함수 호출
+    $diagnosisResultSaveBtn.on('click', function() {
+        saveDiagnosisResult();
+    });
 });

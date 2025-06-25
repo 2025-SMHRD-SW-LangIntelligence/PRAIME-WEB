@@ -183,8 +183,9 @@ main{
 .divider2{
 	width: 95%;
 	margin: 0 auto;
-	color: #e2e6ee;
-	height: 0.1rem;
+	border: 0;
+	background-color: rgba(226, 230, 238, 0.7);
+	height: 0.1px;
 }
 
 .weather-bottom-section { /* Renamed for clarity */
