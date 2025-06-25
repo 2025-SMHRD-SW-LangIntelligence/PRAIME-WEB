@@ -247,7 +247,26 @@ public class DailyLogService {
 		DailyLogEntity log = dailyLogRepository.findById(dlid)
 				.orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
+		// ✅ 실제 파일 시스템의 이미지 파일들 삭제
+		if (log.getDlimage() != null && !log.getDlimage().isEmpty()) {
+			System.out.println("🗑️ 삭제할 이미지 파일들:");
+			for (DailyImageEntity image : log.getDlimage()) {
+				String imagePath = uploadDir + File.separator + image.getDlipath();
+				File file = new File(imagePath);
+				if (file.exists()) {
+					if (file.delete()) {
+						System.out.println("✅ 이미지 파일 삭제 성공: " + imagePath);
+					} else {
+						System.err.println("❌ 이미지 파일 삭제 실패: " + imagePath);
+					}
+				} else {
+					System.out.println("⚠️ 이미지 파일이 존재하지 않음: " + imagePath);
+				}
+			}
+		}
+
 		dailyLogRepository.delete(log); // 연관된 이미지도 orphanRemoval = true 로 자동 삭제됨
+		System.out.println("✅ 일지 및 관련 데이터 삭제 완료: DLID=" + dlid);
 	}
 
 	public boolean isLogOwner(Long dlid, UserEntity user) {

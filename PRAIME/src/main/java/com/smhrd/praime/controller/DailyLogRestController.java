@@ -172,23 +172,45 @@ public class DailyLogRestController {
     }
 
     // ✅ ✨ 수정용 데이터 조회 API: log + user.crops
-    @PostMapping("/editData/{dlid}")
+    @GetMapping("/editData/{dlid}")
     public ResponseEntity<?> getEditData(@PathVariable Long dlid) {
-        Optional<DailyLogEntity> logOpt = dailyLogService.getLogDetail(dlid);
+        try {
+            System.out.println("🔍 editData 요청 - dlid: " + dlid);
+            
+            Optional<DailyLogEntity> logOpt = dailyLogService.getLogDetail(dlid);
 
-        if (logOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "일지를 찾을 수 없습니다."));
+            if (logOpt.isEmpty()) {
+                System.out.println("❌ 일지를 찾을 수 없음 - dlid: " + dlid);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("error", "일지를 찾을 수 없습니다."));
+            }
+
+            DailyLogEntity log = logOpt.get();
+            System.out.println("✅ 일지 조회 성공 - 제목: " + log.getDltitle());
+            
+            // UserEntity를 다시 조회하여 영속화
+            UserEntity user = userRepository.findByUid(log.getUser().getUid())
+                    .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+            
+            List<String> crops = user.getCrops();
+            if (crops == null) {
+                crops = new ArrayList<>(); // null인 경우 빈 리스트로 초기화
+                System.out.println("⚠️ crops가 null이므로 빈 리스트로 초기화");
+            }
+            System.out.println("✅ 작물 목록 조회 성공 - 작물 수: " + crops.size());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("log", log);
+            response.put("crops", crops);
+
+            System.out.println("✅ 응답 데이터 생성 완료");
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            System.err.println("❌ editData 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "데이터 조회 중 오류가 발생했습니다: " + e.getMessage()));
         }
-
-        DailyLogEntity log = logOpt.get();
-        UserEntity user = log.getUser();
-        List<String> crops = user.getCrops();
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("log", log);
-        response.put("crops", crops);
-
-        return ResponseEntity.ok(response);
     }
 }
