@@ -58,40 +58,45 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.querySelector("select[name='dlwork']").value = log.dlwork || "";
         document.querySelector("input[name='dlpesticide']").value = log.dlpesticide || "";
 
-        // 🖼️ 기존 이미지 처리 (선택사항)
-        if (log.dlimage && log.dlimage.length > 0) {
-            const imgPreviewContainer = document.querySelector("#existingImageContainer");
-            imgPreviewContainer.innerHTML = "";
+		// 🖼️ 기존 이미지 처리 (선택사항)
+		if (log.dlimage && log.dlimage.length > 0) {
+		    const imgPreviewContainer = document.querySelector("#existingImageContainer");
+		    imgPreviewContainer.innerHTML = "";
 
-            log.dlimage.forEach(img => {
-                const div = document.createElement("div");
-                div.classList.add("img-preview");
+		    log.dlimage.forEach(img => {
+		        const div = document.createElement("div");
+		        div.classList.add("img-preview"); // This div will contain the image and the icon
 
-                const image = document.createElement("img");
-                image.src = `/uploads/farmlog/${img.dlipath}`;
-                image.alt = "기존 이미지";
-                image.dataset.imageId = img.dliid;
+		        const image = document.createElement("img");
+		        image.src = `/uploads/farmlog/${img.dlipath}`;
+		        image.alt = "기존 이미지";
+		        image.dataset.imageId = img.dliid;
 
-                const delBtn = document.createElement("button");
-                delBtn.textContent = "삭제";
-                delBtn.type = "button";
-                delBtn.addEventListener("click", () => {
-                    div.remove();
+		        // --- 변경된 부분 시작 ---
+		        // Create the <i> tag directly for the icon
+		        const deleteIcon = document.createElement("i");
+		        deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
+		        deleteIcon.title = "삭제"; // Tooltip on hover
+		        deleteIcon.style.cursor = "pointer"; // Indicate it's clickable
 
-                    // 삭제할 이미지 ID 기록 (서버에 넘김)
-                    const deletedInput = document.createElement("input");
-                    deletedInput.type = "hidden";
-                    deletedInput.name = "deletedImageIds";
-                    deletedInput.value = img.dliid;
-                    document.querySelector("#editForm").appendChild(deletedInput);
-                });
+		        // Attach the event listener directly to the icon
+		        deleteIcon.addEventListener("click", () => {
+		            div.remove(); // Remove the entire img-preview div
 
-                div.appendChild(image);
-                div.appendChild(delBtn);
-                imgPreviewContainer.appendChild(div);
-            });
-        }
+		            // 삭제할 이미지 ID 기록 (서버에 넘김)
+		            const deletedInput = document.createElement("input");
+		            deletedInput.type = "hidden";
+		            deletedInput.name = "deletedImageIds";
+		            deletedInput.value = img.dliid;
+		            document.querySelector("#editForm").appendChild(deletedInput);
+		        });
+		        // --- 변경된 부분 끝 ---
 
+		        div.appendChild(image);
+		        div.appendChild(deleteIcon); // Append the icon directly to the preview div
+		        imgPreviewContainer.appendChild(div);
+		    });
+		}
     } catch (error) {
         console.error("수정 데이터 로딩 오류:", error);
         alert("수정 데이터를 불러오는 중 문제가 발생했습니다.");
