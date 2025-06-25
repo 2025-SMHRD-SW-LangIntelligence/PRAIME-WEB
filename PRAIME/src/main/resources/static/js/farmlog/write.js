@@ -1,4 +1,4 @@
-// write.js (No changes from your provided code, as it relies on farmlog.js)
+// write.js
 
 document.addEventListener("DOMContentLoaded", () => {
 	const imageInput = document.getElementById("dlimages");
@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	let selectedFiles = []; // 사용자가 선택한 파일들을 저장할 배열
 
 	// 작물 목록 불러오기 (farmlog.js에 정의된 함수 호출)
-	// 이 함수가 작물 데이터를 가져와 crop-container div에 동적으로 추가합니다.
 	if (typeof fetchCropOptions === 'function') {
 		fetchCropOptions("/farmlog/write/crops", "crop-container");
 	} else {
@@ -15,26 +14,54 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	// 날씨 정보 불러오기 (farmlog.js에 정의된 함수 호출)
-	// 이 함수가 날씨 데이터를 가져와 dlweather, dltemp hidden input에 설정합니다.
 	if (typeof fetchWeather === 'function') {
 		fetchWeather();
 	} else {
 		console.error("fetchWeather 함수가 정의되지 않았습니다. farmlog.js를 확인하세요.");
 	}
 
-	// 이미지 선택 시 미리보기 표시
+	// 이미지 선택 시 미리보기 표시 (파일 유효성 검사 강화)
 	imageInput.addEventListener("change", (e) => {
-		// 새로 선택된 파일들을 selectedFiles 배열에 저장 (renderImages로 전달)
-		selectedFiles = Array.from(e.target.files);
+		const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
+		const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+		let validFiles = [];
+		let invalidFileMessages = [];
+
+		// 새로 선택된 파일들을 순회하며 유효성 검사
+		Array.from(e.target.files).forEach(file => {
+			const fileExtension = file.name.split(".").pop().toLowerCase();
+
+			if (!allowedExtensions.includes(fileExtension)) {
+				invalidFileMessages.push(`- ${file.name} (허용되지 않는 확장자: ${fileExtension})`);
+			} else if (file.size > MAX_FILE_SIZE) {
+				invalidFileMessages.push(`- ${file.name} (용량 초과: ${ (file.size / (1024 * 1024)).toFixed(2) }MB, 최대 ${ (MAX_FILE_SIZE / (1024 * 1024)).toFixed(0) }MB)`);
+			} else {
+				validFiles.push(file); // 유효한 파일만 추가
+			}
+		});
+
+		// 유효하지 않은 파일이 있으면 사용자에게 알림
+		if (invalidFileMessages.length > 0) {
+			let errorMessage = "다음 파일들은 업로드할 수 없습니다:\n" + invalidFileMessages.join('\n');
+			errorMessage += `\n\n허용되는 확장자: ${allowedExtensions.join(', ')}\n`;
+			alert(errorMessage);
+		}
+
+		// input 요소의 files 속성을 유효한 파일들로만 다시 설정
+		// 이렇게 해야 renderImages나 폼 제출 시 유효한 파일만 처리됩니다.
+		const dt = new DataTransfer();
+		validFiles.forEach(file => dt.items.add(file));
+		imageInput.files = dt.files;
+		selectedFiles = validFiles; // selectedFiles 배열도 유효한 파일로 업데이트
 
 		// renderImages 함수 (farmlog.js에 정의)를 사용하여 이미지 미리보기를 갱신
-		// 세 번째 인자 true는 새로운 파일이 선택되었을 때 기존 미리보기를 지우고 다시 그리는 것을 의미
+		// 이제 selectedFiles 배열에는 유효한 파일만 들어있으므로, 그것들만 미리보기됩니다.
 		if (typeof renderImages === 'function') {
-			renderImages(preview, selectedFiles, imageInput, true); // <--- renderImages 호출
+			renderImages(preview, selectedFiles, imageInput, true);
 		} else {
 			console.error("renderImages 함수가 정의되지 않았습니다. farmlog.js를 확인하세요.");
-			// renderImages 함수가 없을 경우 대체 로직: 파일명만 표시
-			preview.innerHTML = ''; // 미리보기 영역 비우기
+			preview.innerHTML = '';
 			selectedFiles.forEach(file => {
 				const p = document.createElement('p');
 				p.textContent = `선택된 파일: ${file.name}`;
@@ -42,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 		}
 	});
+
 
 	// 작성 폼 제출 이벤트 리스너
 	form.addEventListener("submit", async (e) => {
@@ -74,7 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // 4. 폼 제출 직전에 현재 시분초를 포함한 날짜 업데이트 (가장 중요!)
-        // 사용자가 '저장하기' 버튼을 누르는 시점의 정확한 시간을 전송하기 위함
         const now = new Date();
         const year = now.getFullYear();
         const month = (now.getMonth() + 1).toString().padStart(2, '0');
@@ -89,33 +116,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		// FormData 객체 생성 (폼의 모든 input 값들을 자동으로 포함)
 		const formData = new FormData(form);
 
-		// DataTransfer 객체를 사용하여 유효한 파일만 새로 구성
-		const dt = new DataTransfer();
-		const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf','ico','gif','webp','bmp'];
-		const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB 제한
-
-		let filteredFileCount = 0; // 필터링되어 제외된 파일 개수
-
-		// 선택된 파일들을 순회하며 유효성 검사 후 DataTransfer 객체에 추가
-		// renderImages에서 이미 fileInput.files가 업데이트되었으므로,
-		// 여기서는 imageInput.files를 직접 사용합니다.
-		Array.from(imageInput.files).forEach(f => {
-			const fileExtension = f.name.split(".").pop().toLowerCase(); // 파일 확장자 추출
-			if (allowedExtensions.includes(fileExtension) && f.size <= MAX_FILE_SIZE) {
-				dt.items.add(f); // 유효한 파일만 추가
-			} else {
-				filteredFileCount++; // 유효하지 않은 파일 카운트
-			}
-		});
-
-		// 유효하지 않은 파일이 있었다면 사용자에게 알림
-		if (filteredFileCount > 0) {
-			alert(`${filteredFileCount}개의 파일이 허용되지 않는 형식('jpg', 'jpeg', 'png', 'pdf','ico','gif','webp','bmp')이거나 10MB를 초과하여 업로드에서 제외되었습니다.`);
-		}
-
-		// 파일 input의 files 속성을 DataTransfer 객체의 files로 업데이트
-		// 이렇게 해야 폼 제출 시 유효한 파일들만 서버로 전송됨
-		imageInput.files = dt.files; // 이 부분은 renderImages에서 이미 처리되었을 수도 있으나, 최종 검증으로 한 번 더 수행
+        // 이전 단계에서 imageInput.files가 이미 유효한 파일들로 필터링되었으므로,
+        // 제출 시점에서는 추가적인 필터링 로직이 필요 없습니다.
+        // 불필요한 중복 검사 및 DataTransfer 재구성을 제거합니다.
 
 		try {
 			// 서버로 데이터 전송 (비동기 POST 요청)
