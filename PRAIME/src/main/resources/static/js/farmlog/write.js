@@ -89,8 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		
 		// DataTransfer 객체를 사용하여 유효한 파일만 새로 구성
 		const dt = new DataTransfer();
-		const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
-		const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB 제한
+		const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf','ico','gif','webp','bmp'];
+		const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB 제한
 
 		let filteredFileCount = 0; // 필터링되어 제외된 파일 개수
 
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		// 유효하지 않은 파일이 있었다면 사용자에게 알림
 		if (filteredFileCount > 0) {
-			alert(`${filteredFileCount}개의 파일이 허용되지 않는 형식(jpg, jpeg, png, pdf)이거나 5MB를 초과하여 업로드에서 제외되었습니다.`);
+			alert(`${filteredFileCount}개의 파일이 허용되지 않는 형식('jpg', 'jpeg', 'png', 'pdf','ico','gif','webp','bmp')이거나 10MB를 초과하여 업로드에서 제외되었습니다.`);
 		}
 
 		// 파일 input의 files 속성을 DataTransfer 객체의 files로 업데이트

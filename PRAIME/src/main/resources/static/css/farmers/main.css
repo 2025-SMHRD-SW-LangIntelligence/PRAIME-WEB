@@ -270,6 +270,7 @@ main{
     flex-direction: column;
     width: 100% !important;
     overflow: hidden;
+    gap : 15px;
     
 }
 

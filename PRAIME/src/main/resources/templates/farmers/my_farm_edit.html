@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>내 정보 페이지</title>
+<!-- CSS -->
 <link th:href="@{/css/font.css}" rel="stylesheet">
 <link th:href="@{/css/common.css}" rel="stylesheet">
-<link th:href="@{/css/farmers/join2.css}" rel="stylesheet">
+<link th:href="@{/css/farmers/farm_info_edit.css}" rel="stylesheet">
 
 <!-- Font Awesome CDN 추가 -->
 <link rel="stylesheet"
@@ -15,15 +16,15 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <!-- Axios CDN  -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- 파일 -->
-<script th:src="@{/js/farmers/my_info.js}"></script>
+<!-- 카카오 주소 API -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script th:src="@{/js/farmers/kakao_address_api.js}"></script>    
 </head>
 <body>
 	<div class="container">
 		<div class="wrapper">
 			<header>
 				<div class="header-group">
-					<a href="role_choice.html" class="prevPage"></a>
 					<div class="header-title-group">
 						<h1 class="header-title">농장 정보 수정</h1>
 						<p class="header-subtitle">농장정보를 수정해주세요</p>
@@ -139,6 +140,23 @@
 </div>
 <!-- 자바스크립트 파일 -->
 <script th:src="@{/js/farmers/my_farm_edit.js}"></script>
-
+<!-- 서버에서 전달된 step1 데이터 -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    window.step1DataFromThymeleaf = {
+        id: /*[[${param.id}]]*/ null,
+        pw: /*[[${param.pw}]]*/ null,
+        name: /*[[${param.name}]]*/ null,
+        'tel-0': /*[[${param['tel-0']}]]*/ null,
+        'tel-1': /*[[${param['tel-1']}]]*/ null,
+        'tel-2': /*[[${param['tel-2']}]]*/ null,
+        'tel-3': /*[[${param['tel-3']}]]*/ null,
+        email: /*[[${param.email}]]*/ null,
+        'email-domain': /*[[${param['email-domain']}]]*/ null,
+        address: /*[[${param.address}]]*/ null,
+        'address-detail': /*[[${param['address-detail']}]]*/ null
+    };
+    /*]]>*/
+</script>
 </body>
 </html>
