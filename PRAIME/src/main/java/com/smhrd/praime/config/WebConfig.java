@@ -8,13 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-	/*
-	 * @Override public void addCorsMappings(CorsRegistry registry) {
-	 * registry.addMapping("/api/**") .allowedOrigins("http://localhost:3000",
-	 * "http://localhost:8080", "http://localhost:8087") .allowedMethods("GET",
-	 * "POST", "PUT", "DELETE", "OPTIONS") .allowedHeaders("*")
-	 * .allowCredentials(true); }
-	 */
+
 	
     private String uploadPath = "file:///C:/uploads/diagnosis/"; // 실제 이미지 저장 경로
     private String farmlogUploadPath = "file:///C:/uploads/crops/"; // farmlog 이미지 저장 경로

@@ -192,7 +192,7 @@ public class PageController {
 		if (userObj == null) {
 			return "redirect:/loginPage";
 		}
-		com.smhrd.praime.entity.UserEntity user = (com.smhrd.praime.entity.UserEntity) userObj;
+		UserEntity user = (UserEntity) userObj;
 		String uid = user.getUid();
 		
 		ArrayList<DailyLogEntity> boardList;

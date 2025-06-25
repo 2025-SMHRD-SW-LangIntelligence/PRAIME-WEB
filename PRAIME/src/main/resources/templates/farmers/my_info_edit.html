@@ -6,18 +6,11 @@
 <link th:href="@{/css/font.css}" rel="stylesheet">
 <link th:href="@{/css/common.css}" rel="stylesheet">
 <link th:href="@{/css/farmers/my_info_edit.css}" rel="stylesheet">
-<!-- Font Awesome CDN 추가 -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<!-- jQuery CDN  -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<!-- Axios CDN  -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- 파일   -->
 <script th:src="@{/js/farmers/my_info_edit.js}"></script>
-<!-- 카카오 주소 API -->
-<script
-	src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script th:src="@{/js/farmers/kakao_address_api.js}"></script>
 <title>내 정보 수정 페이지</title>
 </head>
@@ -40,39 +33,31 @@
 							<span class="join-title-wrap"> </span>기본정보
 						</h2>
 						<!-- <form class="join-form" action=""> -->
-						<form class="join-form" id="joinFormStep1"
+						<form class="join-form" id="editForm"
 							action="/farmers/update_info" method="post">
 
 							<div class="form-group">
 								<label for="pw">비밀번호</label>
 								<div class="password-input-container">
 									<input type="password" name="pw" id="pw"
-										placeholder="비밀번호를 입력해주세요" th:value="${session.user.pw}">
+										placeholder="새 비밀번호를 입력해주세요 (선택사항)" th:value="${session.user.pw}">
 									<span class="password-toggle-icon"> <i
 										class="fas fa-eye"></i>
 									</span>
 								</div>
 							</div>
-							<div class="form-group">
-								<label for="pw">비밀번호</label>
-								<div class="password-input-container">
-									<input type="password" name="pw-confirm" id="pw-confirm"
-										placeholder="비밀번호를 입력해주세요"> <span
-										class="password-toggle-icon"> <i class="fas fa-eye"></i>
-									</span>
-								</div>
-							</div>
 
 							<div class="form-group">
-								<label for="pw">이름</label> <input type="text" name="name"
-									id="name" placeholder="이름을 입력해주세요"
-									th:value="${session.user.name}">
+								<label for="name">이름</label>
+								<input type="text" name="name" id="name"
+									placeholder="이름을 입력해주세요" th:value="${session.user.name}">
 							</div>
+
 							<div class="form-group tel-group">
 								<label for="tel">휴대폰</label>
 								<div class="tel-input-group">
 									<select name="tel-0" id="tel-0">
-										<option value="">통신사선택</option>
+										<option value="${session.user.telecom}">통신사선택</option>
 										<option value="KT"
 											th:selected="${session.user.telecom == 'KT'}">KT</option>
 										<option value="SKT"
@@ -100,25 +85,23 @@
 										onclick="identityVerification()">본인인증</button>
 								</div>
 							</div>
+
 							<div class="form-group">
 								<label for="email">이메일</label>
 								<div class="email-input-group">
 									<input type="text" name="email" id="email"
 										placeholder="이메일을 입력해주세요" th:value="${session.user.emailId}">
-									<span>@</span> <select name="email-domain" id="email-domain">
+									<span>@</span>
+									<select name="email-domain" id="email-domain">
 										<option value="">선택</option>
-										<option value="gmail.com"
-											th:selected="${session.user.emailDomain == 'gmail.com'}">gmail.com</option>
-										<option value="naver.com"
-											th:selected="${session.user.emailDomain == 'naver.com'}">naver.com</option>
-										<option value="daum.net"
-											th:selected="${session.user.emailDomain == 'daum.net'}">daum.net</option>
-										<option value="hanmail.net"
-											th:selected="${session.user.emailDomain == 'hanmail.net'}">hanmail.net</option>
+										<option value="gmail.com" th:selected="${session.user.emailDomain == 'gmail.com'}">gmail.com</option>
+										<option value="naver.com" th:selected="${session.user.emailDomain == 'naver.com'}">naver.com</option>
+										<option value="daum.net" th:selected="${session.user.emailDomain == 'daum.net'}">daum.net</option>
+										<option value="hanmail.net" th:selected="${session.user.emailDomain == 'hanmail.net'}">hanmail.net</option>
 									</select>
 								</div>
 							</div>
-							<!-- 주소찾기  -->
+
 							<div class="form-group">
 								<label for="address-postcode">주소</label>
 								<div class="address-input-group">
@@ -140,8 +123,8 @@
 							</div>
 
 							<div class="button-group">
-								<button class="back-btn" onclick="history.back()">취소</button>
-								<button type="submit" class="join-btn" id="joinBtn">저장</button>
+								<button type="button" class="back-btn" onclick="goToRoleChoice()">취소</button>
+								<button type="submit" class="join-btn submit-btn" id="submitBtn">저장</button>
 							</div>
 						</form>
 					</div>

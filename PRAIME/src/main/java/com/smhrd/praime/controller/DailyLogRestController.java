@@ -83,13 +83,13 @@ public class DailyLogRestController {
         }
     }
 
-    // ✅ 상세 조회 (화면용)
-    @GetMapping("/{dlid}")
-    public ResponseEntity<?> getLogDetail(@PathVariable Long dlid) {
-        return dailyLogService.getLogDetail(dlid)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+	/*
+	 * // ✅ 상세 조회 (화면용)
+	 * 
+	 * @GetMapping("/{dlid}") public ResponseEntity<?> getLogDetail(@PathVariable
+	 * Long dlid) { return dailyLogService.getLogDetail(dlid)
+	 * .map(ResponseEntity::ok) .orElse(ResponseEntity.notFound().build()); }
+	 */
 
     // ✅ 수정 처리
     @PostMapping("/update/{dlid}")

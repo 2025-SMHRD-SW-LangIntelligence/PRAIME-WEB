@@ -17,4 +17,16 @@ public class FileUploadConfig implements WebMvcConfigurer {
 				.addResourceLocations("file:" + uploadPath + "/"); 
         		/*.addResourceLocations(uploadPath + "/");*/
     }
+    
+	// upload 될 경로 설정
+	
+	@Value("${file.upload-dir}")
+	private String uploadDir;
+	
+	public String getUploadDir() {
+		
+		return uploadDir;
+		
+	} 
+    
 }

@@ -170,35 +170,47 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
-	// 기본정보 수정
 	@PostMapping("/farmers/update_info")
-	public String updateUserInfo(@RequestParam("pw") String pw, @RequestParam("name") String name,
-			@RequestParam("tel-0") String telecom, @RequestParam("tel-1") String tel1,
-			@RequestParam("tel-2") String tel2, @RequestParam("tel-3") String tel3, @RequestParam("email") String email,
-			@RequestParam("email-domain") String emailDomain, @RequestParam("address") String address,
-			@RequestParam(value = "address-detail", required = false) String addressDetail,
+	@ResponseBody
+	public Map<String, Object> updateUserInfo(
+	        @RequestParam("pw") String pw, 
+	        @RequestParam("name") String name,
+	        @RequestParam("tel-0") String telecom, 
+	        @RequestParam("tel-1") String tel1,
+	        @RequestParam("tel-2") String tel2, 
+	        @RequestParam("tel-3") String tel3, 
+	        @RequestParam("email") String email,
+	        @RequestParam("email-domain") String emailDomain, 
+	        @RequestParam("address") String address,
+	        @RequestParam(value = "address-detail", required = false) String addressDetail,
+	        HttpSession session) {
 
-			HttpSession session, Model model) {
-		UserEntity user = (UserEntity) session.getAttribute("user");
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        UserEntity user = (UserEntity) session.getAttribute("user");
 
-		user.setPw(pw);
-		user.setName(name);
-		user.setTelecom(telecom);
-		user.setTel1(tel1);
-		user.setTel2(tel2);
-		user.setTel3(tel3);
-		user.setEmailId(email);
-		user.setEmailDomain(emailDomain);
-		user.setAddress(address);
-		user.setAddressDetail(addressDetail);
+	        user.setPw(pw);
+	        user.setName(name);
+	        user.setTelecom(telecom);
+	        user.setTel1(tel1);
+	        user.setTel2(tel2);
+	        user.setTel3(tel3);
+	        user.setEmailId(email);
+	        user.setEmailDomain(emailDomain);
+	        user.setAddress(address);
+	        user.setAddressDetail(addressDetail);
 
-		userService.updateBasicInfo(user);
+	        userService.updateBasicInfo(user);
 
-		return "redirect:/myInfoFarmerPage";
+	        result.put("success", true);
+	    } catch (Exception e) {
+	        result.put("success", false);
+	        result.put("message", "회원 정보 수정 중 오류가 발생했습니다: " + e.getMessage());
+	    }
+	    return result;
 	}
 
 	// 농장정보 수정
-
 	@PostMapping("/farmers/update_farm")
 	public String updateFarmInfo(HttpSession session,
 	        @RequestParam("farm-name") String farmName,

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.smhrd.praime.config.FileUploadConfig2;
+import com.smhrd.praime.config.FileUploadConfig;
 
 
 @Service
@@ -21,13 +21,13 @@ public class DailyImageService {
 	private String uploadDir;
 	
 	@Autowired
-	FileUploadConfig2 fileUploadConfig2;
+	FileUploadConfig fileUploadConfig;
 	
 	// 이미지 파일 저장
 	public String saveFile(MultipartFile file) {
         if (file.isEmpty()) return null;
 
-        String uploadDir = fileUploadConfig2.getUploadDir();
+        String uploadDir = fileUploadConfig.getUploadDir();
         String originalFilename = file.getOriginalFilename();
         String newFilename = UUID.randomUUID() + "_" + originalFilename;
 
