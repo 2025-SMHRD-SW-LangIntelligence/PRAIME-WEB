@@ -46,6 +46,9 @@ public class DailyLogService {
 
     @Value("${file.upload-dir}")
     private String uploadDir;
+    
+    @Value("${file.upload-dir.farmlog}")
+    private String farmlogUploadDir;
 	
 	// 영농일지 모든 일지 불러오기(최신순)
 	public ArrayList<DailyLogEntity> readAll(Model model) {
@@ -98,17 +101,17 @@ public class DailyLogService {
         // 2. 이미지 처리
         if (dlimages != null) {
             // ✅ 업로드 폴더가 없으면 자동 생성
-            File uploadDirFile = new File(uploadDir);
+            File uploadDirFile = new File(farmlogUploadDir);
             if (!uploadDirFile.exists()) {
                 uploadDirFile.mkdirs();
-                System.out.println("업로드 폴더 생성: " + uploadDir);
+                System.out.println("업로드 폴더 생성: " + farmlogUploadDir);
             }
             
             for (MultipartFile file : dlimages) {
                 if (!file.isEmpty()) {
                     try {
                         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-                        String filePath = uploadDir + File.separator + fileName;
+                        String filePath = farmlogUploadDir + File.separator + fileName;
                         file.transferTo(new File(filePath));
 
                         DailyImageEntity image = new DailyImageEntity();
@@ -191,7 +194,7 @@ public class DailyLogService {
 			while (iterator.hasNext()) {
 				DailyImageEntity image = iterator.next();
 				if (deletedImageIds.contains(image.getDliid())) {
-					String imagePath = uploadDir + image.getDlipath();
+					String imagePath = farmlogUploadDir + File.separator + image.getDlipath();
 					File file = new File(imagePath);
 					if (file.exists() && file.delete()) {
 						System.out.println("✅ 이미지 파일 삭제 성공: " + imagePath);
@@ -211,11 +214,20 @@ public class DailyLogService {
 		// 새 이미지 추가
 		if (newImages != null && !newImages.isEmpty()) {
 			System.out.println("📥 새로 추가된 이미지 수: " + newImages.size());
+			
+			// ✅ 업로드 폴더가 없으면 자동 생성
+			File uploadDirFile = new File(farmlogUploadDir);
+			if (!uploadDirFile.exists()) {
+				uploadDirFile.mkdirs();
+				System.out.println("업로드 폴더 생성: " + farmlogUploadDir);
+			}
+			
 			for (MultipartFile file : newImages) {
 				if (!file.isEmpty()) {
 					try {
 						String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-						File dest = new File(uploadDir + fileName);
+						String filePath = farmlogUploadDir + File.separator + fileName;
+						File dest = new File(filePath);
 						file.transferTo(dest);
 						System.out.println("✅ 새 이미지 저장: " + fileName);
 
@@ -251,7 +263,7 @@ public class DailyLogService {
 		if (log.getDlimage() != null && !log.getDlimage().isEmpty()) {
 			System.out.println("🗑️ 삭제할 이미지 파일들:");
 			for (DailyImageEntity image : log.getDlimage()) {
-				String imagePath = uploadDir + File.separator + image.getDlipath();
+				String imagePath = farmlogUploadDir + File.separator + image.getDlipath();
 				File file = new File(imagePath);
 				if (file.exists()) {
 					if (file.delete()) {
