@@ -283,7 +283,7 @@ header {
 
 .edit-btn {
     background-color: var(--primary-color);
-    color: white;
+    color: white ;
 }
 
 .edit-btn:hover {
@@ -297,6 +297,14 @@ header {
 
 .delete-btn:hover {
     background-color: #c0392b;
+}
+
+.fa-edit{
+	color: white;
+}
+
+.fa-trash-alt{
+	color: white;
 }
 
 /* ==================== Responsive ==================== */
