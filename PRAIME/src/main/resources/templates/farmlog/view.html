@@ -108,12 +108,13 @@
                     <div class="detail-buttons">
                         <button class="btn edit-btn"
                             th:onclick="|location.href='/farmlog/edit/${log.dlid}'|">
-                            <i class="fas fa-edit"></i> 수정
+                            <span>수정</span>
                         </button>
 
                         <button class="btn delete-btn"
                             th:onclick="|deleteDiary(${log.dlid})|">
-                            <i class="fas fa-trash-alt"></i> 삭제
+                            <img src="https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Trash-can-icon.png" width="128" height="128">
+							<span>삭제</span> 
                         </button>
                     </div>
                 </section>
