@@ -11,11 +11,11 @@ let currentSearchOption = 'title'; // 현재 검색 옵션 저장
 // ✅ 정렬 관련 변수
 let currentSortOrder = 'desc'; // 기본값: 최신순 ('desc' = 최신순, 'asc' = 오래된순)
 
-// 페이지 로드 시 초기 데이터 로드
+// 페이지 로드 시 초기 데이터 로드 및 이벤트 리스너 설정
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
 
-    // ✅ URL에서 초기 정렬 순서 가져오기 및 currentSortOrder 초기화
+    // URL에서 초기 정렬 순서 가져오기 및 currentSortOrder 초기화
     currentSortOrder = urlParams.get('sortOrder') || 'desc';
 
     // URL 파라미터에서 검색 키워드 및 옵션 가져오기 (새로고침 시에도 유지되도록)
@@ -28,59 +28,49 @@ document.addEventListener('DOMContentLoaded', function() {
     if (keywordInput) keywordInput.value = currentKeyword;
     if (searchOptionSelect) searchOptionSelect.value = currentSearchOption;
 
-    // 초기 데이터 로드 시 현재 검색 및 정렬 조건 전달
-    loadInitialData(); // 인자 없이 호출하도록 변경
+    // 초기 데이터 로드 (첫 페이지 데이터)
+    loadInitialData(); 
     setupInfiniteScroll();
     setupSearchForm();
     setupSortButton();
+    updateSortButtonUI(document.getElementById('sort-toggle-button'), currentSortOrder); // ✅ 초기 버튼 UI 설정
 });
 
 // 초기 데이터 로드
 function loadInitialData() {
-    currentPage = 0;
-    hasMoreData = true;
-    // isSearchMode 및 searchResults는 서버 페이징 방식에서는 불필요하므로 제거합니다.
-    // clearBoardList(); // 기존 HTML의 카드들을 제거하고 새로 로드 (resetInfiniteScroll에서 수행)
-    
-    // 초기 데이터 로드는 resetInfiniteScroll 후 loadMoreItems를 호출하도록 통일
-    resetInfiniteScroll(); 
-    loadMoreItems(); // 인자 없이 호출하도록 변경
+    resetInfiniteScroll(); // 모든 상태 초기화 및 보드 리스트 비우기
+    loadMoreItems(); // 첫 페이지 데이터 로드
 }
-    
-// 무한스크롤 설정
+
+// 무한 스크롤 설정
 function setupInfiniteScroll() {
+    window.removeEventListener('scroll', handleScroll); // 중복 방지
     window.addEventListener('scroll', handleScroll);
 }
 
 // 스크롤 이벤트 핸들러
 function handleScroll() {
-    if (isLoading || !hasMoreData) return;
-    
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-    
-    if (scrollTop + windowHeight >= documentHeight - 100) { // 스크롤이 하단에 가까워지면
-        // ✅ loadMoreItems 호출 시 전역 변수 사용
-        loadMoreItems(); 
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight - 50 && hasMoreData && !isLoading) {
+        loadMoreItems();
     }
 }
 
-// 더 많은 아이템 로드
-// ✅ 함수 시그니처에서 인자 제거. 항상 전역 변수 currentKeyword, currentSearchOption, currentSortOrder 사용
+// 다음 페이지 데이터 로드 요청
 function loadMoreItems() {
-    if (isLoading || !hasMoreData) return;
-    
-    isLoading = true;
-    showLoadingIndicator();
-    
-    // ✅ 서버에서 데이터 로드 시 전역 변수 사용
-    loadFromServer(currentKeyword, currentSearchOption, currentSortOrder);
+    loadFromServer(); // 서버에서 데이터 로드
 }
 
-// ✅ 서버에서 데이터 로드 (keyword, searchOption, sortOrder 인자 추가)
-function loadFromServer(keyword, searchOption, sortOrder) {
-    const url = `/api/farmlog?page=${currentPage}&size=${pageSize}&keyword=${encodeURIComponent(keyword)}&searchOption=${encodeURIComponent(searchOption)}&sortOrder=${encodeURIComponent(sortOrder)}`;
+
+// ✅ 서버에서 데이터 로드
+function loadFromServer() {
+    if (isLoading || !hasMoreData) return;
+
+    isLoading = true;
+    showLoadingIndicator();
+
+    // URL은 이제 /api/farmlog 로 사용합니다 (PageController 기준)
+    const url = `/api/farmlog?page=${currentPage}&size=${pageSize}&keyword=${encodeURIComponent(currentKeyword)}&searchOption=${encodeURIComponent(currentSearchOption)}&sortOrder=${encodeURIComponent(currentSortOrder)}`;
     
     fetch(url)
         .then(response => {
@@ -98,7 +88,6 @@ function loadFromServer(keyword, searchOption, sortOrder) {
             
             const boardList = document.getElementById('board-list');
 
-            // 기존 "검색 결과 없음" 또는 "등록된 영농일지 없음" 메시지 제거
             const existingNoResult = boardList.querySelector('.no-result');
             if (existingNoResult) {
                 existingNoResult.remove();
@@ -110,21 +99,22 @@ function loadFromServer(keyword, searchOption, sortOrder) {
                 });
                 
                 currentPage++;
+                // 서버에서 반환된 HTML 프래그먼트에 실제로 데이터가 pageSize만큼 있었는지 확인
+                // 이 방식으로 hasMoreData를 결정하는 것이 가장 정확합니다.
                 hasMoreData = newCards.length === pageSize; 
             } else {
+                // 더 이상 로드할 데이터가 없거나, 처음부터 데이터가 없는 경우
                 hasMoreData = false;
-                // 첫 페이지 로드인데 데이터가 없으면 메시지 표시
                 if (currentPage === 0 && boardList.querySelectorAll('.board-card').length === 0) { 
-                    showNoResultsMessage(keyword);
+                    showNoResultsMessage(currentKeyword);
                 }
             }
         })
         .catch(error => {
             console.error('데이터 로드 중 오류 발생:', error);
             hasMoreData = false;
-            // 에러 발생 시에도 메시지 표시
             if (currentPage === 0 && boardList.querySelectorAll('.board-card').length === 0) {
-                showNoResultsMessage(keyword);
+                showNoResultsMessage(currentKeyword);
             }
         })
         .finally(() => {
@@ -159,45 +149,6 @@ function showNoResultsMessage(keyword) {
     
     boardList.appendChild(noResultDiv);
 }
-
-// createCardFromData 함수는 현재 HTML 조각을 서버에서 직접 받으므로 이 JS 로직에서는 사용되지 않습니다.
-// JSON 데이터를 받을 때 클라이언트에서 동적으로 카드를 생성하는 용도로만 유효합니다.
-// (주석 처리 또는 삭제 고려)
-function createCardFromData(log) {
-    const card = document.createElement('div');
-    card.className = 'board-card';
-    card.onclick = () => location.href = `/farmlog/view/${log.dlid}`;
-    
-    const dateObj = new Date(log.dldate); 
-    const date = `${dateObj.getFullYear()}년 ${String(dateObj.getMonth() + 1).padStart(2, '0')}월 ${String(dateObj.getDate()).padStart(2, '0')}일 ${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
-    
-    const thumbnailUrl = log.thumbnailUrl || (log.dlimage && log.dlimage.length > 0 ? `/uploads/farmlog/${log.dlimage[0].dlipath}` : '/img/log.png');
-    
-    card.innerHTML = `
-        <div class="card-first-row">
-            <div class="board-card-image">
-                <img src="${thumbnailUrl}" alt="영농일지 이미지" class="card-thumbnail">
-            </div>
-            <div class="board-card-text-content">
-                <div class="board-card-title">${log.dltitle}</div>
-                <div class="board-card-content">${log.dlcontent}</div>
-            </div>
-        </div>
-        <div class="card-second-row">
-            <div class="board-card-meta-group">
-                <span class="board-card-crop">${log.dlcrop}</span>
-                <span class="board-card-weather">${log.dlweather}</span>
-                <span class="board-card-temp">${log.dltemp}°C</span>
-            </div>
-            <div class="board-card-date-group">
-                <span class="board-card-date">${date}</span>
-            </div>
-        </div>
-    `;
-    
-    return card;
-}
-
 
 // 로딩 인디케이터 표시
 function showLoadingIndicator() {
@@ -240,9 +191,6 @@ function performSearch() {
     
     // 검색 시 무한 스크롤 상태 재설정 및 데이터 다시 로드
     resetInfiniteScroll();
-    // isSearchMode, searchResults 관련 로직은 서버 페이징 방식에서 제거합니다.
-
-    // ✅ 첫 페이지 데이터 로드 (현재 검색 조건 + 현재 정렬 조건 모두 포함)
     loadMoreItems(); 
 }
 
@@ -250,7 +198,8 @@ function performSearch() {
 function setupSortButton() {
     const sortButton = document.getElementById('sort-toggle-button');
     if (sortButton) {
-        updateSortButtonUI(sortButton, currentSortOrder); // 초기 정렬 버튼 UI 업데이트
+        // 이 함수가 호출될 때마다 초기 UI를 다시 설정합니다. (DOMContentLoaded에서 한 번 호출되므로 여기서는 제거)
+        // updateSortButtonUI(sortButton, currentSortOrder); 
         
         sortButton.addEventListener('click', function() {
             currentSortOrder = (currentSortOrder === 'desc') ? 'asc' : 'desc'; // 현재 정렬 순서를 토글
@@ -258,9 +207,6 @@ function setupSortButton() {
             
             // 정렬 시 무한 스크롤 상태 재설정 및 데이터 다시 로드
             resetInfiniteScroll();
-            // isSearchMode, searchResults 관련 로직은 서버 페이징 방식에서 제거합니다.
-
-            // ✅ 첫 페이지 데이터 로드 (현재 검색 조건 + 새로운 정렬 조건 모두 포함)
             loadMoreItems();
         });
     }

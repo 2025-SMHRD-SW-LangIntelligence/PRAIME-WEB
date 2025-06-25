@@ -35,11 +35,8 @@ import java.util.HashMap;
 @RequestMapping("/farmlog")
 public class DailyLogRestController {
 
-    @Autowired
     private final DailyLogService dailyLogService;
-    
-    @Autowired
-    private UserRepository userRepository; // UserEntity용 리포지토리 추가
+    private final UserRepository userRepository;
 
     // ✅ 현재 로그인한 사용자의 작물 목록 조회
     @GetMapping("/write/crops")
@@ -83,13 +80,6 @@ public class DailyLogRestController {
         }
     }
 
-	/*
-	 * // ✅ 상세 조회 (화면용)
-	 * 
-	 * @GetMapping("/{dlid}") public ResponseEntity<?> getLogDetail(@PathVariable
-	 * Long dlid) { return dailyLogService.getLogDetail(dlid)
-	 * .map(ResponseEntity::ok) .orElse(ResponseEntity.notFound().build()); }
-	 */
 
     // ✅ 수정 처리
     @PostMapping("/update/{dlid}")
@@ -176,7 +166,7 @@ public class DailyLogRestController {
     public ResponseEntity<?> getEditData(@PathVariable Long dlid) {
         try {
             System.out.println("🔍 editData 요청 - dlid: " + dlid);
-            
+
             Optional<DailyLogEntity> logOpt = dailyLogService.getLogDetail(dlid);
 
             if (logOpt.isEmpty()) {
@@ -187,11 +177,18 @@ public class DailyLogRestController {
 
             DailyLogEntity log = logOpt.get();
             System.out.println("✅ 일지 조회 성공 - 제목: " + log.getDltitle());
-            
+
             // UserEntity를 다시 조회하여 영속화
+            // log.getUser()가 null일 가능성도 있으므로 null 체크 추가 권장
+            if (log.getUser() == null || log.getUser().getUid() == null) {
+                System.err.println("❌ 일지 작성자 정보가 없거나 UID가 null입니다.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(Map.of("error", "일지 작성자 정보를 찾을 수 없습니다."));
+            }
+            
             UserEntity user = userRepository.findByUid(log.getUser().getUid())
                     .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
-            
+
             List<String> crops = user.getCrops();
             if (crops == null) {
                 crops = new ArrayList<>(); // null인 경우 빈 리스트로 초기화
@@ -205,7 +202,7 @@ public class DailyLogRestController {
 
             System.out.println("✅ 응답 데이터 생성 완료");
             return ResponseEntity.ok(response);
-            
+
         } catch (Exception e) {
             System.err.println("❌ editData 오류 발생: " + e.getMessage());
             e.printStackTrace();
@@ -213,4 +210,5 @@ public class DailyLogRestController {
                     .body(Map.of("error", "데이터 조회 중 오류가 발생했습니다: " + e.getMessage()));
         }
     }
+
 }

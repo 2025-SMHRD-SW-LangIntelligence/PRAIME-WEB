@@ -6,14 +6,8 @@
     <link th:href="@{/css/font.css}" rel="stylesheet">
     <link th:href="@{/css/common.css}" rel="stylesheet">
     <link th:href="@{/css/farmlog/board.css}" rel="stylesheet">
-	<!-- Font Awesome CDN 추가 -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-   	<!-- jQuery CDN  -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- Axios CDN  -->
-   	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- 파일   -->
-    <script th:src="@{/js/common.js}"></script>
+   	<script th:src="@{/js/common.js}"></script>
     <script th:src="@{/js/farmlog/board.js}"></script>
     <title>영농일지 페이지</title>
 </head>
@@ -34,8 +28,7 @@
         <main>
 	        <section class = "search-section">
 		        <div class = "search-board">
-			        <form action = "/farmlogBoardPage" method = "get" class = "search-form">
-			        	<input type = "text" class = "search-input" name = "keyword" id = "keyword" 
+			        <form action = "/api/farmlog" method = "get" class = "search-form"> <input type = "text" class = "search-input" name = "keyword" id = "keyword" 
 			        		   placeholder = "일지 검색" th:value="${keyword}">
 			        	
 			        		<select class = "search-select" name = "searchOption" id = "searchOption">
@@ -49,7 +42,6 @@
 		        </div>
 	        </section>
 	        
-	        <!-- 정렬 버튼 추가 -->
 	        <section class="sort-section">
 	            <div class="sort-buttons">
 	                <button id="sort-toggle-button">
@@ -60,42 +52,14 @@
 	        
 	        <section class = "board-section">
 	        	<div class = "board-list" id="board-list">
-	        		<!-- Thymeleaf를 사용한 실제 DB 데이터 표시 -->
-	        		<div th:each="log : ${boardList}" class="board-card" th:attr="onclick=|location.href='/farmlog/view/${log.dlid}'|">
-						<div class="board-card-image" th:if="${not #lists.isEmpty(log.dlimage)}">
-	        				<img class="card-thumbnail" th:src="@{'uploads/crops/' + ${log.dlimage[0].dlipath}}"alt="영농일지 이미지" >
-	        			</div>
-	        			<div class="board-card-content-wrapper">
-	        				<div class="board-card-title" th:text="${log.dltitle}">제목</div>
-	        				<div class="board-card-content" th:text="${log.dlcontent}">내용</div>
-	        				<div class="board-card-meta">
-	        					<span class="board-card-crop" th:text="${log.dlcrop}">작물</span>
-	        					<span class="board-card-weather" th:text="${log.dlweather}">날씨</span>
-	        					<span class="board-card-temp" th:if="${log.dltemp != null}" th:text="${log.dltemp + '°C'}">온도</span>
-	        					<span class="board-card-date" th:text="${#temporals.format(log.dldate, 'yyyy년 MM월 dd일')}">날짜</span>
-	        				</div>
-	        			</div>
 	        		</div>
-	        		
-	        		<!-- 데이터가 없을 때 표시할 메시지 -->
-	        		<div th:if="${#lists.isEmpty(boardList)}" class="no-result">
-	        			<span th:if="${keyword != null and keyword != ''}">
-	        				'<span th:text="${keyword}"></span>'에 대한 검색 결과가 없습니다.
-	        			</span>
-	        			<span th:unless="${keyword != null and keyword != ''}">
-	        				등록된 영농일지가 없습니다.
-	        			</span>
-	        		</div>
-	        	</div>
 	        </section>
         </main>
-        <!-- Footer -->
         <div th:replace="/global/footer::footer "></div> 
 		</div>
     </div>
     
-    <!-- 무한스크롤을 위한 fragment -->
-<div th:fragment="board-list">
+    <div th:fragment="board-list">
     <div th:each="log : ${farmlogList}" class="board-card"
          th:onclick="'location.href=\'/farmlog/view/' + ${log.dlid} + '\''"
          th:data-dlid="${log.dlid}"
