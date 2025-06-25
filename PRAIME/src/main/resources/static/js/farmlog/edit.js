@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const preview = document.getElementById("upload-preview");
     const form = document.getElementById("editForm");
     const imageInput = document.getElementById("dlimages");
+    const uploadBox = document.querySelector(".image-upload-panel .upload-box"); // Get the upload box element
 
     if (!dlid || isNaN(dlid)) {
         alert("잘못된 접근입니다. 일지 ID가 유효하지 않습니다.");
@@ -58,32 +59,32 @@ document.addEventListener("DOMContentLoaded", async () => {
                 image.style.objectFit = "cover";
                 image.style.borderRadius = "0.5rem";
 
-				const deleteIcon = document.createElement("i");
-				deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
-				deleteIcon.title = "기존 이미지 삭제";
-				deleteIcon.style.cursor = "pointer";
+                const deleteIcon = document.createElement("i");
+                deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
+                deleteIcon.title = "기존 이미지 삭제";
+                deleteIcon.style.cursor = "pointer";
 
-				deleteIcon.style.position = "absolute";
-				deleteIcon.style.top = "5px";
-				deleteIcon.style.right = "5px";
-				deleteIcon.style.color = "#dc3545";
-				deleteIcon.style.backgroundColor = "rgba(255, 255, 255, 0.7)";
-				deleteIcon.style.borderRadius = "50%";
-				deleteIcon.style.padding = "3px";
-				deleteIcon.style.fontSize = "1.2em";
-				deleteIcon.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
+                deleteIcon.style.position = "absolute";
+                deleteIcon.style.top = "5px";
+                deleteIcon.style.right = "5px";
+                deleteIcon.style.color = "#dc3545";
+                deleteIcon.style.backgroundColor = "rgba(255, 255, 255, 0.7)";
+                deleteIcon.style.borderRadius = "50%";
+                deleteIcon.style.padding = "3px";
+                deleteIcon.style.fontSize = "1.2em";
+                deleteIcon.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
 
-				deleteIcon.addEventListener("click", () => {
-				    if (confirm("이 이미지를 정말 삭제하시겠습니까?")) {
-				        div.remove();
+                deleteIcon.addEventListener("click", () => {
+                    if (confirm("이 이미지를 정말 삭제하시겠습니까?")) {
+                        div.remove();
 
-				        const deletedInput = document.createElement("input");
-				        deletedInput.type = "hidden";
-				        deletedInput.name = "deletedImageIds";
-				        deletedInput.value = img.dliid;
-				        form.appendChild(deletedInput);
-				    }
-				});
+                        const deletedInput = document.createElement("input");
+                        deletedInput.type = "hidden";
+                        deletedInput.name = "deletedImageIds";
+                        deletedInput.value = img.dliid;
+                        form.appendChild(deletedInput);
+                    }
+                });
 
                 div.appendChild(image);
                 div.appendChild(deleteIcon);
@@ -96,15 +97,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.history.back();
     }
 
-    // ✅ 새 이미지 업로드 처리 (파일 유효성 검사 강화)
-    imageInput.addEventListener("change", (e) => {
+    // Function to handle file validation and update imageInput.files
+    function handleFiles(files) {
         const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
         const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
         let validFiles = [];
         let invalidFileMessages = [];
 
-        Array.from(e.target.files).forEach(file => {
+        Array.from(files).forEach(file => {
             const fileExtension = file.name.split(".").pop().toLowerCase();
 
             if (!allowedExtensions.includes(fileExtension)) {
@@ -139,7 +140,47 @@ document.addEventListener("DOMContentLoaded", async () => {
                 preview.appendChild(p);
             });
         }
+    }
+
+
+    // ✅ 새 이미지 업로드 처리 (파일 유효성 검사 강화)
+    imageInput.addEventListener("change", (e) => {
+        handleFiles(e.target.files);
     });
+
+    // --- Drag and Drop Functionality ---
+    uploadBox.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadBox.classList.add('drag-over'); // Add a class for visual feedback
+    });
+
+    uploadBox.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadBox.classList.remove('drag-over'); // Remove the class
+    });
+
+    uploadBox.addEventListener('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadBox.classList.remove('drag-over'); // Remove the class
+
+        const files = e.dataTransfer.files; // Get files from the dataTransfer object
+        if (files.length > 0) {
+            // Check if any of the dropped items are images
+            const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+
+            if (imageFiles.length > 0) {
+                // If there are image files, process them
+                handleFiles(imageFiles);
+            } else {
+                alert('이미지 파일만 업로드할 수 있습니다.');
+            }
+        }
+    });
+    // --- End Drag and Drop Functionality ---
+
 
     // ✅ 수정 폼 제출 이벤트 리스너
     form.addEventListener("submit", async (e) => {
@@ -178,10 +219,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("dldate").value = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 
         const formData = new FormData(form);
-
-        // 파일 유효성 검사는 이미 'change' 이벤트에서 처리되었으므로,
-        // 제출 시점에서는 추가적인 파일 필터링 로직이 필요 없습니다.
-        // imageInput.files는 이미 유효한 파일만 가지고 있습니다.
 
         try {
             const response = await fetch(`/farmlog/update/${dlid}`, {

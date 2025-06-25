@@ -63,8 +63,7 @@
 	        		<!-- Thymeleaf를 사용한 실제 DB 데이터 표시 -->
 	        		<div th:each="log : ${boardList}" class="board-card" th:attr="onclick=|location.href='/farmlog/view/${log.dlid}'|">
 						<div class="board-card-image" th:if="${not #lists.isEmpty(log.dlimage)}">
-	        				<img th:src="@{'uploads/farmlog/' + ${log.dlimage[0].dlipath}}" 
-	        					alt="영농일지 이미지" class="card-thumbnail">
+	        				<img class="card-thumbnail" th:src="@{'uploads/crops/' + ${log.dlimage[0].dlipath}}"alt="영농일지 이미지" >
 	        			</div>
 	        			<div class="board-card-content-wrapper">
 	        				<div class="board-card-title" th:text="${log.dltitle}">제목</div>
@@ -96,31 +95,39 @@
     </div>
     
     <!-- 무한스크롤을 위한 fragment -->
-    <div th:fragment="board-list">
-        <div th:each="log : ${farmlogList}" class="board-card" 
-             th:onclick="'location.href=\'/farmlog/view/' + ${log.dlid} + '\''"
-             th:data-dlid="${log.dlid}"
-             th:data-title="${log.dltitle}"
-             th:data-content="${log.dlcontent}"
-             th:data-crop="${log.dlcrop}"
-             th:data-weather="${log.dlweather}"
-             th:data-temp="${log.dltemp}"
-             th:data-date="${#temporals.format(log.dldate, 'yyyy-MM-dd')}">
+<div th:fragment="board-list">
+    <div th:each="log : ${farmlogList}" class="board-card"
+         th:onclick="'location.href=\'/farmlog/view/' + ${log.dlid} + '\''"
+         th:data-dlid="${log.dlid}"
+         th:data-title="${log.dltitle}"
+         th:data-content="${log.dlcontent}"
+         th:data-crop="${log.dlcrop}"
+         th:data-weather="${log.dlweather}"
+         th:data-temp="${log.dltemp}"
+         th:data-date="${#temporals.format(log.dldate, 'yyyy-MM-dd HH:mm')}">
+        <div class="card-first-row">
             <div class="board-card-image" th:if="${not #lists.isEmpty(log.dlimage)}">
-                <img th:src="@{'/uploads/crops/' + ${log.dlimage[0].dlipath}}" 
-                    alt="영농일지 이미지" class="card-thumbnail">
+                <img class="card-thumbnail" th:src="@{'/uploads/crops/' + ${log.dlimage[0].dlipath}}"
+                     alt="영농일지 이미지">
             </div>
-            <div class="board-card-content-wrapper">
+            <div class="board-card-text-content">
                 <div class="board-card-title" th:text="${log.dltitle}">제목</div>
                 <div class="board-card-content" th:text="${log.dlcontent}">내용</div>
-                <div class="board-card-meta">
-                    <span class="board-card-crop" th:text="${log.dlcrop}">작물</span>
-                    <span class="board-card-weather" th:text="${log.dlweather}">날씨</span>
-                    <span class="board-card-temp" th:if="${log.dltemp != null}" th:text="${log.dltemp + '°C'}">온도</span>
-            <span class="board-card-date" th:text="${#temporals.format(log.dldate, 'yyyy년 MM월 dd일 HH:mm')}">날짜</span>
-                </div>
             </div>
-		</div>
+        </div>
+
+        <div class="card-second-row">
+            <div class="board-card-meta-group">
+                <span class="board-card-crop" th:text="${log.dlcrop}">작물</span>
+                <span class="board-card-weather" th:text="${log.dlweather}">날씨</span>
+                <span class="board-card-temp" th:if="${log.dltemp != null}" th:text="${log.dltemp + '°C'}">온도</span>
+            </div>
+            <div class="board-card-date-group">
+                <span class="board-card-date" th:text="${#temporals.format(log.dldate, 'yyyy년 MM월 dd일 HH:mm')}">날짜</span>
+            </div>
+        </div>
     </div>
+</div>
+
 </body>
 </html>

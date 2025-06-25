@@ -165,8 +165,10 @@ main {
   border: 1px solid #f0f0f0;
   margin-bottom: 0.8rem;
   will-change: transform; /* GPU 가속 활성화 */
+  /* board-card 자체가 이제 두 개의 주요 행을 수직으로 쌓는 flex column 컨테이너가 됩니다. */
   display: flex;
-  gap: 1rem;
+  flex-direction: column; /* card-first-row와 card-second-row를 세로로 쌓습니다. */
+  gap: 1rem; /* 첫 번째 줄과 두 번째 줄 사이의 간격 */
 }
 
 .board-list .board-card:hover {
@@ -175,9 +177,17 @@ main {
   border-color: #e0e0e0;
 }
 
+/* NEW: 첫 번째 줄 컨테이너 (이미지 + 텍스트 내용) */
+.card-first-row {
+    display: flex; /* 이미지를 왼쪽에, 텍스트 내용을 오른쪽에 배치 */
+    gap: 1rem; /* 이미지와 텍스트 내용 사이의 간격 */
+    align-items: flex-start; /* 세로 정렬: 위쪽으로 정렬 */
+    width: 100%; /* 부모 카드 너비에 맞춰 */
+}
+
 /* 카드 이미지 영역 */
 .board-card-image {
-  flex-shrink: 0;
+  flex-shrink: 0; /* 이미지 크기 축소 방지 */
   width: 80px;
   height: 80px;
   border-radius: 0.5rem;
@@ -186,6 +196,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #e0e0e0; /* 이미지에 테두리 추가 */
 }
 
 .card-thumbnail {
@@ -194,52 +205,73 @@ main {
   object-fit: cover;
 }
 
-/* 카드 내용 영역 */
-.board-card-content-wrapper {
-  flex: 1;
+/* NEW: 텍스트 내용 래퍼 (제목 + 내용) */
+.board-card-text-content {
+  flex: 1; /* 남은 공간을 모두 차지하도록 설정 */
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  width: 100%;
+  flex-direction: column; /* 제목과 내용을 세로로 쌓습니다. */
 }
 
 .board-card-title {
   font-size: 1.1rem;
   font-weight: bold;
-  margin-bottom: 0.3rem;
   color: #333;
   line-height: 1.3;
+  margin-bottom: 0.2rem; /* 제목 아래 작은 간격 */
 }
 
 .board-card-content {
-  max-width: 100%; /* 부모의 100% 너비를 차지하도록 설정 */
-  overflow-wrap: break-word; /* 최신 표준 */	
+  max-width: 100%;
   font-size: 0.9rem;
   color: #666;
-  margin-bottom: 0.5rem;
   line-height: 1.4;
+
+  /* 여러 줄 말줄임표를 위한 필수 속성 */
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 2; /* 2줄로 제한 */
   -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  
+  overflow: hidden; /* 영역을 벗어나는 내용 숨김 */
+  text-overflow: ellipsis; /* 내용이 잘릴 경우 말줄임표 추가 */
+
+  /* 긴 단어 강제 줄 바꿈 */
+  word-wrap: break-word; /* 구형 표준, 폭넓게 지원 */
+  overflow-wrap: break-word; /* 최신 표준 */
+}
+
+/* NEW: 두 번째 줄 컨테이너 (메타 그룹 + 날짜 그룹) */
+.card-second-row {
+    display: flex;
+    justify-content: space-between; /* 메타 그룹을 왼쪽으로, 날짜 그룹을 오른쪽으로 밀어냅니다. */
+    align-items: flex-end; /* 세로 정렬: 아래쪽으로 정렬 */
+    width: 100%; /* 부모 카드 너비에 맞춰 */
+    margin-top: 0.5rem; /* 위 내용과의 작은 간격 */
+    padding-top: 0.5rem; /* 선택 사항: 시각적 구분을 위한 상단 패딩 */
+    border-top: 1px dashed #eee; /* 선택 사항: 두 행을 구분하는 점선 */
+}
+
+/* NEW: 작물, 날씨, 온도 그룹 */
+.board-card-meta-group {
+    display: flex;
+    flex-wrap: wrap; /* 태그가 많을 경우 줄 바꿈 허용 */
+    gap: 8px; /* 태그들 사이의 간격 */
+    align-items: center; /* 태그들을 세로 중앙 정렬 */
+}
+
+/* NEW: 날짜/시간 그룹 */
+.board-card-date-group {
+    display: flex;
+    align-items: center; /* 날짜를 세로 중앙 정렬 */
 }
 
 .board-card-date {
-  font-size: 0.8rem;
-  color: #999;
-  font-weight: 500;
+    font-size: 0.8rem;
+    color: #999;
+    font-weight: 500;
+    flex-shrink: 0; /* 날짜 축소 방지 */
+    white-space: nowrap; /* 날짜를 한 줄에 유지 */
 }
 
-/* 메타 정보 스타일 추가 */
-.board-card-meta {
-  display: flex;
-  gap: 10px;
-  margin-top: 8px;
-  flex-wrap: wrap;
-}
-
+/* 메타 정보 태그 스타일 (기존 유지) */
 .board-card-crop,
 .board-card-weather,
 .board-card-temp {
@@ -247,6 +279,7 @@ main {
   padding: 2px 8px;
   border-radius: 12px;
   font-weight: 500;
+  border: 1px solid rgba(0, 0, 0, 0.1); /* 태그에 미묘한 테두리 */
 }
 
 .board-card-crop {
@@ -264,7 +297,7 @@ main {
   color: #e65100;
 }
 
-/* 검색 결과 없음 메시지 */
+/* 검색 결과 없음 메시지 (기존 유지) */
 .board-list .no-result {
   text-align: center;
   padding: 3rem 1rem;
@@ -275,7 +308,7 @@ main {
   border: 1px dashed #ddd;
 }
 
-/* 로딩 인디케이터 */
+/* 로딩 인디케이터 (기존 유지) */
 .loading-indicator {
   display: flex;
   flex-direction: column;
@@ -301,12 +334,11 @@ main {
   100% { transform: rotate(360deg); }
 }
 
-/* 무한 스크롤 최적화 */
+/* 무한 스크롤 최적화 (기존 유지) */
 .board-list {
-  min-height: 200px; /* 최소 높이 설정 */
+  min-height: 200px;
 }
 
-/* 스크롤 성능 최적화 */
 .board-card {
-  will-change: transform; /* GPU 가속 활성화 */
+  will-change: transform;
 }
