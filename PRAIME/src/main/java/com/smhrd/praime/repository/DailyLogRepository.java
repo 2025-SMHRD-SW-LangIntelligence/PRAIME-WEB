@@ -25,6 +25,13 @@ public interface DailyLogRepository extends JpaRepository<DailyLogEntity, Long> 
 	ArrayList<DailyLogEntity> findByDlcropContainingOrderByDldateDesc(String keyword);
 	ArrayList<DailyLogEntity> findByDlweatherContainingOrderByDldateDesc(String keyword);
 	
+    // ✅ 검색 및 페이징을 위한 메서드 추가 
+    Page<DailyLogEntity> findByDltitleContaining(String keyword, Pageable pageable);
+    Page<DailyLogEntity> findByDlcontentContaining(String keyword, Pageable pageable);
+    Page<DailyLogEntity> findByDlcropContaining(String keyword, Pageable pageable);
+    Page<DailyLogEntity> findByDlweatherContaining(String keyword, Pageable pageable);
+
+	
 	// 상세 조회 (이미지 포함 fetch)
     @EntityGraph(attributePaths = {"dlimage"})
     Optional<DailyLogEntity> findWithImagesByDlid(Long dlid);

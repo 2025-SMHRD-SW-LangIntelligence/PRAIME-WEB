@@ -251,7 +251,7 @@ public class DailyLogService {
 		return true;
 	}
 
-
+	// 영농일지
 	@Transactional
 	public void deleteLog(Long dlid) {
 		DailyLogEntity log = dailyLogRepository.findById(dlid)
