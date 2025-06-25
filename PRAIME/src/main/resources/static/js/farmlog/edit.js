@@ -78,25 +78,37 @@ document.addEventListener("DOMContentLoaded", async () => {
                 image.style.borderRadius = "0.5rem";
 
 
-                // 삭제 아이콘 생성 (버튼 대신 <i> 태그 직접 사용)
-                const deleteIcon = document.createElement("i");
-                deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
-                deleteIcon.title = "기존 이미지 삭제"; // 툴팁
-                deleteIcon.style.cursor = "pointer"; // 클릭 가능한 커서
+				// 삭제 아이콘 생성 (<i> 태그 직접 사용)
+				const deleteIcon = document.createElement("i");
+				deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
+				deleteIcon.title = "기존 이미지 삭제"; // 툴팁
+				deleteIcon.style.cursor = "pointer"; // 클릭 가능한 커서
 
-                // 삭제 아이콘 클릭 이벤트 리스너
-                deleteIcon.addEventListener("click", () => {
-                    if (confirm("이 이미지를 정말 삭제하시겠습니까?")) {
-                        div.remove(); // 미리보기 div 제거
+				// --- 삭제 아이콘의 위치 및 스타일 설정 ---
+				deleteIcon.style.position = "absolute"; // 부모 div 기준으로 절대 위치
+				deleteIcon.style.top = "5px";   // 상단에서 5px 떨어진 위치
+				deleteIcon.style.right = "5px"; // 오른쪽에서 5px 떨어진 위치
+				deleteIcon.style.color = "#dc3545"; // 삭제 아이콘 색상 (빨간색)
+				deleteIcon.style.backgroundColor = "rgba(255, 255, 255, 0.7)"; // 반투명 흰색 배경
+				deleteIcon.style.borderRadius = "50%"; // 원형 배경
+				deleteIcon.style.padding = "3px"; // 아이콘 주변 패딩
+				deleteIcon.style.fontSize = "1.2em"; // 아이콘 크기
+				deleteIcon.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)"; // 그림자 효과
+				// ------------------------------------------
 
-                        // 삭제할 이미지 ID를 숨겨진 input으로 폼에 추가
-                        const deletedInput = document.createElement("input");
-                        deletedInput.type = "hidden";
-                        deletedInput.name = "deletedImageIds"; // 서버에서 이 이름으로 배열을 받음
-                        deletedInput.value = img.dliid;
-                        form.appendChild(deletedInput); // 폼에 추가하여 서버로 전송
-                    }
-                });
+				// 삭제 아이콘 클릭 이벤트 리스너
+				deleteIcon.addEventListener("click", () => {
+				    if (confirm("이 이미지를 정말 삭제하시겠습니까?")) {
+				        div.remove(); // 미리보기 div 제거
+
+				        // 삭제할 이미지 ID를 숨겨진 input으로 폼에 추가
+				        const deletedInput = document.createElement("input");
+				        deletedInput.type = "hidden";
+				        deletedInput.name = "deletedImageIds"; // 서버에서 이 이름으로 배열을 받음
+				        deletedInput.value = img.dliid;
+				        form.appendChild(deletedInput); // 폼에 추가하여 서버로 전송
+				    }
+				});
 
                 div.appendChild(image);
                 div.appendChild(deleteIcon);

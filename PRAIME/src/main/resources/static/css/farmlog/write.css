@@ -181,6 +181,7 @@ main {
 .delete-thumbnail:hover {
   background: rgba(255, 0, 0, 0.8);
   outline: none;
+  color : white;
 }
 
 /* ==================== 버튼 ==================== */

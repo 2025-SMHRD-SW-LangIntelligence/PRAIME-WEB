@@ -1,3 +1,5 @@
+// write.js (No changes from your provided code, as it relies on farmlog.js)
+
 document.addEventListener("DOMContentLoaded", () => {
 	const imageInput = document.getElementById("dlimages");
 	const preview = document.getElementById("upload-preview");
@@ -22,13 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// 이미지 선택 시 미리보기 표시
 	imageInput.addEventListener("change", (e) => {
-		// 새로 선택된 파일들을 selectedFiles 배열에 저장
+		// 새로 선택된 파일들을 selectedFiles 배열에 저장 (renderImages로 전달)
 		selectedFiles = Array.from(e.target.files);
-		
+
 		// renderImages 함수 (farmlog.js에 정의)를 사용하여 이미지 미리보기를 갱신
 		// 세 번째 인자 true는 새로운 파일이 선택되었을 때 기존 미리보기를 지우고 다시 그리는 것을 의미
 		if (typeof renderImages === 'function') {
-			renderImages(preview, selectedFiles, imageInput, true);
+			renderImages(preview, selectedFiles, imageInput, true); // <--- renderImages 호출
 		} else {
 			console.error("renderImages 함수가 정의되지 않았습니다. farmlog.js를 확인하세요.");
 			// renderImages 함수가 없을 경우 대체 로직: 파일명만 표시
@@ -86,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		// FormData 객체 생성 (폼의 모든 input 값들을 자동으로 포함)
 		const formData = new FormData(form);
-		
+
 		// DataTransfer 객체를 사용하여 유효한 파일만 새로 구성
 		const dt = new DataTransfer();
 		const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf','ico','gif','webp','bmp'];
@@ -95,7 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		let filteredFileCount = 0; // 필터링되어 제외된 파일 개수
 
 		// 선택된 파일들을 순회하며 유효성 검사 후 DataTransfer 객체에 추가
-		selectedFiles.forEach(f => {
+		// renderImages에서 이미 fileInput.files가 업데이트되었으므로,
+		// 여기서는 imageInput.files를 직접 사용합니다.
+		Array.from(imageInput.files).forEach(f => {
 			const fileExtension = f.name.split(".").pop().toLowerCase(); // 파일 확장자 추출
 			if (allowedExtensions.includes(fileExtension) && f.size <= MAX_FILE_SIZE) {
 				dt.items.add(f); // 유효한 파일만 추가
@@ -111,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		// 파일 input의 files 속성을 DataTransfer 객체의 files로 업데이트
 		// 이렇게 해야 폼 제출 시 유효한 파일들만 서버로 전송됨
-		imageInput.files = dt.files;
+		imageInput.files = dt.files; // 이 부분은 renderImages에서 이미 처리되었을 수도 있으나, 최종 검증으로 한 번 더 수행
 
 		try {
 			// 서버로 데이터 전송 (비동기 POST 요청)
