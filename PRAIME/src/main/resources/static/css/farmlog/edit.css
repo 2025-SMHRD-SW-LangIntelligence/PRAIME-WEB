@@ -217,6 +217,96 @@ main {
     right: 6px;
   }
 }
+/* ==================== 작물 선택 카드 ==================== */
+.crop-selection-container {
+	display: flex;
+	gap: 1rem;
+	flex-wrap: wrap;
+	margin-top: 1rem;
+	min-height: 60px; /* 최소 높이 설정 */
+}
+
+.crop-card {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0.25rem;
+	padding: 1rem 1.5rem;
+	border: 2px solid #ccc;
+	border-radius: 12px;
+	background-color: white;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+	position: relative;
+}
+
+.crop-card:hover {
+	border-color: #999;
+}
+
+.crop-card input[type="radio"] {
+	display: none;
+}
+
+.crop-card input[type="radio"]:checked ~ .crop-label {
+	border-color: #4CAF50;
+	background-color: #eaffea;
+	color: #2b7a2b;
+	font-weight: bold;
+}
+
+.crop-card input[type="radio"]:checked ~ .crop-label::after {
+	content: '';
+	position: absolute;
+	top: -2px;
+	right: -2px;
+	bottom: -2px;
+	left: -2px;
+	border: 2px solid #4CAF50;
+	border-radius: 14px;
+	pointer-events: none;
+}
+
+.crop-label {
+	pointer-events: none;
+}
+
+/* 작물이 없을 때의 메시지 스타일 */
+.no-crops-message {
+	width: 100%;
+	text-align: center;
+	padding: 20px;
+	color: #666;
+	background: #f9f9f9;
+	border-radius: 8px;
+	margin: 10px 0;
+	border: 1px solid #e0e0e0;
+}
+
+.no-crops-message p {
+	margin: 0 0 10px 0;
+	font-weight: bold;
+}
+
+.no-crops-message p:last-of-type {
+	font-size: 14px;
+	margin-bottom: 15px;
+}
+
+.no-crops-message button {
+	margin-top: 10px;
+	padding: 8px 16px;
+	background: #0f4f35;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.no-crops-message button:hover {
+	background: #0a3524;
+}
 
 /* ==================== 기존 이미지 컨테이너 ==================== */
 .existing-image-container {
