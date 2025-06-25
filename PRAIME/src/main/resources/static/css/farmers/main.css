@@ -21,12 +21,12 @@ header {
 }
 
 .header-title-group{
-   margin-top: 0; 
+   margin-top: 0;
    text-align: left;
 }
 
 .header-title{
-    margin-top: 0; 
+    margin-top: 0;
 	color: white;
 }
 .header-subtitle{
@@ -35,7 +35,7 @@ header {
 }
 
 .today-group{
-    margin-top: 15px; 
+    margin-top: 15px;
     padding-right: 15px;
 	background-color: var(--primary-color);
 	text-align: right;
@@ -66,89 +66,138 @@ main{
 
 .weather-box {
     background-color: var(--background-color); /* common.css 변수 적용 */
-    padding: 20px;
     border-radius: 10px;
     box-shadow: var(--card-shadow); /* common.css 변수 적용 */
+    display: flex;
+    flex-direction: column;
+    /* Removed padding and gap here, children will handle it */
 }
 
-.weather-top {
+/* --- Weather Sub-Sections Styling --- */
+
+.weather-top-section {
     display: flex;
     justify-content: space-between;
-    gap: 20px;
+    align-items: center; /* Vertically center "오늘의 날씨" and "예상 특보" */
+    padding: 15px 20px 20px 20px; /* Padding inside this section */
 }
 
 .weather-left {
-    flex: 1;
+    /* No flex properties needed here anymore, as it's just a title */
 }
 
 .weather-title {
     font-size: 1.2rem;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin: 0; /* Remove default margin */
     color: var(--text-color); /* common.css 변수 적용 */
 }
 
-.weather-info {
+.weather-right-header { /* New container for "예상 특보" and its status */
     display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.weather-icon {
-    font-size: 2rem; /* 이미지 사용 시 img 태그에서 실제 크기 제어 */
-}
-
-.weather-detail div {
-  font-size: 14px;
-  margin: 2px 0;
-  color: var(--text-color); /* common.css 변수 적용 */
-}
-
-#weatherWarning span {
-  display: block;
-  font-weight: 600;
-  color: var(--error-color); /* common.css 변수 적용 */
-}
-
-.temperature {
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-.humidity {
-    font-size: 0.85rem;
-    color: var(--subtitle-color); /* common.css 변수 적용 */
-}
-
-.weather-right {
-    flex: 1;
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    align-items: center; /* Vertically align "예상 특보" and "특이사항 없음" */
+    gap: 8px; /* Space between title and status */
 }
 
 .weather-tasks-title {
     font-size: 0.95rem;
     font-weight: bold;
-    margin-bottom: 6px;
+    margin: 0; /* Remove default margin */
     color: var(--text-color); /* common.css 변수 적용 */
 }
 
-.weather-tasks span {
-    display: block;
+.weather-tasks { /* This now holds "특이사항 없음" or actual warning */
+    font-size: 0.95rem;
+    color: var(--subtitle-color);
+    /* No flex-direction here as it's part of a flex row with weather-tasks-title */
+}
+.weather-tasks > span { /* This now holds "특이사항 없음" or actual warning */
     font-size: 0.9rem;
-    margin-left: 8px;
+    color: rgba(255,0,15,0.7);
+    /* No flex-direction here as it's part of a flex row with weather-tasks-title */
+}
+
+/* Specific style for "특이사항 없음" */
+#weatherWarning {
+    color: var(--success-color, #28a745); /* Greenish color for no warning */
+    font-weight: normal;
+}
+
+/* If there is a warning (e.g., JS adds a class like 'has-warning') */
+#weatherWarning.has-warning {
+    color: var(--error-color, #dc3545); /* Reddish color for warnings */
+    font-weight: bold;
+}
+
+.weather-middle-section { /* New section for icon and details */
+    display: flex; /* Makes weather-info (its child) take full width */
+    justify-content: center; /* Center content horizontally within its padding */
+    padding: 0 20px 20px 20px; /* Padding for this section */
+}
+
+.weather-info {
+    display: flex; /* Flex container for weather-icon and weather-detail */
+    align-items: center; /* Vertically align icon and text details */
+    width: 100%; /* Ensure it fills the middle section */
+    justify-content: space-between; /* Align contents to the start */
+}
+
+.weather-icon img {
+    width: 90px; /* Adjusted size as per screenshot */
+    height: 90px;
+    object-fit: contain;
+    flex-shrink: 0; /* Prevents icon from shrinking */
+}
+
+.weather-detail {
+    display: flex;
+    flex-direction: column; /* Stack temperature, humidity, etc. vertically */
+    gap: 5px; /* Space between each weather stat */
+    font-size: 14px; /* Default font size for details */
     color: var(--text-color); /* common.css 변수 적용 */
 }
 
+.weather-detail div {
+  font-size: 14px;
+  margin: 0;
+  display: flex; /* To align icon and text horizontally */
+  align-items: center; /* Center icon and text vertically */
+  gap: 8px; /* Space between icon and text */
+}
 
-.weather-bottom {
+
+.temperature {
+    font-weight: bold;
+    font-size: 1.1rem; /* Slightly larger for temperature */
+}
+
+.humidity, .rainfall, .wind {
+    font-size: 0.95rem; /* Consistent size for other details */
+    color: var(--subtitle-color); /* common.css 변수 적용 */
+}
+
+
+.divider{
+	width: 100%;
+}
+.divider2{
+	width: 95%;
+	margin: 0 auto;
+	color: #e2e6ee;
+	height: 0.1rem;
+}
+
+.weather-bottom-section { /* Renamed for clarity */
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Left text on left, right text on right */
+    align-items: center; /* Vertically center the text */
+    padding: 15px 20px; /* Padding inside this section */
     font-size: 0.85rem;
     color: var(--subtitle-color); /* common.css 변수 적용 */
 }
+
+
+/* --- Remaining CSS (no changes unless specified) --- */
 
 /* 핵심 기능 섹션 */
 .core-func-section {
@@ -271,7 +320,7 @@ main{
     width: 100% !important;
     overflow: hidden;
     gap : 15px;
-    
+
 }
 
 /* --- "최근 진단 이력" 섹션의 이미지 및 텍스트 정렬 관련 스타일 적용 --- */
@@ -418,13 +467,13 @@ main{
 }
 
 /* 진단 기록이 없을 때 스타일 */
-.no-records { 
-    text-align: center; 
+.no-records {
+    text-align: center;
     color: var(--subtitle-color); /* common.css 변수 적용 */
-    padding: 20px; 
+    padding: 20px;
     background: var(--card-bg); /* common.css 변수 적용 */
-    border-radius: 10px; 
-    margin-top: 10px; 
+    border-radius: 10px;
+    margin-top: 10px;
     box-shadow: var(--card-shadow); /* common.css 변수 적용 */
 }
 
