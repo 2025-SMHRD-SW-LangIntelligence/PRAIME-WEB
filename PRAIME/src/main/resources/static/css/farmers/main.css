@@ -79,7 +79,7 @@ main{
     display: flex;
     justify-content: space-between;
     align-items: center; /* Vertically center "오늘의 날씨" and "예상 특보" */
-    padding: 15px 20px 20px 20px; /* Padding inside this section */
+    padding: 15px 20px 5px 20px; /* Padding inside this section */
 }
 
 .weather-left {
@@ -143,8 +143,8 @@ main{
 }
 
 .weather-icon img {
-    width: 90px; /* Adjusted size as per screenshot */
-    height: 90px;
+    width: 128px; /* Adjusted size as per screenshot */
+    height: 128px;
     object-fit: contain;
     flex-shrink: 0; /* Prevents icon from shrinking */
 }
