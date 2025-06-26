@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.goToRoleChoice = function() {
         if (confirm('수정을 취소하시겠습니까?\n변경 내용이 저장되지 않습니다.')) {
-            window.location.href = '/myPage';
+            window.location.href = '/myInfoFarmerPage';
         }
     };
 
