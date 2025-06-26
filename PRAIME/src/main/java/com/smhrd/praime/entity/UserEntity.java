@@ -1,4 +1,4 @@
-package com.smhrd.praime.entity; // 패키지명은 실제 프로젝트에 맞게 확인해주세요
+package com.smhrd.praime.entity;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -7,18 +7,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn; // @CollectionTable의 joinColumns에 사용
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList; // ArrayList import 추가
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+// 필요한 경우 import 추가
+import jakarta.persistence.CascadeType; // CascadeType import 추가
+import jakarta.persistence.OneToMany;   // OneToMany import 추가
 
 @Entity
-@Table(name = "user") // 테이블 이름을 user로 유지
+@Table(name = "user")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,11 +46,11 @@ public class UserEntity {
     private String tel3;    // 5678
 
     // 이메일 관련 필드
-    private String emailId;     // 이메일 아이디 부분
-    private String emailDomain;  // 이메일 도메인 부분 (gmail.com 등)
+    private String emailId;    // 이메일 아이디 부분
+    private String emailDomain; // 이메일 도메인 부분 (gmail.com 등)
 
     // 주소
-    private String address;      // 우편번호 또는 주소
+    private String address;     // 우편번호 또는 주소
     private String addressDetail; // 상세주소
 
     // 역할
@@ -60,13 +64,19 @@ public class UserEntity {
     private String farmAddress;
     private String farmAddressDetail;
 
-    @ElementCollection(fetch = jakarta.persistence.FetchType.EAGER) // List<String> crops를 별도 테이블로 관리
-    @CollectionTable(name = "user_crops", // 새로운 조인 테이블 이름 (farmer_crops -> user_crops)
-                     joinColumns = @JoinColumn(name = "user_uid")) // UserEntity의 PK(uid)와 연결
-    @Column(name = "crop") // 컬렉션 테이블 내의 작물 값 컬럼 이름
+    @ElementCollection(fetch = jakarta.persistence.FetchType.EAGER)
+    @CollectionTable(name = "user_crops",
+                     joinColumns = @JoinColumn(name = "user_uid"))
+    @Column(name = "crop")
     private List<String> crops;
 
-    // --- 편의 메서드 (기존과 동일) ---
+    // Casecade 외래키 포함 제약조건 관련 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DailyLogEntity> dailyLogs = new ArrayList<>(); // NullPointerException 방지를 위해 초기화
+
+    // *** 새로 추가하거나 수정해야 할 부분 끝 ***
+
+    // --- 편의 메서드 ---
     public String getFullTel() {
         return tel1 + "-" + tel2 + "-" + tel3;
     }
@@ -78,11 +88,6 @@ public class UserEntity {
     }
 
     public void setFullTel(String fullTel) {
-        if (fullTel == null || !fullTel.matches("\\d{3}-\\d{4}-\\d{4}")) {
-            // throw new IllegalArgumentException("전화번호 형식이 올바르지 않습니다. 예) 010-1234-5678");
-            // Validation은 서비스 레이어에서 하는 것이 더 좋습니다.
-            // 여기서는 넘어온 값 그대로 분리하거나, 유효성 검사 실패 시 null로 처리할 수 있습니다.
-        }
         if (fullTel != null) {
             String[] parts = fullTel.split("-");
             if (parts.length == 3) {
@@ -90,7 +95,6 @@ public class UserEntity {
                 this.tel2 = parts[1];
                 this.tel3 = parts[2];
             } else {
-                // 형식에 맞지 않으면 기본값 또는 null 처리
                 this.tel1 = null;
                 this.tel2 = null;
                 this.tel3 = null;
@@ -99,9 +103,6 @@ public class UserEntity {
     }
 
     public void setFullEmail(String fullEmail) {
-        if (fullEmail == null || !fullEmail.matches("[^@]+@[^@]+\\.[^@]+")) {
-            // throw new IllegalArgumentException("이메일 형식이 올바르지 않습니다. 예) user@example.com");
-        }
         if (fullEmail != null) {
             String[] parts = fullEmail.split("@", 2);
             if (parts.length == 2) {
