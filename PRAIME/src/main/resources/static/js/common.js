@@ -13,6 +13,6 @@ function goToFarmlogBoardPage(){
 }
 
 
-function goToDiagnosisUploadPage(){
-	window.location.href = "/diagnosisUploadPage";
+function goToDiagnosisBoardPage(){
+	window.location.href = "/diagnosisBoardPage";
 }
