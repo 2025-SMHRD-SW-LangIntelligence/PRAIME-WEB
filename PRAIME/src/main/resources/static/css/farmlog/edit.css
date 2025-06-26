@@ -37,6 +37,7 @@ main {
   background-color: var(--secondary-color);
   flex: 1;
   padding-bottom: 3rem;
+  margin-bottom: 60px; 
 }
 
 .journal-form > div {
