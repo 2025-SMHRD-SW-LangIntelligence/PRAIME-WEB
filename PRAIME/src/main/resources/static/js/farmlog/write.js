@@ -1,10 +1,9 @@
 // write.js
-
 document.addEventListener("DOMContentLoaded", () => {
     const imageInput = document.getElementById("dlimages");
     const preview = document.getElementById("upload-preview");
     const form = document.querySelector(".journal-form");
-    const uploadBox = document.querySelector(".image-upload-panel .upload-box"); // Get the upload box element
+    const uploadBox = document.querySelector(".image-upload-panel .upload-box"); 
     let selectedFiles = []; // 사용자가 선택한 파일들을 저장할 배열
 
     // 작물 목록 불러오기 (farmlog.js에 정의된 함수 호출)
@@ -21,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("fetchWeather 함수가 정의되지 않았습니다. farmlog.js를 확인하세요.");
     }
 
-    // Function to handle file validation and update selectedFiles
+    // 파일 유효성검사
     function handleFiles(files) {
         const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
         const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -47,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert(errorMessage);
         }
 
-        // Update the hidden file input's files property
+        // hidden 값 처리
         const dt = new DataTransfer();
         validFiles.forEach(file => dt.items.add(file));
         imageInput.files = dt.files;
@@ -73,31 +72,29 @@ document.addEventListener("DOMContentLoaded", () => {
         handleFiles(e.target.files);
     });
 
-    // --- Drag and Drop Functionality ---
+    // --- Drag and Drop 기능 ---
     uploadBox.addEventListener('dragover', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        uploadBox.classList.add('drag-over'); // Add a class for visual feedback
+        uploadBox.classList.add('drag-over'); 
     });
 
     uploadBox.addEventListener('dragleave', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        uploadBox.classList.remove('drag-over'); // Remove the class
+        uploadBox.classList.remove('drag-over');
     });
 
     uploadBox.addEventListener('drop', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        uploadBox.classList.remove('drag-over'); // Remove the class
+        uploadBox.classList.remove('drag-over'); 
 
-        const files = e.dataTransfer.files; // Get files from the dataTransfer object
+        const files = e.dataTransfer.files; 
         if (files.length > 0) {
-            // Check if any of the dropped items are images
             const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
 
             if (imageFiles.length > 0) {
-                // If there are image files, process them
                 handleFiles(imageFiles);
             } else {
                 alert('이미지 파일만 업로드할 수 있습니다.');
@@ -105,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // --- End Drag and Drop Functionality ---
+    // --- Drag and Drop 기능 End ---
 
 
     // 작성 폼 제출 이벤트 리스너
