@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('my_info_edit.js script started.');
 
-    // 본인인증, 주소찾기, 취소 관련 함수
-    window.identityVerification = function() {
-        alert("본인인증 기능은 현재 개발 중입니다.");
-    };
+	// 본인인증, 주소찾기, 취소 관련 함수
+	window.identityVerification = function(event) { 
+	    if (event) {
+	        event.preventDefault(); 
+	    }
+	    alert("본인인증 기능은 현재 개발 중입니다.");
+	};
+
 
     window.goToRoleChoice = function() {
         if (confirm('수정을 취소하시겠습니까?\n변경 내용이 저장되지 않습니다.')) {
