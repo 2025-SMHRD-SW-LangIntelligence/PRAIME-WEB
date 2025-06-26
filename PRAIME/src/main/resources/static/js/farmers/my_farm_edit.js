@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('join2.js script started. (Submitting Step1 data only)');
+    console.log('my_farm_edit.js script started.');
 
-    // 1. Thymeleaf에서 전달된 step1Data 파싱 (예: window.step1DataFromThymeleaf)
+    // 1. Thymeleaf에서 전달된 step1Data 파싱 (예: window.step1DataFromThymeleaf) - Keep as is if needed for other parts
     const step1Data = typeof window.step1DataFromThymeleaf !== 'undefined' ? window.step1DataFromThymeleaf : {};
     console.log('Raw Step1 Data from Thymeleaf (from URL params):', step1Data);
 
-    // 2. 배열 형태인 값은 첫 번째 값만 추출하여 hidden 필드로 처리
+    // 2. 배열 형태인 값은 첫 번째 값만 추출하여 hidden 필드로 처리 - Keep as is if needed for other parts
     const processedStep1Data = {};
     for (const key in step1Data) {
         if (step1Data.hasOwnProperty(key) && step1Data[key] !== null) {
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.querySelector('.join-form');
     const joinBtn = document.getElementById('joinBtn');
-    const farmAreaInput = document.getElementById('farm-area'); // Add this line to get the farm-area input
+    const farmAreaInput = document.getElementById('farm-area');
 
     if (!form) {
         console.error("Error: '.join-form' not found.");
@@ -26,12 +26,12 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error("Error: '#joinBtn' not found.");
         return;
     }
-    if (!farmAreaInput) { // Add check for farmAreaInput
+    if (!farmAreaInput) {
         console.error("Error: '#farm-area' input not found.");
         return;
     }
 
-    // 3. Step1 데이터를 기반으로 hidden input 동적 생성
+    // 3. Step1 데이터를 기반으로 hidden input 동적 생성 - Keep as is if needed for other parts
     for (const key in processedStep1Data) {
         if (processedStep1Data.hasOwnProperty(key) && processedStep1Data[key] !== null) {
             const hiddenInput = document.createElement('input');
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // --- 농작물 선택 관련 UI (현재 서버 미연동) ---
+    // --- 농작물 선택 관련 UI---
     const cropItems = document.querySelectorAll('.crop-item');
     const selectedCropsDisplay = document.getElementById('selectedCropsDisplay');
 
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateSelectedCropsDisplay() {
         const selectedCheckboxes = document.querySelectorAll('.crop-checkbox:checked');
-        selectedCropsDisplay.innerHTML = '';
+        selectedCropsDisplay.innerHTML = ''; // Clear previous display
 
         if (selectedCheckboxes.length > 0) {
             const selectedCrops = Array.from(selectedCheckboxes).map(checkbox => {
@@ -112,6 +112,17 @@ document.addEventListener('DOMContentLoaded', function () {
             selectedCropsDisplay.textContent = '선택된 농작물이 없습니다';
         }
     }
+
+    // *** IMPORTANT: Call this function on page load to initialize the display ***
+    // Also, initialize the 'selected' class for previously checked items
+    cropItems.forEach(item => {
+        const checkbox = item.querySelector('.crop-checkbox');
+        if (checkbox.checked) {
+            item.classList.add('selected');
+        }
+    });
+    updateSelectedCropsDisplay();
+
 
     // --- 회원가입 버튼 클릭 처리 ---
     joinBtn.addEventListener('click', function (e) {
@@ -133,44 +144,20 @@ document.addEventListener('DOMContentLoaded', function () {
             isValid = false;
         }
 
-        // 농민 관련 유효성 검사는 생략 (Step1 데이터만 사용 가정)
+        // Validate that at least one crop is selected
+        const selectedCrops = document.querySelectorAll('.crop-checkbox:checked');
+        if (selectedCrops.length === 0) {
+            createErrorMessage(selectedCropsDisplay.closest('.form-group'), '농작물을 최소 하나 이상 선택해주세요.');
+            isValid = false;
+        }
+
 
         console.log('Validation passed (only checking Step1 data assumed) and farm-area validation:', isValid);
 
         if (isValid) {
-            const formData = new FormData(form);
-
-            console.log('Sending FormData (only Step1 data expected):');
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
-
-            axios.post('/joinFarmer.do', formData)
-                .then(function (response) {
-                    if (response.data.success) {
-                        alert('회원가입이 완료되었습니다');
-                        window.location.href = '/loginPage';
-                    } else {
-                        throw new Error(response.data.message || '회원가입에 실패했습니다. (서버 응답: ' + JSON.stringify(response.data) + ')');
-                    }
-                })
-                .catch(function (error) {
-                    console.error('회원가입 실패:', error);
-                    let errorMessage = '회원가입 처리 중 알 수 없는 오류가 발생했습니다.';
-                    if (error.response) {
-                        errorMessage = `회원가입 실패: ${error.response.status} ${error.response.statusText}. `;
-                        if (error.response.data && error.response.data.message) {
-                            errorMessage += error.response.data.message;
-                        } else if (error.response.data) {
-                            errorMessage += JSON.stringify(error.response.data);
-                        }
-                    } else if (error.request) {
-                        errorMessage = '서버로부터 응답이 없습니다. 네트워크 연결을 확인해주세요.';
-                    } else {
-                        errorMessage = `요청 설정 오류: ${error.message}`;
-                    }
-                    createErrorMessage(form, errorMessage);
-                });
+            // The form action is "/farmers/update_farm", not "/joinFarmer.do" as per your HTML
+            // Make sure the server-side endpoint correctly handles the update
+            form.submit(); // Submit the form to the action specified in HTML
         }
     });
 });
@@ -178,6 +165,6 @@ document.addEventListener('DOMContentLoaded', function () {
 // --- 회원가입 취소 버튼 동작 ---
 function goToRoleChoice() {
     if (confirm('회원가입을 취소하시겠습니까?\n입력한 내용이 저장되지 않습니다.')) {
-        window.location.href = '/roleChoicePage';
+        window.location.href = '/myInfoFarmerPage';
     }
 }
