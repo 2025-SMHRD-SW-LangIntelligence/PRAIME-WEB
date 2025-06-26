@@ -1,3 +1,5 @@
+// DailyLogEntity.java
+
 package com.smhrd.praime.entity;
 
 import java.time.LocalDateTime;
@@ -6,6 +8,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference; // 이 import를 추가!
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -52,7 +55,7 @@ public class DailyLogEntity {
 	private String dlwork;
 	
 	// 농약 필드 추가 (NULL 가능)
-	@Column(nullable = true) // 또는 @Column만 사용해도 기본값이 true입니다.
+	@Column(nullable = true)
 	private String dlpesticide;
 	
 	@PrePersist
@@ -61,11 +64,12 @@ public class DailyLogEntity {
     }
 
     @OneToMany(mappedBy = "dailyLog", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference  // 부모 → 자식 방향
+    @JsonManagedReference // DailyImageEntity와의 관계에서 '관리하는' 참조
     private List<DailyImageEntity> dlimage = new ArrayList<>();
 	
     @ManyToOne
     @JoinColumn(name = "uid", nullable = false)
+    @JsonBackReference // --- 이 부분이 중요! UserEntity와의 순환 참조를 끊는 역할 ---
     private UserEntity user;
     
 }

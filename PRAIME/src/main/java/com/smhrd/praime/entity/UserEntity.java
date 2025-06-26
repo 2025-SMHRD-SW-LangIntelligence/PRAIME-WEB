@@ -13,13 +13,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList; // ArrayList import 추가
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-// 필요한 경우 import 추가
-import jakarta.persistence.CascadeType; // CascadeType import 추가
-import jakarta.persistence.OneToMany;   // OneToMany import 추가
+import com.fasterxml.jackson.annotation.JsonManagedReference; // JsonManagedReference 임포트
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @Table(name = "user")
@@ -70,11 +71,10 @@ public class UserEntity {
     @Column(name = "crop")
     private List<String> crops;
 
-    // Casecade 외래키 포함 제약조건 관련 
+    // Casecade 외래키 포함 제약조건 관련
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // DailyLogEntity와의 양방향 관계에서 이쪽이 관리하는 측임을 명시
     private List<DailyLogEntity> dailyLogs = new ArrayList<>(); // NullPointerException 방지를 위해 초기화
-
-    // *** 새로 추가하거나 수정해야 할 부분 끝 ***
 
     // --- 편의 메서드 ---
     public String getFullTel() {
