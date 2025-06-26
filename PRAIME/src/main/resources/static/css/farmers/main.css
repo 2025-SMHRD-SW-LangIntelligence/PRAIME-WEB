@@ -445,6 +445,13 @@ main{
     border-radius: 5px;
 }
 
+/* 신뢰도메세지 */
+.info-mgs{
+	color: green;
+	font-size: 0.8rem !important;
+	font-weight: 100 !important;
+}
+
 /* 버튼 중앙 정렬 */
 .journal-add-button {
     display: flex;

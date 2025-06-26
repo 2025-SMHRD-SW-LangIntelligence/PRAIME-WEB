@@ -142,6 +142,7 @@
                                         <div class="journal-desc">
                                             신뢰도: <span th:text="${#numbers.formatDecimal(diagnosis.confidence, 0, 'COMMA', 0, 'POINT')} + '%'"></span>
                                             <div class="card-bar" th:styleappend="'--confidence-width: ' + ${#numbers.formatDecimal(diagnosis.confidence, 0, 0)} + '%'"></div>
+                                            <div class="info-mgs">신뢰도는 단순히 AI모델이 업로드한 이미지의 결과를 판단한 결과로 단순히 참고용입니다</div>
                                         </div>
                                     </div>
                                 </div>
@@ -166,6 +167,8 @@
             <p class="modal-label" id="modalLabel"></p>
             <p class="modal-confidence" id="modalConfidence"></p>
             <p class="modal-description" id="modalDescription"></p>
+            <hr class="divider">
+            <div class="info-mgs">신뢰도는 단순히 AI모델이 업로드한 이미지의 결과를 판단한 결과로 단순히 참고용입니다</div>
         </div>
     </div>
 </div>	
