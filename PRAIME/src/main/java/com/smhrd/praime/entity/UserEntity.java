@@ -46,7 +46,6 @@ public class UserEntity {
     private String emailDomain;  // 이메일 도메인 부분 (gmail.com 등)
 
     // 주소
-    private String postcode;     // 우편번호
     private String address;      // 우편번호 또는 주소
     private String addressDetail; // 상세주소
 
