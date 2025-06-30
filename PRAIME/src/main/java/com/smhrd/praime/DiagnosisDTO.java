@@ -27,4 +27,6 @@ public class DiagnosisDTO {
 
     private String uid; // 사용자 ID
     private String description; // 질병 설명
+    private String solution; // solution 필드
+
 }

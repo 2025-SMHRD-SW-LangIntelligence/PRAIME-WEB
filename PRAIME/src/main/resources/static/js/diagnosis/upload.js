@@ -427,6 +427,7 @@ $(function(){
         };
 
         console.log("저장할 데이터:", saveData);
+        alert("저장할 데이터:", saveData);
 
         // Spring Boot 백엔드 API로 POST 요청
         axios.post('http://localhost:8087/api/diagnosis/save', saveData, {

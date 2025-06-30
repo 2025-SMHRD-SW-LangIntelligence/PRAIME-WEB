@@ -46,6 +46,7 @@ public class DiagnosisController {
      */
     @PostMapping("/save")
     public ResponseEntity<?> saveDiagnosis(@RequestBody DiagnosisDTO dto, HttpSession session) {
+    	log.info("Received DTO for save: {}", dto); // <-- 이 로그 추가
         Object userObj = session.getAttribute("user");
         if (userObj == null) {
             return ResponseEntity.status(401).body(Map.of("success", false, "message", "로그인이 필요합니다."));

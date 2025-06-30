@@ -1,27 +1,25 @@
-// diagnosis/board.js
+// /js/diagnosis/board.js
+
 document.addEventListener('DOMContentLoaded', () => {
-    // 버튼 클릭 이벤트 리스너
+    // 버튼 클릭 이벤트 리스너 (상단 탭)
     const startDiagnosisBtn = document.getElementById('start-diagnosis');
     if (startDiagnosisBtn) {
-        startDiagnosisBtn.onclick = () => location.href = '/diagnosisUploadPage'; // /diagnosis/uploadPage
+        startDiagnosisBtn.onclick = () => location.href = '/diagnosisUploadPage';
     }
 
     const viewHistoryBtn = document.getElementById('view-history');
     if (viewHistoryBtn) {
-        // view-history 버튼 클릭 시 진단 이력 섹션으로 스크롤 (기존 로직 유지)
         viewHistoryBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-        // view-history 버튼 클릭 시 '활성화된 탭'으로 표시 (CSS .active-tab 적용)
         viewHistoryBtn.classList.add('active-tab');
-        const startDiagnosisBtn = document.getElementById('start-diagnosis');
         if (startDiagnosisBtn) {
             startDiagnosisBtn.classList.remove('active-tab');
-            startDiagnosisBtn.classList.add('btn-outline'); // 비활성화 스타일 적용
-            startDiagnosisBtn.classList.remove('btn-primary'); // 활성화 스타일 제거
+            startDiagnosisBtn.classList.add('btn-outline');
+            startDiagnosisBtn.classList.remove('btn-primary');
         }
-        viewHistoryBtn.classList.remove('btn-outline'); // 비활성화 스타일 제거
-        viewHistoryBtn.classList.add('btn-primary'); // 활성화 스타일 적용
-
+        viewHistoryBtn.classList.remove('btn-outline');
+        viewHistoryBtn.classList.add('btn-primary');
     }
+
     // 페이지 로드 시 URL에서 sortOrder를 가져와 초기 currentSortOrder 설정
     const urlParams = new URLSearchParams(window.location.search);
     currentSortOrder = urlParams.get('sortOrder') || 'desc';
@@ -34,35 +32,66 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalImage = document.getElementById("modalImage");
     const modalLabel = document.getElementById("modalLabel");
     const modalConfidence = document.getElementById("modalConfidence");
-    const modalDescription = document.getElementById("modalDescription"); // 추가: description 엘리먼트
+    const modalDescription = document.getElementById("modalDescription");
+    const modalSolution = document.getElementById("modalSolution"); // 해결 방법 요소
+
+    // HTML에서 `id="googleSearchBtn"`으로 변경되었으므로 여기에 맞춤
+    const googleSearchBtn = document.getElementById("googleSearchBtn"); 
+    
     const closeBtn = document.querySelector(".modal-close");
 
     // card-list 내 이미지 클릭 시 이벤트 위임
     document.getElementById('card-list').addEventListener('click', function(event) {
         const clickedImg = event.target.closest('.card-thumb img');
-        const deleteIcon = event.target.closest('.delete-icon'); // 삭제 아이콘 클릭 감지
+        const deleteIcon = event.target.closest('.delete-icon');
 
-        // 삭제 아이콘이 클릭된 경우, 이미지 모달을 띄우지 않고 삭제 로직 실행
         if (deleteIcon) {
             const cardItem = deleteIcon.closest('.card-item');
             const diagnosisId = cardItem.dataset.diagnosisId;
             if (diagnosisId) {
                 deleteDiagnosis(diagnosisId, cardItem);
             }
-            return; // 이미지 클릭으로 넘어가지 않도록 함수 종료
+            return;
         }
 
         if (clickedImg) {
             modal.classList.add('show');
             modalImage.src = clickedImg.src;
-            modalLabel.textContent = `진단명: ${clickedImg.dataset.label || '정보 없음'}`;
-            modalConfidence.textContent = `신뢰도: ${clickedImg.dataset.confidence || '0%'}`;
-            modalDescription.textContent = `간략 설명: ${clickedImg.dataset.description || '설명 없음'}`;
 
+            const label = clickedImg.dataset.label || '정보 없음';
+            const confidence = clickedImg.dataset.confidence || '0%';
+            const description = clickedImg.dataset.description || '설명 없음';
+            const solution = clickedImg.dataset.solution || ''; // 해결 방법 데이터 가져오기
+
+            modalLabel.textContent = `진단명: ${label}`;
+            modalConfidence.textContent = `신뢰도: ${confidence}`;
+            modalDescription.textContent = `간략 설명: ${description}`;
+
+            // 해결 방법 표시 로직
+            if (solution) {
+                // 해결 방법 텍스트를 굵게 표시하고, 줄바꿈 처리
+                modalSolution.innerHTML = `<b>해결 방법:</b><br>${solution.replace(/\n/g, '<br>')}`;
+                modalSolution.style.display = 'block';
+                // 해결 방법 제목도 보이게 (HTML에 제목 P 태그를 별도로 뒀다면 해당 P 태그를 show/hide)
+                // 현재 HTML 구조에서는 modalSolution이 직접 제목과 내용을 담고 있으므로 이대로 유지
+            } else {
+                modalSolution.style.display = 'none';
+            }
+
+            // Google 검색 링크 표시 로직
+            // '정상'이거나 '정보 없음'인 경우 검색 링크 숨김
+            if (label && !label.includes('정상') && label !== '정보 없음') {
+                const pureDiseaseName = label.replace(/^(진단명:\s*배|진단명:\s*사과)\s*/, '').trim(); // "진단명: 배", "진단명: 사과" 접두사 제거
+                const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(pureDiseaseName)}`; // 질병명으로 구글검색
+                googleSearchBtn.href = googleSearchUrl;
+                googleSearchBtn.style.display = 'flex'; // flex로 표시 (CSS에 맞춤)
+            } else {
+                googleSearchBtn.style.display = 'none'; // 숨김
+            }
 
             modalImage.onerror = function() {
                 this.onerror = null;
-                this.src = '/images/placeholder.png'; // 오류 시 대체 이미지
+                this.src = '/images/placeholder.png';
             };
         }
     });
@@ -90,29 +119,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 정렬 버튼 클릭 이벤트 (하나의 버튼으로 토글)
+    // 정렬 버튼 클릭 이벤트
     const sortButton = document.getElementById('sort-toggle-button');
     if (sortButton) {
+        updateSortButtonUI(sortButton, currentSortOrder); // 초기 UI 설정
         sortButton.addEventListener('click', function() {
-            // 현재 정렬 순서를 토글
             currentSortOrder = (currentSortOrder === 'desc') ? 'asc' : 'desc';
-
-            // 버튼 텍스트 및 아이콘 업데이트
             updateSortButtonUI(sortButton, currentSortOrder);
-
-            // 무한 스크롤 상태 재설정 및 데이터 다시 로드
             resetInfiniteScroll();
             loadMoreDiagnosis(true, currentSortOrder);
         });
     }
 });
 
-// 무한스크롤 관련 변수
+// 무한스크롤 관련 변수 (글로벌 스코프)
 let currentPage = 0;
 let isLoading = false;
 let hasMoreData = true;
 const pageSize = 10;
-let currentSortOrder = 'desc'; // 초기 정렬 순서: 최신순 (백엔드 기본값과 일치)
+let currentSortOrder = 'desc';
 
 /**
  * 정렬 버튼의 UI를 업데이트합니다. (텍스트, 아이콘)
@@ -127,7 +152,6 @@ function updateSortButtonUI(button, order) {
         button.innerHTML = '<i class="fas fa-sort-amount-up-alt"></i> 오래된순';
     }
 }
-
 
 /**
  * 무한 스크롤 시스템을 초기화합니다.
@@ -159,7 +183,8 @@ function resetInfiniteScroll() {
     isLoading = false;
     hasMoreData = true;
     const cardList = document.getElementById('card-list');
-    cardList.innerHTML = '';
+    cardList.innerHTML = ''; // 기존 카드 모두 제거
+    // '기록 없음' 또는 '오류 메시지'가 있다면 제거
     const noRecordsMessage = cardList.querySelector('.no-records');
     if (noRecordsMessage) {
         noRecordsMessage.remove();
@@ -180,7 +205,7 @@ function handleScroll() {
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
 
-    if (scrollTop + windowHeight >= documentHeight - 100) {
+    if (scrollTop + windowHeight >= documentHeight - 100) { // 하단 100px 남았을 때 로드
         loadMoreDiagnosis();
     }
 }
@@ -198,8 +223,7 @@ function loadMoreDiagnosis(isInitialLoad = false, sortOrder = currentSortOrder) 
 
     currentSortOrder = sortOrder; // 현재 정렬 순서 업데이트
 
-    const url = `/api/diagnosis?page=${currentPage}&size=${pageSize}&sortOrder=${currentSortOrder}`; // 수정: /api/diagnosis/history -> /api/diagnosis
-    // URL 수정 (컨트롤러 @GetMapping("/history") 주석 처리 후 @GetMapping("")로 변경 예정)
+    const url = `/api/diagnosis?page=${currentPage}&size=${pageSize}&sortOrder=${currentSortOrder}`;
 
     fetch(url)
         .then(response => {
@@ -215,8 +239,9 @@ function loadMoreDiagnosis(isInitialLoad = false, sortOrder = currentSortOrder) 
             const newCards = doc.querySelectorAll('.card-item');
             const cardList = document.getElementById('card-list');
 
+            // 초기 로드 또는 재정렬 시 기존 콘텐츠 비우기
             if (isInitialLoad) {
-                cardList.innerHTML = ''; // 초기 로드 시 기존 콘텐츠 비우기
+                cardList.innerHTML = '';
             }
 
             const noRecordsMessage = cardList.querySelector('.no-records');
@@ -290,8 +315,7 @@ function deleteDiagnosis(diagnosisId, cardItemElement) {
             .then(response => {
                 if (response.data.success) {
                     alert('진단 이력이 성공적으로 삭제되었습니다.');
-                    // DOM에서 해당 카드 아이템 제거
-                    cardItemElement.remove();
+                    cardItemElement.remove(); // DOM에서 해당 카드 아이템 제거
 
                     // 모든 아이템이 삭제되었는지 확인하고 '기록 없음' 메시지 표시
                     const cardList = document.getElementById('card-list');

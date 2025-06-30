@@ -18,17 +18,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification; // Add this import
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils; // Add this import
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.smhrd.praime.DiagnosisDTO;
 import com.smhrd.praime.entity.DiagnosisEntity;
 import com.smhrd.praime.repository.DiagnosisRepository;
 
-import jakarta.persistence.criteria.Predicate; // Add this import
+import jakarta.persistence.criteria.Predicate;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -104,18 +104,24 @@ public class DiagnosisService {
      * @throws IOException 이미지 파일 저장 중 오류 발생 시
      */
     public Long saveDiagnosis(DiagnosisDTO dto) throws IOException {
+        log.info("Saving Diagnosis - DTO details: label={}, confidence={}, description={}, solution={}, uid={}",
+                dto.getLabel(), dto.getConfidence(), dto.getDescription(), dto.getSolution(), dto.getUid());
+
         validateDiagnosisDTO(dto); // Use the unified validation
 
+        // Base64 이미지를 파일로 저장하고 경로를 가져옵니다.
         String imagePath = saveBase64Image(dto.getResultImageBase64());
-        log.debug("Image saved at: {}", imagePath); // Use debug for more detailed logs
+        log.debug("Image saved at: {}", imagePath);
 
+        // DiagnosisEntity를 빌드하여 DB에 저장합니다.
         DiagnosisEntity entity = DiagnosisEntity.builder()
                 .label(dto.getLabel())
                 .confidence(dto.getConfidence())
                 .imagePath(imagePath)
                 .description(dto.getDescription())
+                .solution(dto.getSolution()) // DiagnosisDTO에서 solution 필드를 여기에 추가!
                 .uid(dto.getUid())
-                .createdAt(LocalDateTime.now()) // Set createdAt here or use @PrePersist in entity
+                .createdAt(LocalDateTime.now()) // @PrePersist를 사용하지 않는 경우 여기에 설정
                 .build();
 
         diagnosisRepository.save(entity);
@@ -134,7 +140,7 @@ public class DiagnosisService {
         Optional<DiagnosisEntity> diagnosisOptional = diagnosisRepository.findById(did);
         if (diagnosisOptional.isPresent()) {
             DiagnosisEntity diagnosis = diagnosisOptional.get();
-            if (diagnosis.getUid().equals(uid)) { // Check user ID for authorization
+            if (diagnosis.getUid().equals(uid)) { // 사용자 ID로 권한 확인
                 try {
                     Path filePath = Paths.get(diagnosis.getImagePath());
                     if (Files.exists(filePath)) {
@@ -145,19 +151,19 @@ public class DiagnosisService {
                     }
                 } catch (IOException e) {
                     log.error("Failed to delete image file: {} for DID={}. Error: {}", diagnosis.getImagePath(), did, e.getMessage(), e);
-                    // Decide whether to throw an exception and rollback or just log and continue
-                    // For now, we'll log and continue to delete DB record
+                    // 이미지 파일 삭제 실패 시에도 DB 레코드는 삭제할지 여부는 비즈니스 로직에 따라 결정
+                    // 현재는 로그를 남기고 DB 레코드 삭제를 진행합니다.
                 }
                 diagnosisRepository.deleteById(did);
                 log.info("Successfully deleted diagnosis record for DID={}", did);
                 return true;
             } else {
                 log.warn("Unauthorized deletion attempt for DID={}. User UID: {}, Owner UID: {}", did, uid, diagnosis.getUid());
-                return false; // Unauthorized
+                return false; // 권한 없음
             }
         }
         log.warn("Diagnosis record not found for DID={}", did);
-        return false; // Not found
+        return false; // 찾을 수 없음
     }
 
     /**
@@ -193,7 +199,13 @@ public class DiagnosisService {
             log.info("Created upload directory: {}", uploadDir);
         }
 
-        byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+        // Base64 문자열이 'data:image/jpeg;base64,'와 같은 접두사를 포함할 수 있으므로 이를 제거합니다.
+        String cleanedBase64Image = base64Image;
+        if (base64Image.contains(",")) {
+            cleanedBase64Image = base64Image.substring(base64Image.indexOf(",") + 1);
+        }
+
+        byte[] imageBytes = Base64.getDecoder().decode(cleanedBase64Image);
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
         String fileName = String.format("diagnosis_%s_%s.jpg", timestamp, UUID.randomUUID().toString().substring(0, 8));
         Path filePath = uploadDir.resolve(fileName);
@@ -222,9 +234,18 @@ public class DiagnosisService {
             throw new IllegalArgumentException("결과 이미지가 필요합니다.");
         }
         try {
-            Base64.getDecoder().decode(dto.getResultImageBase64());
+            // 접두사가 있는 Base64도 처리할 수 있도록 saveBase64Image와 동일하게 처리
+            String base64Content = dto.getResultImageBase64();
+            if (base64Content.contains(",")) {
+                base64Content = base64Content.substring(base64Content.indexOf(",") + 1);
+            }
+            Base64.getDecoder().decode(base64Content);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("올바르지 않은 Base64 이미지입니다.");
         }
+        // solution 필드가 DTO에 추가되었으므로, 필요에 따라 null 또는 빈 문자열 체크를 추가할 수 있습니다.
+        // if (dto.getSolution() == null || dto.getSolution().trim().isEmpty()) {
+        //     throw new IllegalArgumentException("해결 방법은 필수입니다.");
+        // }
     }
 }

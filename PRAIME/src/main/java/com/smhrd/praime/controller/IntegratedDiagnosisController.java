@@ -52,9 +52,12 @@ public class IntegratedDiagnosisController {
                     dto.setLabel((String) predictionDetails.get("class_name"));
                     Double confidence = (Double) predictionDetails.get("confidence");
                     dto.setConfidence(confidence != null ? confidence * 100 : 0.0);
-
+                    
                     String base64Img = (String) outputImage.get("base64_encoded_image");
                     dto.setResultImageBase64(base64Img);
+                    
+                    
+
 
                     // Flask 응답에서 UID를 가져와 DTO에 설정 (필요하다면)
                     // flaskResponse에 사용자 UID가 포함되어 있다면 아래처럼 설정할 수 있습니다.
