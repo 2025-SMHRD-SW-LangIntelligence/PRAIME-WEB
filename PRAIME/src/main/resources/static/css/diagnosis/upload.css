@@ -1,4 +1,7 @@
 /* /css/diagnosis/upload.css */
+.fas {
+	color: white;
+}
 
 /* 헤더 - 기존과 동일 */
 .diagnosis-header {
@@ -83,12 +86,11 @@
 /* 업로드 섹션 */
 .diagnosis-upload {
   padding: 20px;
-  text-align: center;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: top;
-  height: 680px; /* 적절한 높이 설정 */
+  height: auto; /* 적절한 높이 설정 */
 }
 
 .upload-box {
@@ -183,8 +185,9 @@
 .button-group{
     display: flex;
     gap: 20px;
-    margin-top: 20px; /* 업로드 박스 아래 여백 추가 */
+    margin-bottom: 20px; /* 업로드 박스 아래 여백 추가 */
     justify-content: center; /* 버튼을 가로 중앙에 배치 */
+    padding: 0 15px 0 15px;
 }
 
 .reset-btn, .diagnosis-result-btn{
@@ -228,7 +231,7 @@
 
 
 /* 진단 결과 설명 영역 스타일 */
-.diagnosis-result .result-description {
+.diagnosis-result .result-description, #google-search-link-container {
     margin-top: 15px;
     padding-top: 10px;
     border-top: 1px solid #eee; /* 구분선 추가 */
@@ -245,3 +248,93 @@
     color: var(--text-color);
     line-height: 1.6;
 }
+
+
+/* /css/diagnosis/upload.css */
+
+.result-item {
+    margin-bottom: 5px; /* Adjust spacing between result lines */
+}
+
+.result-sub-text {
+    font-size: 0.9em;
+    color: #555; /* A slightly softer color for the short description */
+    margin-top: 5px; /* Space between label and short description */
+    display: block; /* Ensures it's on its own line */
+}
+
+#google-search-link-container {
+    margin-top: 20px; /* Space above the Google search button */
+    text-align: center; /* Center the button if you prefer */
+}
+
+/* Style for the Google Search button */
+.btn-secondary {
+    background-color: #6c757d; /* Example secondary color */
+    color: white;
+    border: 1px solid #6c757d;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-flex; /* Align icon and text */
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+
+
+
+/*
+ * 아래 CSS는 기존 /css/diagnosis/upload.css 파일 내용의 가장 하단에 추가되어야 합니다.
+ * common.css는 수정되지 않습니다.
+*/
+
+/* --- 컨테이너 및 레이아웃 관련 (스크롤 및 푸터 고정) --- */
+
+/* body를 flex 컨테이너로 설정하여 자식 요소를 세로로 정렬하고 전체 높이를 채우도록 함 */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 뷰포트 높이의 최소 100%를 차지하도록 함 */
+    margin: 0; /* 기본 마진 제거 */
+    padding: 0; /* 기본 패딩 제거 */
+}
+
+/* 전체 컨테이너가 body 내에서 가용한 공간을 채우도록 함 */
+.container {
+    flex-grow: 1; /* 가용한 공간을 모두 차지하도록 성장 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* main 태그가 .container 내에서 가용한 공간을 모두 차지하고, 하단 버튼 그룹을 위한 공간 확보 */
+main {
+    flex-grow: 1; /* 가용한 공간을 모두 차지하도록 성장 */
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 70px; /* 하단 버튼 그룹의 높이를 고려하여 여백 추가. 필요시 조절. */
+    position: relative; /* 자식 요소 (button-group)의 absolute 포지셔닝 기준점 */
+}
+
+/* 진단 섹션이 들어갈 스크롤 가능한 영역 */
+.content-wrapper {
+    flex-grow: 1; /* 가용한 공간을 모두 차지하도록 성장 */
+    overflow-y: auto; /* 내용이 넘칠 경우 세로 스크롤 활성화 */
+    -webkit-overflow-scrolling: touch; /* iOS에서 부드러운 스크롤 제공 */
+    padding-bottom: 20px; /* 스크롤 영역 하단에 여백 추가 */
+}
+
+/* 기존 diagnosis-upload의 height 및 margin-bottom 제거 또는 조정 (content-wrapper가 높이 관리) */
+.diagnosis-upload {
+    /* height: 680px;  이 줄을 삭제하거나 조정하세요. */
+    /* margin-bottom: 60px;  이 줄을 삭제하거나 조정하세요. */
+    flex-grow: 1; /* content-wrapper 내에서 사용 가능한 공간을 채우도록 함 */
+    justify-content: flex-start; /* 내용을 상단부터 배치 */
+}
+
+

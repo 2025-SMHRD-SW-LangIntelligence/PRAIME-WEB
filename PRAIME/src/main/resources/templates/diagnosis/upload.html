@@ -26,54 +26,63 @@
 			</div>
 		</header>
 
+		<main>
+            <div class="diagnosis-actions top-actions">
+                <button type="button" class="btn btn-primary" id="start-diagnosis">
+                    <i class="fas fa-stethoscope"></i> 진단하기
+                </button>
+                <button type="button" class="btn btn-outline" id="view-history">
+                    <i class="fas fa-history"></i> 진단 이력
+                </button>
+            </div>
 
+            <div class="content-wrapper">
+                <section class="diagnosis-upload">
+                    <div class="upload-box">
+                        <i class="fas fa-image upload-icon"></i>
+                        <h2>작물 사진 업로드</h2>
+                        <p>병해충이 의심되는 부분을 촬영하거나 이미지를 업로드하세요</p>
+                        <div class="upload-buttons">
+                            <button type="button" class="btn btn-outline" id="upload-file">
+                                <i class="fas fa-upload"></i> 파일 업로드
+                            </button>
+                        </div>
+                    </div>
 
-		<div class="diagnosis-actions top-actions">
-			<button type="button" class="btn btn-primary" id="start-diagnosis">
-				<i class="fas fa-stethoscope"></i> 진단하기
-			</button>
-			<button type="button" class="btn btn-outline" id="view-history">
-				<i class="fas fa-history"></i> 진단 이력
-			</button>
-		</div>
-
-		<div id="page-container">
-			<section class="diagnosis-upload">
-
-				<section class="diagnosis-upload">
-					<div class="upload-box">
-						<i class="fas fa-image upload-icon"></i>
-						<h2>작물 사진 업로드</h2>
-						<p>병해충이 의심되는 부분을 촬영하거나 이미지를 업로드하세요</p>
-						<div class="upload-buttons">
-							<button type="button" class="btn btn-outline" id="upload-file">
-								<i class="fas fa-upload"></i> 파일 업로드
-							</button>
-						</div>
-					</div>
-
-					<div class="diagnosis-result hidden" id="diagnosisResult">
-						<h3>진단 결과</h3>
-						<p>
-							레이블: <span id="result-label">--</span>
-						</p>
-						<p>
-							신뢰도: <span id="result-confidence">--%</span>
-						</p>
+                    <div class="diagnosis-result hidden" id="diagnosisResult">
+                        <h3>진단 결과</h3>
+                        <div class="result-item">
+                            <span class="result-label-title">탐지결과:</span>
+                            <span id="result-label">--</span>
+                        </div>
+                        <div class="result-item">
+                            <span id="result-short-description" class="result-sub-text"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-confidence-title">신뢰도:</span>
+                            <span id="result-confidence">--%</span>
+                        </div>
                         <div class="result-description hidden" id="result-description-container">
-                            <h4>간략 설명</h4>
+                            <h4>상세 설명</h4>
                             <p id="result-description">--</p>
                         </div>
+                        <div id="solution-container" class="result-description" style="display: none;">
+                            <h4>해결 방법</h4>
+                            <p id="solution-text">--</p>
                         </div>
-				</section>
-
-                <div class="button-group">
-                    <button class="reset-btn">리셋</button>
-                    <button class="diagnosis-result-btn" id="diagnosisResultSaveBtn">결과저장</button>
-                </div>
-                <div th:replace="/global/footer::footer "></div>
-			</section>
-		</div>
+                        <div id="google-search-link-container" class="hidden">
+                            <a id="google-search-link" href="#" target="_blank" class="btn btn-secondary mt-2">
+                                <i class="fas fa-search"></i> 구글에서 질병 정보 더보기
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </div> <div class="button-group">
+                <button class="reset-btn">리셋</button>
+                <button class="diagnosis-result-btn" id="diagnosisResultSaveBtn">결과저장</button>
+            </div>
+		</main>
 	</div>
+    <div th:replace="/global/footer::footer"></div>
 </body>
 </html>

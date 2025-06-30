@@ -4,15 +4,61 @@
 // [0] 질병 설명 데이터 (class_id에 매핑)
 // ----------------------------------------------------
 const diseaseDataById = {
-    // class_id: { label: "레이블명", description: "설명" }
-    0: { label: "정상", description: "탐지된 병해충이 없습니다." }, // '정상'에 대한 설명 명확화
-    1: { label: "배검은별무늬병", description: "배 잎, 줄기, 과실 등에 검은색 별 모양의 병반이 생기는 병으로, 잎과 과실에 피해를 주며 수확량 감소를 유발합니다. 주로 겨울철 자낭각에서 월동하며 봄에 자낭포자가 퍼져 감염됩니다." },
-    2: { label: "배과수화상병", description: "세균성 전염병으로, 잎과 가지, 과실 등이 불에 탄 듯 괴사하며 식물 전체가 말라 죽을 수 있는 치명적인 병입니다. 빠른 확산과 피해가 특징입니다." },
-    3: { label: "사과갈색무늬병", description: "사과 잎에 갈색의 반점이 생기고 심하면 조기 낙엽을 유발하는 병으로, 나무 세력을 약화시키고 수확량에 악영향을 줍니다. 주로 6~9월에 심하게 발생합니다." },
-    4: { label: "사과과수화상병", description: "사과에 발생하는 과수화상병으로, 가지와 잎, 과실이 괴사하며 나무 전체가 말라 죽을 수 있는 심각한 세균성 질병입니다. 빠른 방제가 필요합니다." },
-    5: { label: "사과부란병", description: "사과 과실에 발생하는 병으로, 과실 표면에 부란(썩음) 현상이 나타나 상품 가치를 떨어뜨립니다. 주로 저장 중에 발생할 수 있습니다." },
-    6: { label: "사과점무늬낙엽병", description: "사과 잎에 점무늬가 생기고 낙엽을 유발하는 병으로, 나무의 생육에 부정적인 영향을 미치며 수확량 감소를 초래합니다." },
-    7: { label: "사과탄저병", description: "사과에 발생하는 탄저병으로, 과실과 가지에 검은색 병반이 생기며 심하면 과실이 썩고 나무가 약해집니다. 방제가 중요합니다." }
+    // class_id: { label: "레이블명", shortDescription: "탐지결과 바로 아래 표시될 간략 설명", description: "설명", solution: "해결 방법" }
+    0: {
+        label: "배 정상",
+        shortDescription: "탐지된 병해충이 없습니다.",
+        description: "탐지된 병해충이 없습니다.",
+        solution: "건강한 작물입니다! 평소와 같이 잘 관리해주세요."
+    },
+    1: {
+        label: "배검은별무늬병",
+        shortDescription: "배 잎, 줄기, 과실에 검은색 별 모양 병반.",
+        description: "배 잎, 줄기, 과실 등에 검은색 별 모양의 병반이 생기는 병으로, 잎과 과실에 피해를 주며 수확량 감소를 유발합니다. 주로 겨울철 자낭각에서 월동하며 봄에 자낭포자가 퍼져 감염됩니다.",
+        solution: "① 낙엽 제거 및 소각하여 병원균 밀도 줄이기\n② 발아 전 석회유황합제 살포\n③ 생육기 중 보호 살균제(예: 만코제브, 클로로탈로닐) 주기적 살포\n④ 배수가 잘 되도록 토양 관리"
+    },
+    2: {
+        label: "배과수화상병",
+        shortDescription: "치명적인 세균성 전염병, 불에 탄 듯 괴사.",
+        description: "세균성 전염병으로, 잎과 가지, 과실 등이 불에 탄 듯 괴사하며 식물 전체가 말라 죽을 수 있는 치명적인 병입니다. 빠른 확산과 피해가 특징입니다.",
+        solution: "① 감염된 부위 즉시 제거 및 소각 (최소 30cm 아래까지)\n② 도구 소독 철저 (70% 알코올 또는 락스 희석액)\n③ 치료제는 없으며, 확산 방지가 최우선\n④ 의심될 경우 즉시 농업기술센터에 신고"
+    },
+    3: {
+        label: "사과갈색무늬병",
+        shortDescription: "사과 잎에 갈색 반점, 조기 낙엽 유발.",
+        description: "사과 잎에 갈색의 반점이 생기고 심하면 조기 낙엽을 유발하는 병으로, 나무 세력을 약화시키고 수확량에 악영향을 줍니다. 주로 6~9월에 심하게 발생합니다.",
+        solution: "① 병든 낙엽 제거 및 소각\n② 질소 비료 과다 사용 자제\n③ 통풍과 채광을 좋게 하여 습도 낮추기\n④ 살균제(예: 디페노코나졸, 테부코나졸) 주기적 살포"
+    },
+    4: {
+        label: "사과과수화상병",
+        shortDescription: "심각한 세균성 질병, 나무 전체 고사 가능.",
+        description: "사과에 발생하는 과수화상병으로, 가지와 잎, 과실이 괴사하며 나무 전체가 말라 죽을 수 있는 심각한 세균성 질병입니다. 빠른 방제가 필요합니다.",
+        solution: "① 감염된 부위 즉시 제거 및 소각 (최소 30cm 아래까지)\n② 도구 소독 철저 (70% 알코올 또는 락스 희석액)\n③ 치료제는 없으며, 확산 방지가 최우선\n④ 의심될 경우 즉시 농업기술센터에 신고"
+    },
+    5: {
+        label: "사과부란병",
+        shortDescription: "과실 표면에 부란(썩음) 현상 발생.",
+        description: "사과 과실에 발생하는 병으로, 과실 표면에 부란(썩음) 현상이 나타나 상품 가치를 떨어뜨립니다. 주로 저장 중에 발생할 수 있습니다.",
+        solution: "① 저장 전 과실 손상 최소화\n② 저온 다습한 환경 피하기\n③ 수확 후 살균제 처리 고려\n④ 병든 과실은 즉시 제거"
+    },
+    6: {
+        label: "사과점무늬낙엽병",
+        shortDescription: "사과 잎에 점무늬, 낙엽 유발.",
+        description: "사과 잎에 점무늬가 생기고 낙엽을 유발하는 병으로, 나무의 생육에 부정적인 영향을 미치며 수확량 감소를 초래합니다.",
+        solution: "① 병든 잎과 가지 제거\n② 과원 내 통풍 및 채광 개선\n③ 질소 비료 과용 피하기\n④ 살균제(예: 만코제브, 캡탄) 주기적 살포"
+    },
+    7: {
+        label: "사과탄저병",
+        shortDescription: "과실과 가지에 검은색 병반 발생.",
+        description: "사과에 발생하는 탄저병으로, 과실과 가지에 검은색 병반이 생기며 심하면 과실이 썩고 나무가 약해집니다. 방제가 중요합니다.",
+        solution: "① 병든 과실 및 가지 제거\n② 비가림 시설로 강우에 의한 전파 줄이기\n③ 봉지 씌우기 실시\n④ 살균제(예: 프로피네브, 플루퀸코나졸) 주기적 살포"
+    },
+    8: {
+        label: "사과 정상",
+        shortDescription: "탐지된 병해충이 없습니다.",
+        description: "탐지된 병해충이 없습니다.",
+        solution: "건강한 작물입니다! 평소와 같이 잘 관리해주세요."
+    },
 };
 
 // ----------------------------------------------------
@@ -75,8 +121,13 @@ $(function(){
     const $diagnosisResultSection = $('#diagnosisResult');
     const $resultLabel = $('#result-label');
     const $resultConfidence = $('#result-confidence');
+    const $resultShortDescription = $('#result-short-description'); // New: Short description element
     const $resultDescriptionContainer = $('#result-description-container');
     const $resultDescription = $('#result-description');
+    const $solutionContainer = $('#solution-container'); // New: 해결 방법 컨테이너
+    const $solutionText = $('#solution-text'); // New: 해결 방법 텍스트
+    const $googleSearchLinkContainer = $('#google-search-link-container'); // Google search link container
+    const $googleSearchLink = $('#google-search-link'); // Google search link
     const $resetBtn = $('.reset-btn');
     const $diagnosisResultSaveBtn = $('#diagnosisResultSaveBtn');
 
@@ -84,7 +135,10 @@ $(function(){
         label: '',
         confidence: 0,
         description: '',
-        image: ''
+        shortDescription: '', // New: Store short description
+        solution: '', // New: Store solution
+        image: '',
+        classId: null // New: Store class_id for link generation
     };
 
     $('body').append($uploadInput);
@@ -105,21 +159,30 @@ $(function(){
         $uploadTextP.show().text('병해충이 의심되는 부분을 촬영하거나 이미지를 업로드하세요'); // 설명 초기화
         $uploadButtons.show(); // 버튼 보이기 (reset 시)
 
-
         $uploadInput.val(''); // 파일 입력 필드 초기화
 
         $diagnosisResultSection.addClass('hidden'); // 진단 결과 섹션 숨기기
         $resultLabel.text('--'); // 레이블 초기화
         $resultConfidence.text('--%'); // 신뢰도 초기화
+        $resultShortDescription.text(''); // Short description 초기화
         $resultDescriptionContainer.addClass('hidden'); // 설명 컨테이너 숨기기
         $resultDescription.text('--'); // 설명 내용 초기화
         
+        $solutionContainer.css('display', 'none'); // 해결 방법 컨테이너 숨김
+        $solutionText.text('--'); // 해결 방법 텍스트 초기화
+
+        $googleSearchLinkContainer.css('display', 'none'); // 초기화 시 링크 컨테이너 숨김을 명확하게
+        $googleSearchLink.attr('href', '#'); // Reset link
+
         // lastDiagnosisResult 객체 초기화
         lastDiagnosisResult = {
             label: '',
             confidence: 0,
             description: '',
-            image: ''
+            shortDescription: '',
+            solution: '', // Reset solution
+            image: '',
+            classId: null
         };
 
         // '결과저장' 버튼 비활성화
@@ -145,8 +208,15 @@ $(function(){
             $diagnosisResultSection.addClass('hidden');
             $resultLabel.text('--');
             $resultConfidence.text('--%');
+            $resultShortDescription.text(''); // Clear short description
             $resultDescriptionContainer.addClass('hidden');
             $resultDescription.text('--');
+            
+            $solutionContainer.css('display', 'none'); // 해결 방법 컨테이너 숨김
+            $solutionText.text('--'); // 해결 방법 텍스트 초기화
+
+            $googleSearchLinkContainer.css('display', 'none'); // 새로운 미리보기 시 링크 컨테이너 숨김을 명확하게
+            $googleSearchLink.attr('href', '#'); // Reset link
             $diagnosisResultSaveBtn.prop('disabled', true).css('opacity', '0.6').css('cursor', 'not-allowed');
         };
         reader.readAsDataURL(file);
@@ -177,6 +247,9 @@ $(function(){
             let resultLabel = '탐지 실패'; // 초기 레이블
             let resultConfidence = 0; // 초기 신뢰도
             let resultDescription = '진단 중 오류가 발생했습니다.'; // 초기 설명
+            let resultShortDescription = ''; // Initial short description
+            let resultSolution = ''; // Initial solution
+            let detectedClassId = null; // Store detected class_id
             let base64Image = null; // 초기 이미지 데이터
 
             // Flask 응답에서 output_image가 있다면 미리 가져옴
@@ -192,11 +265,14 @@ $(function(){
                     // Case 1: detections 배열이 비어있는 경우 (객체 탐지 실패)
                     resultLabel = '객체탐지 실패';
                     resultConfidence = 0;
-                    resultDescription = '모델이 객체탐지에 실패했습니다.\n흐릿하거나 확대된 이미지의 경우 정확한 진단이 되지 않을 수 있습니다.';
+                    resultShortDescription = '모델이 객체탐지에 실패했습니다.';
+                    resultDescription = '흐릿하거나 확대된 이미지의 경우 정확한 진단이 되지 않을 수 있습니다.';
+                    resultSolution = '정확한 진단을 위해 선명하고 적절한 크기의 이미지를 업로드해주세요.';
                 } else {
                     // detections 배열에 내용이 있는 경우
                     const firstDetection = detections[0];
                     const classId = firstDetection.class_id; // Flask에서 넘어온 class_id
+                    detectedClassId = classId; // Store class_id
                     resultConfidence = parseFloat((firstDetection.confidence * 100).toFixed(2));
 
                     // class_id에 해당하는 질병 정보 가져오기
@@ -205,26 +281,32 @@ $(function(){
                     if (diseaseInfo) {
                         resultLabel = diseaseInfo.label;
                         resultDescription = diseaseInfo.description;
+                        resultShortDescription = diseaseInfo.shortDescription;
+                        resultSolution = diseaseInfo.solution; // Get solution
                     } else {
                         // 정의되지 않은 class_id인 경우
                         resultLabel = '알 수 없는 질병';
                         resultDescription = '알 수 없는 질병이 탐지되었습니다. 데이터베이스를 확인해주세요.';
+                        resultShortDescription = '알 수 없는 질병이 탐지되었습니다.';
+                        resultSolution = '해당 질병에 대한 정보가 없습니다. 관리자에게 문의해주세요.';
                     }
                 }
             } else {
                 // success가 false이거나 prediction_details가 없거나 detections가 배열이 아닌 경우 (예상치 못한 응답)
                 resultLabel = '탐지 실패';
                 resultConfidence = 0;
+                resultShortDescription = '진단 처리 중 알 수 없는 오류가 발생했습니다.';
                 resultDescription = data.error || '진단 처리 중 알 수 없는 오류가 발생했습니다.';
+                resultSolution = '진단 중 오류가 발생했습니다. 다시 시도해주세요.';
             }
-            
+
             // 진단 결과 UI 업데이트
             $resultLabel.text(resultLabel); // 레이블 표시
             $resultConfidence.text(`${resultConfidence}%`); // 신뢰도 표시
+            $resultShortDescription.text(resultShortDescription); // Display short description
             $diagnosisResultSection.removeClass('hidden'); // 결과 섹션 보이게
 
             // 질병 설명 UI 업데이트
-            // resultDescription이 유효한 문자열이고 기본값인 '--'가 아닐 때만 표시
             if (resultDescription && resultDescription !== '--') {
                 $resultDescription.text(resultDescription);
                 $resultDescriptionContainer.removeClass('hidden'); // 설명 컨테이너 보이게
@@ -232,6 +314,23 @@ $(function(){
                 $resultDescription.text('--'); // 그 외의 경우 '--' 표시
                 $resultDescriptionContainer.addClass('hidden'); // 설명 컨테이너 숨기기
             }
+
+            // 해결 방법 UI 업데이트 및 가시성 제어
+            $solutionContainer.css('display', 'none'); // 기본적으로 숨김
+            if (resultSolution && resultSolution !== '--' && !resultLabel.includes('객체탐지 실패')) {
+                $solutionText.html(resultSolution.replace(/\n/g, '<br>')); // 줄바꿈 적용
+                $solutionContainer.css('display', 'block'); // 조건 만족 시 보이게
+            }
+            
+            // Google Search Link update: '정상' 라벨이거나 질병이 아니면 무조건 숨김
+            $googleSearchLinkContainer.css('display', 'none'); // 기본적으로 숨김 처리
+            if (detectedClassId !== null && detectedClassId >= 1 && detectedClassId <= 7 && !resultLabel.includes('정상')) {
+                const diseaseName = diseaseDataById[detectedClassId].label;
+                const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(diseaseName)} 질병 정보`;
+                $googleSearchLink.attr('href', googleSearchUrl);
+                $googleSearchLinkContainer.css('display', 'block'); // 조건 만족 시에만 다시 보이게
+            }
+
 
             // 업로드 박스 텍스트 업데이트
             $uploadTextH2.text('진단 완료').show();
@@ -242,8 +341,8 @@ $(function(){
                 $uploadBox.css('background-image', `url(data:image/jpeg;base64,${base64Image})`);
                 $uploadBox.addClass('uploaded');
                 $uploadIcon.hide();
-                $uploadTextH2.show();  
-                $uploadTextP.show();  
+                $uploadTextH2.show();
+                $uploadTextP.show();
                 $uploadButtons.hide();
             }
 
@@ -252,12 +351,14 @@ $(function(){
                 label: resultLabel,
                 confidence: resultConfidence,
                 description: resultDescription,
-                image: base64Image
+                shortDescription: resultShortDescription,
+                solution: resultSolution, // Store solution
+                image: base64Image,
+                classId: detectedClassId
             };
 
             // '결과 저장' 버튼 활성화/비활성화
-            // "객체탐지 실패"가 아니고 신뢰도가 0보다 크거나 '정상'인 경우 활성화
-            if (resultLabel !== '객체탐지 실패' && (resultConfidence > 0 || resultLabel === '정상')) {
+            if (resultLabel !== '객체탐지 실패' && resultLabel !== '알 수 없는 질병' && (resultConfidence > 0 || resultLabel.includes('정상'))) {
                 $diagnosisResultSaveBtn.prop('disabled', false).css('opacity', '1').css('cursor', 'pointer');
             } else {
                 $diagnosisResultSaveBtn.prop('disabled', true).css('opacity', '0.6').css('cursor', 'not-allowed');
@@ -265,7 +366,7 @@ $(function(){
 
         })
         .catch(error => {
-            console.error('진단 실패:', error); // 에러 로그
+            console.error('진단 실패:', error);
             let errorMessage = '진단 중 오류가 발생했습니다.';
             if (error.response) {
                 errorMessage = `서버 오류: ${error.response.data.error || error.response.statusText}`;
@@ -274,15 +375,18 @@ $(function(){
             } else {
                 errorMessage = `요청 오류: ${error.message}`;
             }
-            alert(errorMessage); // 사용자에게 알림
+            alert(errorMessage);
 
             // 오류 발생 시 UI 초기화
             $resultLabel.text('오류 발생');
             $resultConfidence.text('---');
+            $resultShortDescription.text('진단 중 오류가 발생했습니다.');
             $diagnosisResultSection.removeClass('hidden');
             $resultDescriptionContainer.addClass('hidden');
             $resultDescription.text('--');
-            
+            $solutionContainer.css('display', 'none'); // 오류 시 해결 방법 숨김
+            $googleSearchLinkContainer.css('display', 'none'); // 오류 시에도 숨김
+
             $uploadTextH2.text('오류 발생').show();
             $uploadTextP.text('진단 중 오류가 발생했습니다.').show();
 
@@ -318,6 +422,7 @@ $(function(){
             label: lastDiagnosisResult.label,
             confidence: lastDiagnosisResult.confidence,
             description: lastDiagnosisResult.description,
+            solution: lastDiagnosisResult.solution, // Save solution
             resultImageBase64: rawBase64Image
         };
 
@@ -356,10 +461,7 @@ $(function(){
 
     // 'upload-box' 클릭 시 숨겨진 파일 입력 필드 열기
     $uploadBox.on('click', function() {
-        // 업로드된 상태가 아닐 때만 클릭 활성화 (오류 발생 시에도 클릭 가능하도록)
-        // if (!$uploadBox.hasClass('uploaded') || $resultLabel.text() === '오류 발생') {
-            $uploadInput.click();
-        // }
+        $uploadInput.click();
     });
 
     // 파일 입력 필드에 파일이 선택되었을 때 이벤트 처리
@@ -399,7 +501,7 @@ $(function(){
                 const dataTransfer = new DataTransfer();
                 dataTransfer.items.add(file);
                 $uploadInput[0].files = dataTransfer.files;
-                
+
                 previewImage(file);
                 uploadImage(file);
             } else {
@@ -407,7 +509,6 @@ $(function(){
             }
         }
     });
-
 
     // '리셋' 버튼 클릭 시 UI 초기화
     $resetBtn.on('click', function() {
