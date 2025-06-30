@@ -34,10 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalConfidence = document.getElementById("modalConfidence");
     const modalDescription = document.getElementById("modalDescription");
     const modalSolution = document.getElementById("modalSolution"); // 해결 방법 요소
-
-    // HTML에서 `id="googleSearchBtn"`으로 변경되었으므로 여기에 맞춤
     const googleSearchBtn = document.getElementById("googleSearchBtn"); 
-    
     const closeBtn = document.querySelector(".modal-close");
 
     // card-list 내 이미지 클릭 시 이벤트 위임
@@ -56,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (clickedImg) {
             modal.classList.add('show');
+            // 모달이 열릴 때 body 스크롤 비활성화
+            document.body.style.overflow = 'hidden'; 
+            
             modalImage.src = clickedImg.src;
 
             const label = clickedImg.dataset.label || '정보 없음';
@@ -69,24 +69,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 해결 방법 표시 로직
             if (solution) {
-                // 해결 방법 텍스트를 굵게 표시하고, 줄바꿈 처리
                 modalSolution.innerHTML = `<b>해결 방법:</b><br>${solution.replace(/\n/g, '<br>')}`;
                 modalSolution.style.display = 'block';
-                // 해결 방법 제목도 보이게 (HTML에 제목 P 태그를 별도로 뒀다면 해당 P 태그를 show/hide)
-                // 현재 HTML 구조에서는 modalSolution이 직접 제목과 내용을 담고 있으므로 이대로 유지
             } else {
                 modalSolution.style.display = 'none';
             }
 
             // Google 검색 링크 표시 로직
-            // '정상'이거나 '정보 없음'인 경우 검색 링크 숨김
             if (label && !label.includes('정상') && label !== '정보 없음') {
-                const pureDiseaseName = label.replace(/^(진단명:\s*배|진단명:\s*사과)\s*/, '').trim(); // "진단명: 배", "진단명: 사과" 접두사 제거
-                const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(pureDiseaseName)}`; // 질병명으로 구글검색
+                const pureDiseaseName = label.replace(/^(진단명:\s*배|진단명:\s*사과)\s*/, '').trim(); 
+                const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(pureDiseaseName)} 질병 정보`;
                 googleSearchBtn.href = googleSearchUrl;
-                googleSearchBtn.style.display = 'flex'; // flex로 표시 (CSS에 맞춤)
+                googleSearchBtn.style.display = 'flex'; 
             } else {
-                googleSearchBtn.style.display = 'none'; // 숨김
+                googleSearchBtn.style.display = 'none'; 
             }
 
             modalImage.onerror = function() {
@@ -100,6 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeBtn) {
         closeBtn.addEventListener('click', function() {
             modal.classList.remove('show');
+            // 모달이 닫힐 때 body 스크롤 재활성화
+            document.body.style.overflow = ''; 
         });
     }
 
@@ -108,6 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.addEventListener('click', function(event) {
             if (event.target === modal) {
                 modal.classList.remove('show');
+                // 모달이 닫힐 때 body 스크롤 재활성화
+                document.body.style.overflow = ''; 
             }
         });
     }
@@ -116,6 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', function(event) {
         if (event.key === "Escape" && modal && modal.classList.contains('show')) {
             modal.classList.remove('show');
+            // 모달이 닫힐 때 body 스크롤 재활성화
+            document.body.style.overflow = ''; 
         }
     });
 
