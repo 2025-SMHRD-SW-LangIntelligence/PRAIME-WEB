@@ -4,7 +4,7 @@
 > Spring Boot 기반 영농일지 관리 서비스와 YOLO11 객체 탐지 모델을 Flask API로 연동한 **4인 팀 프로젝트**입니다.
 
 <!-- TODO: 실제 서비스가 운영 중인 경우에만 URL을 연결하세요. -->
-**[🌐 서비스 페이지](https://-------) : 데모종료** 
+**~~[🌐 서비스 페이지](#) : 데모종료~~** 
 
  **[🤖 Flask 저장소](https://github.com/2025-SMHRD-SW-LangIntelligence/PRAIME-Flask)**
 
